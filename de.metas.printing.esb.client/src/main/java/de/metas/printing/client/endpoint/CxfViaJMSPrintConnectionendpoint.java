@@ -63,6 +63,7 @@ public class CxfViaJMSPrintConnectionendpoint implements IPrintConnectionEndpoin
 	}
 
 	@Override
+	public void sendPrintPackageResponse(PrintJobInstructionsConfirm response)
 	{
 		// TODO Auto-generated method stub
 
