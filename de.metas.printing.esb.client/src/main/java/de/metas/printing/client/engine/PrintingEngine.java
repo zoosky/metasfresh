@@ -47,14 +47,14 @@ import javax.print.attribute.standard.MediaTray;
 import javax.print.attribute.standard.PageRanges;
 
 import de.metas.printing.client.Context;
-import de.metas.printing.esb.api.PrintJobInstructionsConfirm;
-import de.metas.printing.esb.api.PrintJobInstructionsStatusEnum;
-import de.metas.printing.esb.api.PrintPackage;
-import de.metas.printing.esb.api.PrintPackageInfo;
-import de.metas.printing.esb.api.PrinterHW;
-import de.metas.printing.esb.api.PrinterHW.PrinterHWMediaSize;
-import de.metas.printing.esb.api.PrinterHW.PrinterHWMediaTray;
-import de.metas.printing.esb.api.PrinterHWList;
+import de.metas.printing.esb.api.protocol.PrintJobInstructionsConfirm;
+import de.metas.printing.esb.api.protocol.PrintJobInstructionsStatusEnum;
+import de.metas.printing.esb.api.protocol.PrintPackage;
+import de.metas.printing.esb.api.protocol.PrintPackageInfo;
+import de.metas.printing.esb.api.protocol.PrinterHW;
+import de.metas.printing.esb.api.protocol.PrinterHWList;
+import de.metas.printing.esb.api.protocol.PrinterHW.PrinterHWMediaSize;
+import de.metas.printing.esb.api.protocol.PrinterHW.PrinterHWMediaTray;
 
 public class PrintingEngine
 {

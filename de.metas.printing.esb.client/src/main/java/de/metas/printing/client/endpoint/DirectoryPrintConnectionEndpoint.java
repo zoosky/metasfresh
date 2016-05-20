@@ -33,11 +33,11 @@ import de.metas.printing.client.Context;
 import de.metas.printing.client.IPrintConnectionEndpoint;
 import de.metas.printing.client.encoder.IBeanEnconder;
 import de.metas.printing.client.util.Util;
-import de.metas.printing.esb.api.LoginRequest;
-import de.metas.printing.esb.api.LoginResponse;
-import de.metas.printing.esb.api.PrintJobInstructionsConfirm;
-import de.metas.printing.esb.api.PrintPackage;
-import de.metas.printing.esb.api.PrinterHWList;
+import de.metas.printing.esb.api.protocol.LoginRequest;
+import de.metas.printing.esb.api.protocol.LoginResponse;
+import de.metas.printing.esb.api.protocol.PrintJobInstructionsConfirm;
+import de.metas.printing.esb.api.protocol.PrintPackage;
+import de.metas.printing.esb.api.protocol.PrinterHWList;
 
 public class DirectoryPrintConnectionEndpoint implements IPrintConnectionEndpoint
 {
@@ -101,9 +101,9 @@ public class DirectoryPrintConnectionEndpoint implements IPrintConnectionEndpoin
 	}
 
 	@Override
-	public void sendPrintPackageResponse(final PrintPackage printPackage, final PrintJobInstructionsConfirm response)
+	public void sendPrintPackageResponse(final PrintJobInstructionsConfirm response)
 	{
-		log.info("Got : " + response + " for " + printPackage);
+		log.info("Got PrintJobInstructionsConfirm=" + response);
 	}
 
 	private void pollNewFiles()

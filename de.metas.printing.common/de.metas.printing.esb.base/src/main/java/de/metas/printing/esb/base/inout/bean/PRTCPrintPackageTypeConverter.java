@@ -29,8 +29,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import de.metas.printing.esb.api.PrintPackage;
-import de.metas.printing.esb.api.PrintPackageInfo;
+import de.metas.printing.esb.api.protocol.PrintPackage;
+import de.metas.printing.esb.api.protocol.PrintPackageInfo;
 import de.metas.printing.esb.base.jaxb.JAXBConstants;
 import de.metas.printing.esb.base.jaxb.generated.ObjectFactory;
 import de.metas.printing.esb.base.jaxb.generated.PRTCPrintPackageInfoType;

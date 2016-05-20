@@ -1,4 +1,4 @@
-package de.metas.printing.esb.api;
+package de.metas.printing.esb.api.protocol;
 
 /*
  * #%L
@@ -13,27 +13,29 @@ package de.metas.printing.esb.api;
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
+ * License along with this program. If not, see
  * <http://www.gnu.org/licenses/gpl-2.0.html>.
  * #L%
  */
 
-
 import java.io.Serializable;
 
-public class LoginRequest implements Serializable
+public class LoginResponse implements Serializable
 {
-	private static final long serialVersionUID = -8864218635418155189L;
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 6515589439074746845L;
 
 	private String username;
-	private String password;
+	private String sessionId;
 	private String hostKey = null;
 
-	public LoginRequest()
+	public LoginResponse()
 	{
 		super();
 	}
@@ -41,8 +43,8 @@ public class LoginRequest implements Serializable
 	@Override
 	public String toString()
 	{
-		return "LoginRequest [username=" + username
-				+ ", password=*********"
+		return "LoginResponse [username=" + username
+				+ ", sessionId=" + sessionId
 				+ ", hostKey=" + hostKey
 				+ "]";
 	}
@@ -57,14 +59,14 @@ public class LoginRequest implements Serializable
 		this.username = username;
 	}
 
-	public String getPassword()
+	public String getSessionId()
 	{
-		return password;
+		return sessionId;
 	}
 
-	public void setPassword(String password)
+	public void setSessionId(String sessionId)
 	{
-		this.password = password;
+		this.sessionId = sessionId;
 	}
 
 	public String getHostKey()

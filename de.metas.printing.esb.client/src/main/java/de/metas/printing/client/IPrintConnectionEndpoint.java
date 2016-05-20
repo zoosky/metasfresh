@@ -24,13 +24,23 @@ package de.metas.printing.client;
 
 import java.io.InputStream;
 
-import de.metas.printing.client.endpoint.LoginFailedPrintConnectionEndpointException;
-import de.metas.printing.esb.api.LoginRequest;
-import de.metas.printing.esb.api.LoginResponse;
-import de.metas.printing.esb.api.PrintJobInstructionsConfirm;
-import de.metas.printing.esb.api.PrintPackage;
-import de.metas.printing.esb.api.PrinterHWList;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
 
+import de.metas.printing.client.endpoint.LoginFailedPrintConnectionEndpointException;
+import de.metas.printing.esb.api.protocol.LoginRequest;
+import de.metas.printing.esb.api.protocol.LoginResponse;
+import de.metas.printing.esb.api.protocol.PrintJobInstructionsConfirm;
+import de.metas.printing.esb.api.protocol.PrintPackage;
+import de.metas.printing.esb.api.protocol.PrinterHWList;
+
+/**
+ * Sync endpoint that is implemented on the metasfresh's side, to be called by the printing client.
+ *
+ * @author metas-dev <dev@metasfresh.com>
+ *
+ */
+@Path("/printing")
 public interface IPrintConnectionEndpoint
 {
 	/**
@@ -39,13 +49,17 @@ public interface IPrintConnectionEndpoint
 	 * @return valid login response (with {@link LoginResponse#getSessionId()} filled).
 	 * @throws LoginFailedPrintConnectionEndpointException in case something went wrong.
 	 */
-	LoginResponse login(final LoginRequest loginRequest) throws LoginFailedPrintConnectionEndpointException;
+	@POST
+	@Path("login")
+	LoginResponse login(LoginRequest loginRequest);
 
 	/**
 	 * Send printer hardware configuration to ADempiere.
 	 *
 	 * @param printerHWList
 	 */
+	@POST
+	@Path("addPrinterHW")
 	void addPrinterHW(PrinterHWList printerHWList);
 
 	/**
@@ -53,6 +67,8 @@ public interface IPrintConnectionEndpoint
 	 *
 	 * @return next {@link PrintPackage} or null if there is no next print package
 	 */
+	@POST // TODO i don't see why it shouldn't be a get in future
+	@Path("getNextPrintPackage")
 	PrintPackage getNextPrintPackage();
 
 	/**
@@ -61,6 +77,8 @@ public interface IPrintConnectionEndpoint
 	 * @param printPackage
 	 * @return PDF Stream, already decoded
 	 */
+	@POST // TODO i don't see why it shouldn't be a get in future
+	@Path("getPrintPackageData")
 	InputStream getPrintPackageData(PrintPackage printPackage);
 
 	/**
@@ -68,5 +86,7 @@ public interface IPrintConnectionEndpoint
 	 *
 	 * @param response
 	 */
-	void sendPrintPackageResponse(PrintPackage printPackage, PrintJobInstructionsConfirm response);
+	@POST
+	@Path("sendPrintPackageResponse")
+	void sendPrintPackageResponse(PrintJobInstructionsConfirm response);
 }

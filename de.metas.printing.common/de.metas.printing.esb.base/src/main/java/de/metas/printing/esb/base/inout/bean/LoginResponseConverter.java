@@ -25,7 +25,7 @@ package de.metas.printing.esb.base.inout.bean;
 
 import java.math.BigInteger;
 
-import de.metas.printing.esb.api.LoginResponse;
+import de.metas.printing.esb.api.protocol.LoginResponse;
 import de.metas.printing.esb.base.jaxb.generated.PRTLoginRequestType;
 import de.metas.printing.esb.base.util.collections.Converter;
 

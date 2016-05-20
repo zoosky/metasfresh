@@ -31,7 +31,7 @@ import java.math.BigInteger;
 
 import org.junit.Ignore;
 
-import de.metas.printing.esb.api.PrintPackage;
+import de.metas.printing.esb.api.protocol.PrintPackage;
 import de.metas.printing.esb.base.jaxb.JAXBConstants;
 import de.metas.printing.esb.base.jaxb.generated.PRTCPrintPackageInfoType;
 import de.metas.printing.esb.base.jaxb.generated.PRTCPrintPackageType;

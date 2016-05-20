@@ -39,7 +39,7 @@ import com.google.common.io.Resources;
 
 import de.metas.esb.printing.test.AbstractPrintingCamelTest;
 import de.metas.printing.esb.api.PRTRestServiceConstants;
-import de.metas.printing.esb.api.PrinterHWList;
+import de.metas.printing.esb.api.protocol.PrinterHWList;
 import de.metas.printing.esb.camel.inout.route.PRTPrinterHWRoute;
 import de.metas.printing.esb.camel.inout.route.PRTRestServiceRoute;
 

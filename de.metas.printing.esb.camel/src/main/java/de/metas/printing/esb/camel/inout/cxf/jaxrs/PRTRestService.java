@@ -31,12 +31,12 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import de.metas.printing.esb.api.LoginRequest;
-import de.metas.printing.esb.api.LoginResponse;
 import de.metas.printing.esb.api.PRTRestServiceConstants;
-import de.metas.printing.esb.api.PrintJobInstructionsConfirm;
-import de.metas.printing.esb.api.PrintPackage;
-import de.metas.printing.esb.api.PrinterHWList;
+import de.metas.printing.esb.api.protocol.LoginRequest;
+import de.metas.printing.esb.api.protocol.LoginResponse;
+import de.metas.printing.esb.api.protocol.PrintJobInstructionsConfirm;
+import de.metas.printing.esb.api.protocol.PrintPackage;
+import de.metas.printing.esb.api.protocol.PrinterHWList;
 
 /**
  * This class defines the printing service's web service interface.

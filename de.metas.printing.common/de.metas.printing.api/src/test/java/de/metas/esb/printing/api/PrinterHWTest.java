@@ -30,7 +30,7 @@ import java.io.InputStream;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;
 
-import de.metas.printing.esb.api.PrinterHWList;
+import de.metas.printing.esb.api.protocol.PrinterHWList;
 
 public class PrinterHWTest
 {

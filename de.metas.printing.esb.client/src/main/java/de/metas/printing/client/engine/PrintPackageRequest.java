@@ -28,8 +28,8 @@ import javax.print.PrintService;
 import javax.print.attribute.HashPrintRequestAttributeSet;
 import javax.print.attribute.PrintRequestAttributeSet;
 
-import de.metas.printing.esb.api.PrintPackage;
-import de.metas.printing.esb.api.PrintPackageInfo;
+import de.metas.printing.esb.api.protocol.PrintPackage;
+import de.metas.printing.esb.api.protocol.PrintPackageInfo;
 
 public class PrintPackageRequest
 {

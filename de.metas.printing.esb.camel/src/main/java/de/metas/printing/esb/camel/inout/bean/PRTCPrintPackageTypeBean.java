@@ -32,7 +32,7 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 
 import de.metas.printing.esb.api.PRTRestServiceConstants;
-import de.metas.printing.esb.api.PrintPackage;
+import de.metas.printing.esb.api.protocol.PrintPackage;
 import de.metas.printing.esb.base.inout.bean.PRTCPrintPackageTypeConverter;
 import de.metas.printing.esb.base.jaxb.generated.ObjectFactory;
 import de.metas.printing.esb.base.jaxb.generated.PRTCPrintPackageType;

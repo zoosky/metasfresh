@@ -10,12 +10,12 @@ package de.metas.printing.client.endpoint;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 2 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-2.0.html>.
@@ -49,12 +49,12 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import de.metas.printing.client.IPrintConnectionEndpoint;
-import de.metas.printing.esb.api.LoginRequest;
-import de.metas.printing.esb.api.LoginResponse;
-import de.metas.printing.esb.api.PrintJobInstructionsConfirm;
-import de.metas.printing.esb.api.PrintPackage;
-import de.metas.printing.esb.api.PrinterHW;
-import de.metas.printing.esb.api.PrinterHWList;
+import de.metas.printing.esb.api.protocol.LoginRequest;
+import de.metas.printing.esb.api.protocol.LoginResponse;
+import de.metas.printing.esb.api.protocol.PrintJobInstructionsConfirm;
+import de.metas.printing.esb.api.protocol.PrintPackage;
+import de.metas.printing.esb.api.protocol.PrinterHW;
+import de.metas.printing.esb.api.protocol.PrinterHWList;
 import de.metas.printing.esb.base.inout.bean.PRTADPrinterHWTypeConverter;
 import de.metas.printing.esb.base.inout.bean.PRTCPrintJobInstructionsConfirmTypeConverter;
 import de.metas.printing.esb.base.inout.bean.PRTCPrintPackageDataTypeConverter;
@@ -69,9 +69,9 @@ import de.metas.printing.esb.base.jaxb.generated.PRTCPrintPackageType;
 
 /**
  * Implementation of {@link IPrintConnectionEndpoint} which calls the replication module (i.e. {@link IImportHelper}) directly.
- * 
+ *
  * @author tsa
- * 
+ *
  */
 public class LoopbackPrintConnectionEndpoint implements IPrintConnectionEndpoint
 {
@@ -166,7 +166,7 @@ public class LoopbackPrintConnectionEndpoint implements IPrintConnectionEndpoint
 	}
 
 	@Override
-	public void sendPrintPackageResponse(PrintPackage printPackage, PrintJobInstructionsConfirm response)
+	public void sendPrintPackageResponse(PrintJobInstructionsConfirm response)
 	{
 		final int sessionId = getAD_Session_ID();
 		final PRTCPrintJobInstructionsConfirmType xmlRequest = converterPRTCPrintJobInstructionsConfirmType.createPRTADPrintPackageResponse(response, sessionId);

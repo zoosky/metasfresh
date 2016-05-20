@@ -34,7 +34,7 @@ import org.apache.camel.RuntimeTransformException;
 import org.apache.camel.impl.DefaultMessage;
 
 import de.metas.printing.esb.api.PRTRestServiceConstants;
-import de.metas.printing.esb.api.PrinterHWList;
+import de.metas.printing.esb.api.protocol.PrinterHWList;
 import de.metas.printing.esb.base.inout.bean.PRTADPrinterHWTypeConverter;
 import de.metas.printing.esb.base.jaxb.generated.PRTADPrinterHWType;
 

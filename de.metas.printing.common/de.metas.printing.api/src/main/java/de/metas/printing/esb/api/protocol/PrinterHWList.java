@@ -1,4 +1,4 @@
-package de.metas.printing.esb.api;
+package de.metas.printing.esb.api.protocol;
 
 /*
  * #%L
@@ -10,44 +10,49 @@ package de.metas.printing.esb.api;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 2 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-2.0.html>.
  * #L%
  */
 
+import java.io.Serializable;
+import java.util.List;
 
-/**
- * This enum corresponds with the ADempiere C_Print_Job_Instructions_Status list reference (AD_Reference_ID=540384). Please keep it in sync with the <code>STATUS_</code> constants in
- * /de.metas.printing/src/main/java-gen/de/metas/printing/model/X_C_Print_Job_Instructions.java
- * <p>
- * Note that this enum contains all values from the ADemnpiere class, even if currently only 'D' and 'E' are used.
- */
-public enum PrintJobInstructionsStatusEnum
+
+public class PrinterHWList implements Serializable
 {
 	/**
-	 * Status D, DONE
+	 *
 	 */
-	Gedruckt,
+	private static final long serialVersionUID = -2897251108708482160L;
 
-	/**
-	 * Status E, ERROR
-	 */
-	Druckfehler,
+	private List<PrinterHW> hwPrinters;
 
-	/**
-	 * Status P, PENDING
-	 */
-	Wartet_auf_druck,
+	public List<PrinterHW> getHwPrinters()
+	{
+		return hwPrinters;
+	}
 
-	/**
-	 * Status S, SENT
-	 */
-	Im_Druck
+	public void setHwPrinters(List<PrinterHW> hwPrinters)
+	{
+		this.hwPrinters = hwPrinters;
+	}
+
+	public PrinterHWList()
+	{
+		super();
+	}
+
+	@Override
+	public String toString()
+	{
+		return "PrinterHWList [hwPrinters=" + hwPrinters + "]";
+	}
 }

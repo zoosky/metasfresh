@@ -32,7 +32,7 @@ import org.apache.camel.RuntimeCamelException;
 import org.apache.camel.impl.DefaultMessage;
 
 import de.metas.printing.esb.api.PRTRestServiceConstants;
-import de.metas.printing.esb.api.PrintJobInstructionsConfirm;
+import de.metas.printing.esb.api.protocol.PrintJobInstructionsConfirm;
 import de.metas.printing.esb.base.inout.bean.PRTCPrintJobInstructionsConfirmTypeConverter;
 import de.metas.printing.esb.base.jaxb.generated.PRTCPrintJobInstructionsConfirmType;
 

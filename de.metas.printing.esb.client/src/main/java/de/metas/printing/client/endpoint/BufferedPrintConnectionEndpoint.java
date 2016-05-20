@@ -30,11 +30,11 @@ import java.util.Queue;
 import java.util.logging.Logger;
 
 import de.metas.printing.client.IPrintConnectionEndpoint;
-import de.metas.printing.esb.api.LoginRequest;
-import de.metas.printing.esb.api.LoginResponse;
-import de.metas.printing.esb.api.PrintJobInstructionsConfirm;
-import de.metas.printing.esb.api.PrintPackage;
-import de.metas.printing.esb.api.PrinterHWList;
+import de.metas.printing.esb.api.protocol.LoginRequest;
+import de.metas.printing.esb.api.protocol.LoginResponse;
+import de.metas.printing.esb.api.protocol.PrintJobInstructionsConfirm;
+import de.metas.printing.esb.api.protocol.PrintPackage;
+import de.metas.printing.esb.api.protocol.PrinterHWList;
 
 public class BufferedPrintConnectionEndpoint implements IPrintConnectionEndpoint
 {
@@ -111,9 +111,9 @@ public class BufferedPrintConnectionEndpoint implements IPrintConnectionEndpoint
 	}
 
 	@Override
-	public void sendPrintPackageResponse(final PrintPackage printPackage, final PrintJobInstructionsConfirm response)
+	public void sendPrintPackageResponse(final PrintJobInstructionsConfirm response)
 	{
-		log.info("Got : " + response + " for " + printPackage);
+		log.info("Got PrintJobInstructionsConfirm=" + response);
 	}
 
 	private static class PrintPackageAndData

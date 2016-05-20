@@ -24,8 +24,8 @@ package de.metas.printing.esb.camel.inout.route;
 
 
 import de.metas.esb.camel.route.Xml2JsonRequestResponseRouteBuilder;
-import de.metas.printing.esb.api.LoginRequest;
-import de.metas.printing.esb.api.LoginResponse;
+import de.metas.printing.esb.api.protocol.LoginRequest;
+import de.metas.printing.esb.api.protocol.LoginResponse;
 import de.metas.printing.esb.base.inout.bean.LoginRequestConverter;
 import de.metas.printing.esb.base.inout.bean.LoginResponseConverter;
 import de.metas.printing.esb.base.jaxb.JAXBConstants;

@@ -38,8 +38,8 @@ import de.metas.printing.client.encoder.JsonBeanEncoder;
 import de.metas.printing.client.endpoint.DirectoryPrintConnectionEndpoint;
 import de.metas.printing.client.engine.PrintingEngine;
 import de.metas.printing.client.util.Util;
-import de.metas.printing.esb.api.PrintPackage;
-import de.metas.printing.esb.api.PrintPackageInfo;
+import de.metas.printing.esb.api.protocol.PrintPackage;
+import de.metas.printing.esb.api.protocol.PrintPackageInfo;
 
 // This is a manual test because on build server we don't have the XPS printer, so this test will always fail
 @Ignore

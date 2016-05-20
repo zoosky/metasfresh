@@ -1,5 +1,8 @@
 package de.metas.printing.client.engine;
 
+import java.io.File;
+import java.io.IOException;
+
 /*
  * #%L
  * de.metas.printing.esb.client
@@ -13,16 +16,17 @@ package de.metas.printing.client.engine;
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
+ * License along with this program. If not, see
  * <http://www.gnu.org/licenses/gpl-2.0.html>.
  * #L%
  */
 
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,11 +35,12 @@ import de.metas.printing.client.Context;
 import de.metas.printing.client.IPrintConnectionEndpoint;
 import de.metas.printing.client.endpoint.LoginFailedPrintConnectionEndpointException;
 import de.metas.printing.client.util.Util;
-import de.metas.printing.esb.api.LoginRequest;
-import de.metas.printing.esb.api.LoginResponse;
-import de.metas.printing.esb.api.PrintJobInstructionsConfirm;
-import de.metas.printing.esb.api.PrintPackage;
-import de.metas.printing.esb.api.PrinterHWList;
+import de.metas.printing.esb.api.protocol.LoginRequest;
+import de.metas.printing.esb.api.protocol.LoginResponse;
+import de.metas.printing.esb.api.protocol.PrintJobInstructionsConfirm;
+import de.metas.printing.esb.api.protocol.PrintJobInstructionsStatusEnum;
+import de.metas.printing.esb.api.protocol.PrintPackage;
+import de.metas.printing.esb.api.protocol.PrinterHWList;
 
 public class PrintingClientDaemon implements Runnable
 {
@@ -204,12 +209,45 @@ public class PrintingClientDaemon implements Runnable
 				log.log(Level.INFO, "{} is true, so we do *not* report anything", Context.CTX_Testing_Dont_RespondAfterPrinting);
 				return;
 			}
-			connection.sendPrintPackageResponse(printPackage, response);
+			connection.sendPrintPackageResponse(response);
+
+			deleteStreamFileIfOK(printPackage, response);
 		}
 		finally
 		{
 			Util.close(in);
 			in = null;
+		}
+	}
+
+	/**
+	 * If the receiving endpoint stored the data it received as a file and if the print was OK, then this method deletes the file.
+	 *
+	 * @param printPackage
+	 * @param response
+	 */
+	private void deleteStreamFileIfOK(final PrintPackage printPackage, final PrintJobInstructionsConfirm response)
+	{
+		if (!PrintJobInstructionsStatusEnum.Gedruckt.equals(response.getStatus()))
+		{
+			return; // leave the file for inspection
+		}
+
+		final File dataFiletoDelete = Util.mkFile(printPackage);
+		if (!dataFiletoDelete.exists())
+		{
+			log.info("File " + dataFiletoDelete.getAbsolutePath() + " is already gone.");
+			return; // the file isn't there anymore
+		}
+
+		try
+		{
+			log.fine("Deleting file " + dataFiletoDelete.getAbsolutePath());
+			Files.delete(dataFiletoDelete.toPath());
+		}
+		catch (final IOException e)
+		{
+			log.log(Level.SEVERE, "IOException while trying to delete data file " + dataFiletoDelete, e);
 		}
 	}
 

@@ -1,4 +1,4 @@
-package de.metas.printing.esb.api;
+package de.metas.printing.esb.api.protocol;
 
 /*
  * #%L
@@ -13,15 +13,14 @@ package de.metas.printing.esb.api;
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
+ * License along with this program. If not, see
  * <http://www.gnu.org/licenses/gpl-2.0.html>.
  * #L%
  */
-
 
 import java.io.Serializable;
 
@@ -35,6 +34,8 @@ public class PrintJobInstructionsConfirm implements Serializable
 	private String printJobInstructionsID;
 	private String errorMsg;
 	private PrintJobInstructionsStatusEnum status;
+
+	private String transactionId;
 
 	public String getPrintJobInstructionsID()
 	{
@@ -110,5 +111,15 @@ public class PrintJobInstructionsConfirm implements Serializable
 		if (status != other.status)
 			return false;
 		return true;
+	}
+
+	public String getTransactionId()
+	{
+		return transactionId;
+	}
+
+	public void setTransactionId(String transactionId)
+	{
+		this.transactionId = transactionId;
 	}
 }

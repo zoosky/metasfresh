@@ -27,7 +27,7 @@ import java.math.BigInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import de.metas.printing.esb.api.PrintJobInstructionsConfirm;
+import de.metas.printing.esb.api.protocol.PrintJobInstructionsConfirm;
 import de.metas.printing.esb.base.jaxb.JAXBConstants;
 import de.metas.printing.esb.base.jaxb.generated.CPrintJobInstructionsStatusEnum;
 import de.metas.printing.esb.base.jaxb.generated.ObjectFactory;

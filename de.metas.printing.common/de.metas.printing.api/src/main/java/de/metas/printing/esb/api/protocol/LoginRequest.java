@@ -1,4 +1,4 @@
-package de.metas.printing.esb.api;
+package de.metas.printing.esb.api.protocol;
 
 /*
  * #%L
@@ -10,12 +10,12 @@ package de.metas.printing.esb.api;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 2 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-2.0.html>.
@@ -25,18 +25,15 @@ package de.metas.printing.esb.api;
 
 import java.io.Serializable;
 
-public class LoginResponse implements Serializable
+public class LoginRequest implements Serializable
 {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6515589439074746845L;
+	private static final long serialVersionUID = -8864218635418155189L;
 
 	private String username;
-	private String sessionId;
+	private String password;
 	private String hostKey = null;
 
-	public LoginResponse()
+	public LoginRequest()
 	{
 		super();
 	}
@@ -44,8 +41,8 @@ public class LoginResponse implements Serializable
 	@Override
 	public String toString()
 	{
-		return "LoginResponse [username=" + username
-				+ ", sessionId=" + sessionId
+		return "LoginRequest [username=" + username
+				+ ", password=*********"
 				+ ", hostKey=" + hostKey
 				+ "]";
 	}
@@ -60,14 +57,14 @@ public class LoginResponse implements Serializable
 		this.username = username;
 	}
 
-	public String getSessionId()
+	public String getPassword()
 	{
-		return sessionId;
+		return password;
 	}
 
-	public void setSessionId(String sessionId)
+	public void setPassword(String password)
 	{
-		this.sessionId = sessionId;
+		this.password = password;
 	}
 
 	public String getHostKey()
@@ -79,5 +76,4 @@ public class LoginResponse implements Serializable
 	{
 		this.hostKey = hostKey;
 	}
-
 }

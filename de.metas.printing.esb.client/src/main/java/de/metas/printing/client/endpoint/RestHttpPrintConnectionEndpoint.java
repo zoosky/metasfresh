@@ -24,13 +24,13 @@ package de.metas.printing.client.endpoint;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,18 +52,17 @@ import de.metas.printing.client.IPrintConnectionEndpoint;
 import de.metas.printing.client.encoder.IBeanEnconder;
 import de.metas.printing.client.util.MapFormat;
 import de.metas.printing.client.util.Util;
-import de.metas.printing.esb.api.LoginRequest;
-import de.metas.printing.esb.api.LoginResponse;
 import de.metas.printing.esb.api.PRTRestServiceConstants;
-import de.metas.printing.esb.api.PrintJobInstructionsConfirm;
-import de.metas.printing.esb.api.PrintJobInstructionsStatusEnum;
-import de.metas.printing.esb.api.PrintPackage;
-import de.metas.printing.esb.api.PrintPackageInfo;
-import de.metas.printing.esb.api.PrinterHWList;
+import de.metas.printing.esb.api.protocol.LoginRequest;
+import de.metas.printing.esb.api.protocol.LoginResponse;
+import de.metas.printing.esb.api.protocol.PrintJobInstructionsConfirm;
+import de.metas.printing.esb.api.protocol.PrintPackage;
+import de.metas.printing.esb.api.protocol.PrintPackageInfo;
+import de.metas.printing.esb.api.protocol.PrinterHWList;
 
 /**
  * Endpoint that queries the printing system via http.
- * 
+ *
  * @author metas-dev <dev@metas-fresh.com>
  *
  */
@@ -246,12 +245,7 @@ public class RestHttpPrintConnectionEndpoint implements IPrintConnectionEndpoint
 			// task 05011: work with a stream instead of byte[] to avoid problems with large amounts of data
 			final InputStream dataBase64Stream = httpPost.getResponseBodyAsStream();
 
-			final File file = mkFile(printPackage);
-
-			final FileOutputStream fileOutputStream = new FileOutputStream(file);
-			ByteStreams.copy(dataBase64Stream, fileOutputStream);
-			dataBase64Stream.close();
-			fileOutputStream.close();
+			final File file = storeBase64StreamAsFile(printPackage, dataBase64Stream);
 
 			final FileInputStream fileInputStream = new FileInputStream(file);
 			return BaseEncoding
@@ -265,12 +259,23 @@ public class RestHttpPrintConnectionEndpoint implements IPrintConnectionEndpoint
 		}
 	}
 
+	private File storeBase64StreamAsFile(final PrintPackage printPackage, final InputStream dataBase64Stream) throws FileNotFoundException, IOException
+	{
+		final File file = Util.mkFile(printPackage);
+
+		final FileOutputStream fileOutputStream = new FileOutputStream(file);
+		ByteStreams.copy(dataBase64Stream, fileOutputStream);
+		dataBase64Stream.close();
+		fileOutputStream.close();
+		return file;
+	}
+
 	@Override
-	public void sendPrintPackageResponse(final PrintPackage printPackage, final PrintJobInstructionsConfirm response)
+	public void sendPrintPackageResponse(final PrintJobInstructionsConfirm response)
 	{
 		final byte[] data = beanEncoder.encode(response);
 
-		final String transactionId = printPackage.getTransactionId();
+		final String transactionId = response.getTransactionId();
 
 		final Map<String, String> params = createInitialUrlParams();
 		params.put(PRTRestServiceConstants.PARAM_TransactionId, transactionId);
@@ -297,31 +302,6 @@ public class RestHttpPrintConnectionEndpoint implements IPrintConnectionEndpoint
 		{
 			throw e instanceof PrintConnectionEndpointException ? (PrintConnectionEndpointException)e : new PrintConnectionEndpointException("Cannot POST to " + url, e);
 		}
-		if (PrintJobInstructionsStatusEnum.Gedruckt.equals(response.getStatus()))
-		{
-			final File dataFiletoDelete = mkFile(printPackage);
-			try
-			{
-				Files.delete(dataFiletoDelete.toPath());
-			}
-			catch (final IOException e)
-			{
-				log.log(Level.SEVERE, "IOException while trying to delete data file " + dataFiletoDelete, e);
-			}
-
-		}
-	}
-
-	/**
-	 * Create a file that corresponds to the given <code>printPackageInfo</code>.
-	 *
-	 * @param printPackageInfo
-	 * @return
-	 */
-	private File mkFile(final PrintPackage printPackageInfo)
-	{
-		final File file = new File("PrintJobInstructionsID_" + printPackageInfo.getPrintJobInstructionsID() + ".data");
-		return file;
 	}
 
 	// protected because we want to make them testable

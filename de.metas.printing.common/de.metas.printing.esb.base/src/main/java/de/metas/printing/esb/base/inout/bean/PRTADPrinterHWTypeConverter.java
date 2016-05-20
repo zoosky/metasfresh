@@ -28,10 +28,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import de.metas.printing.esb.api.PrinterHW;
-import de.metas.printing.esb.api.PrinterHW.PrinterHWMediaSize;
-import de.metas.printing.esb.api.PrinterHW.PrinterHWMediaTray;
-import de.metas.printing.esb.api.PrinterHWList;
+import de.metas.printing.esb.api.protocol.PrinterHW;
+import de.metas.printing.esb.api.protocol.PrinterHWList;
+import de.metas.printing.esb.api.protocol.PrinterHW.PrinterHWMediaSize;
+import de.metas.printing.esb.api.protocol.PrinterHW.PrinterHWMediaTray;
 import de.metas.printing.esb.base.jaxb.JAXBConstants;
 import de.metas.printing.esb.base.jaxb.generated.ObjectFactory;
 import de.metas.printing.esb.base.jaxb.generated.PRTADPrinterHWMediaSizeType;

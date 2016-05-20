@@ -1,4 +1,4 @@
-package de.metas.printing.esb.api;
+package de.metas.printing.esb.api.protocol;
 
 /*
  * #%L

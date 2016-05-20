@@ -24,8 +24,11 @@ package de.metas.printing.client.util;
 
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+
+import de.metas.printing.esb.api.protocol.PrintPackage;
 
 public final class Util
 {
@@ -153,6 +156,18 @@ public final class Util
 	public static String toString(final InputStream in)
 	{
 		return new String(toByteArray(in));
+	}
+
+	/**
+	 * Create a file that corresponds to the given <code>printPackage</code>.
+	 *
+	 * @param printPackage
+	 * @return
+	 */
+	public static File mkFile(final PrintPackage printPackage)
+	{
+		final File file = new File("PrintJobInstructionsID_" + printPackage.getPrintJobInstructionsID() + ".data");
+		return file;
 	}
 
 }

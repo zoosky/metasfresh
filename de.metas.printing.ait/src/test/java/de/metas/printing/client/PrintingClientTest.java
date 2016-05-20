@@ -10,12 +10,12 @@ package de.metas.printing.client;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 2 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-2.0.html>.
@@ -48,12 +48,12 @@ import de.metas.printing.client.encoder.IBeanEnconder;
 import de.metas.printing.client.endpoint.LoginFailedPrintConnectionEndpointException;
 import de.metas.printing.client.endpoint.PrintConnectionEndpointException;
 import de.metas.printing.client.endpoint.RestHttpPrintConnectionEndpoint;
-import de.metas.printing.esb.api.LoginRequest;
-import de.metas.printing.esb.api.LoginResponse;
-import de.metas.printing.esb.api.PrintJobInstructionsConfirm;
-import de.metas.printing.esb.api.PrintJobInstructionsStatusEnum;
-import de.metas.printing.esb.api.PrintPackage;
-import de.metas.printing.esb.api.PrinterHWList;
+import de.metas.printing.esb.api.protocol.LoginRequest;
+import de.metas.printing.esb.api.protocol.LoginResponse;
+import de.metas.printing.esb.api.protocol.PrintJobInstructionsConfirm;
+import de.metas.printing.esb.api.protocol.PrintJobInstructionsStatusEnum;
+import de.metas.printing.esb.api.protocol.PrintPackage;
+import de.metas.printing.esb.api.protocol.PrinterHWList;
 import de.metas.printing.esb.base.inout.bean.PRTCPrintPackageTypeConverter;
 import de.metas.printing.esb.base.jaxb.generated.PRTCPrintJobInstructionsConfirmType;
 import de.metas.printing.esb.base.jaxb.generated.PRTCPrintPackageDataType;
@@ -209,7 +209,7 @@ public class PrintingClientTest extends AbstractPrintingCamelTest
 	/**
 	 * If the jms endpoint throw an exception, then we still expect a "normal" print package to be returned, because it shall not be the printing lcient's problem if e.g. metasfresh is down for
 	 * maintainance.
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -439,7 +439,7 @@ public class PrintingClientTest extends AbstractPrintingCamelTest
 		response.setErrorMsg(null);
 
 		// Send the response and check that there are no errors
-		restClient.sendPrintPackageResponse(printPackage, response);
+		restClient.sendPrintPackageResponse(response);
 
 		final I_C_Print_Job_Instructions printJobInstructionsAfter = InterfaceWrapperHelper.create(Env.getCtx(), printJobInstructionsId, I_C_Print_Job_Instructions.class, ITrx.TRXNAME_None);
 		Assert.assertNotNull("C_Print_Job_Instructions(after) shall not be null", printJobInstructionsAfter);
