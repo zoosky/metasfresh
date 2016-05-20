@@ -401,11 +401,8 @@ public class GridTab implements DataStatusListener, Evaluatee, Serializable
 		}
 		m_Chats = null;
 		//
-		if (m_vo.isInitFields())
-		{
-			m_vo.getFields().clear();
-		}
-		// m_vo.Fields = null;
+		m_vo.clearFields();
+		
 		m_vo = null;
 		if (m_loader != null)
 		{
@@ -427,7 +424,7 @@ public class GridTab implements DataStatusListener, Evaluatee, Serializable
 	{
 		log.debug("#" + m_vo.TabNo);
 
-		if (m_vo.getFields() == null)
+		if (m_vo.getFields().isEmpty())
 		{
 			return false;
 		}
@@ -1813,7 +1810,7 @@ public class GridTab implements DataStatusListener, Evaluatee, Serializable
 	 */
 	public boolean isPrinted()
 	{
-		return m_vo.AD_Process_ID != 0;
+		return m_vo.getPrint_Process_ID() > 0;
 	}	// isPrinted
 
 	/**
@@ -1843,7 +1840,7 @@ public class GridTab implements DataStatusListener, Evaluatee, Serializable
 	 */
 	public int getAD_Process_ID()
 	{
-		return m_vo.AD_Process_ID;
+		return m_vo.getPrint_Process_ID();
 	}	// getAD_Process_ID
 
 	/**

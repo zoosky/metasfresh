@@ -1,10 +1,13 @@
-package de.metas.adempiere.callout;
+package org.compiere.util;
+
+import org.junit.Assert;
+import org.junit.Test;
 
 /*
  * #%L
- * de.metas.swat.base
+ * de.metas.adempiere.adempiere.base
  * %%
- * Copyright (C) 2015 metas GmbH
+ * Copyright (C) 2016 metas GmbH
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,21 +25,22 @@ package de.metas.adempiere.callout;
  * #L%
  */
 
-
-import org.compiere.apps.search.IGridTabRowBuilder;
-import org.compiere.model.GridTab;
-
-public interface IOrderFastInputHandler
+public class UtilTest
 {
-
-	void clearFields(GridTab gridTab);
-
-	/**
-	 * 
-	 * @param gridTab
-	 * @return true if focus was actually requested
-	 */
-	boolean requestFocus(GridTab gridTab);
-
-	IGridTabRowBuilder createLineBuilderFromHeader(Object model);
+	@Test
+	public void test_clearAmp()
+	{
+		test_clearAmp(null, null);
+		test_clearAmp("", "");
+		
+		test_clearAmp("nothing", "nothing");
+		
+		test_clearAmp("Springe zu Eintrag (wo verwendet)", "&Springe zu Eintrag (wo verwendet)");
+	}
+	
+	private void test_clearAmp(final String expected, final String input)
+	{
+		final String actual = Util.cleanAmp(input);
+		Assert.assertEquals("Invalid result for input: "+input, expected, actual);
+	}
 }

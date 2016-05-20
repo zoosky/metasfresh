@@ -24,8 +24,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
-import org.slf4j.Logger;
-import de.metas.logging.LogManager;
 
 import org.adempiere.ad.security.IUserRolePermissions;
 import org.adempiere.ad.trx.api.ITrx;
@@ -36,6 +34,9 @@ import org.adempiere.util.Check;
 import org.adempiere.util.Services;
 import org.compiere.util.DB;
 import org.compiere.util.Env;
+import org.slf4j.Logger;
+
+import de.metas.logging.LogManager;
 
 /**
  *  Model Window Value Object
@@ -82,10 +83,10 @@ public class GridWindowVO implements Serializable
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Load {@link GridWindowVO}.
-	 * 
+	 *
 	 * @param ctx
 	 * @param WindowNo
 	 * @param AD_Window_ID
@@ -95,7 +96,7 @@ public class GridWindowVO implements Serializable
 	 */
 	public static GridWindowVO create (final Properties ctx, final int WindowNo, final int AD_Window_ID, final int AD_Menu_ID)
 	{
-		logger.info("#" + WindowNo + " - AD_Window_ID=" + AD_Window_ID + "; AD_Menu_ID=" + AD_Menu_ID);
+		logger.info("WindowNo={} - AD_Window_ID={}; AD_Menu_ID={}", WindowNo, AD_Window_ID, AD_Menu_ID);
 		GridWindowVO vo = new GridWindowVO (ctx, WindowNo);
 		vo.AD_Window_ID = AD_Window_ID;
 
@@ -158,7 +159,7 @@ public class GridWindowVO implements Serializable
 			//	create statement
 			pstmt = DB.prepareStatement(sql.toString(), ITrx.TRXNAME_None);
 			DB.setParameters(pstmt, sqlParams);
-			
+
 			// 	get data
 			rs = pstmt.executeQuery();
 			if (rs.next())
@@ -198,7 +199,7 @@ public class GridWindowVO implements Serializable
 		// Ensure ASP exceptions
 		final IUserRolePermissions role = Env.getUserRolePermissions(ctx);
 		// metas: begin: check for permissions using MRole API
-		Boolean windowAccess = null; 
+		Boolean windowAccess = null;
 		if (vo != null)
 			windowAccess = role.getWindowAccess(vo.AD_Window_ID);
 		if (vo != null && windowAccess == null)
@@ -298,7 +299,7 @@ public class GridWindowVO implements Serializable
 		return true;
 	}   //  createTabs
 
-	
+
 	/**************************************************************************
 	 *  Private Constructor
 	 *  @param Ctx context
@@ -415,7 +416,7 @@ public class GridWindowVO implements Serializable
 	{
 		return IsOneInstanceOnly;
 	}
-	
+
 	private StringBuffer loadErrorMessages = null;
 	protected void addLoadErrorMessage(String message, boolean checkEmpty)
 	{
@@ -428,7 +429,7 @@ public class GridWindowVO implements Serializable
 			// Don't add this message
 			if (checkEmpty)
 				return;
-			
+
 			loadErrorMessages.append("\n");
 		}
 		loadErrorMessages.append(message);
@@ -436,6 +437,16 @@ public class GridWindowVO implements Serializable
 	public String getLoadErrorMessage()
 	{
 		return loadErrorMessages == null || loadErrorMessages.length() == 0 ? null : loadErrorMessages.toString();
+	}
+
+	public Properties getCtx()
+	{
+		return ctx;
+	}
+
+	public List<GridTabVO> getTabs()
+	{
+		return Tabs;
 	}
 // metas: end
 }   //  MWindowVO

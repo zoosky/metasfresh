@@ -306,6 +306,7 @@ public final class Env
 	public static final String CTXNAME_WindowName = "WindowName";
 	public static final String CTXNAME_Printer = "#Printer";
 	public static final String CTXNAME_ShowAcct = "#ShowAcct";
+	public static final String CTXNAME_AcctSchemaElementPrefix = "$Element_";
 
 	/**
 	 * See task http://dewiki908/mediawiki/index.php/05730_Use_different_Theme_colour_on_UAT_system
@@ -1819,17 +1820,17 @@ public final class Env
 			return null;
 		}
 
-		JFrame retValue = null;
 		try
 		{
-			retValue = getFrame(s_windows.get(WindowNo));
+			return getFrame(s_windows.get(WindowNo));
 		}
 		catch (Exception e)
 		{
-			s_log.error(e.toString());
+			s_log.error("Failed getting frame for windowNo={}", WindowNo, e);
 		}
-		return retValue;
-	}	// getWindow
+		
+		return null;
+	}
 
 	/**
 	 * Remove window from active list
