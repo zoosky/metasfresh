@@ -12,11 +12,13 @@ Additional notes:
 
 The actual release notes
 
-# metasfresh 4.x.x (upcoming)
+# metasfresh 4.19.18 (upcoming)
 
 ## Features
+ - FRESH-335 create an initial contributor's guideline
 
 ## Fixes
+ - FRESH-278 Umsatzreport Geschäftspartner copy and modify details
  - FRESH-333 Procurement candidate prices not updated correctly
  - FRESH-307 New Organisation: Financial Data of existing Org
  - FRESH-326 Set the Correct Org in Fact_Acct_Summary
