@@ -116,59 +116,21 @@
 			</plugin>
 
 			<plugin>
-				<!-- NOTE: We don't need a groupId specification because the group is 
-					org.apache.maven.plugins ...which is assumed by default. -->
-				<artifactId>maven-assembly-plugin</artifactId>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>${spring-boot.version}</version>
 				<configuration>
-					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>
-					<archive>
-						<index>true</index>
-						<manifest>
-							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-							<mainClass>de.metas.printing.client.PrintingClientStandaloneService</mainClass>
-						</manifest>
-						<manifestEntries>
-							<!-- required when we run this jar as an applet. 
-							     See http://docs.oracle.com/javase/7/docs/technotes/guides/jweb/manifest.html#permissions -->
-							<Permissions>all-permissions</Permissions>
-							<Implementation-Version>${project.version}-${env.BUILD_NUMBER}</Implementation-Version>
-						</manifestEntries>
-					</archive>
+					<executable>true</executable>
 				</configuration>
 				<executions>
 					<execution>
-						<id>make-assembly</id> <!-- this is used for inheritance merges -->
-						<phase>package</phase> <!-- bind to the packaging phase -->
 						<goals>
-							<goal>single</goal>
+							<goal>repackage</goal>
 						</goals>
 					</execution>
 				</executions>
 			</plugin>
 
-			<plugin>
-				<!-- sign the uber-jar that we just created with the maven-assembly-plugin -->
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jarsigner-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>sign</id>
-						<phase>package</phase>
-						<goals>
-							<goal>sign</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<keystore>${keystore.path}</keystore>
-					<alias>${keystore.alias}</alias>
-					<storepass>${keystore.store.password}</storepass>
-					<keypass>${keystore.key.password}</keypass>
-					<archive>${project.build.directory}/${project.artifactId}-${project.version}-jar-with-dependencies.jar</archive>
-				</configuration>
-			</plugin>
 		</plugins>
 	</build>
 </project>

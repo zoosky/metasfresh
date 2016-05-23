@@ -2,7 +2,6 @@ package de.metas.printing.client.endpoint;
 
 import java.io.InputStream;
 import java.util.Collections;
-import java.util.logging.Logger;
 
 import javax.ws.rs.core.MediaType;
 
@@ -11,6 +10,10 @@ import org.apache.cxf.feature.LoggingFeature;
 import org.apache.cxf.interceptor.AbstractLoggingInterceptor;
 import org.apache.cxf.jaxrs.client.JAXRSClientFactory;
 import org.apache.cxf.jaxrs.client.WebClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import com.google.common.base.Strings;
@@ -36,38 +39,35 @@ import de.metas.printing.esb.api.protocol.PrinterHWList;
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
+ * License along with this program. If not, see
  * <http://www.gnu.org/licenses/gpl-2.0.html>.
  * #L%
  */
 
-public class CxfViaJMSPrintConnectionendpoint implements IPrintConnectionEndpoint
+public class CxfOverJmsPrintConnectionendpoint implements IPrintConnectionEndpoint
 {
 
-	private final IMetasfreshEPSync metasfreshEPSync;
+	private static final transient Logger logger = LoggerFactory.getLogger(CxfOverJmsPrintConnectionendpoint.class);
 
+	/**
+	 * The server-URL to be used by the client. It contains {@link #brokerUrl}, {@link #metasfreshQueueRequest} and {@link #metasfreshQueueResponse} as substrings.
+	 */
+	@Value("${mf.sync.url:}")
+	private String serverUrl;
 
-	private final transient Logger logger = Logger.getLogger(getClass().getName());
-
-	public CxfViaJMSPrintConnectionendpoint()
-	{
-		metasfreshEPSync=clientEndPoint(
-				jacksonJaxbJsonProvider(),
-				createLoggingFeature());
-	}
-
-
+	@Autowired
+	private IMetasfreshEPSync metasfreshEPSync;
 
 	/**
 	 * Creates the {@link IServerSync} client endpoint which this application can use to talk to the metasfresh server.
 	 *
 	 * @return
 	 */
-	private IMetasfreshEPSync clientEndPoint(
+	public IMetasfreshEPSync metasfreshEPSync(
 			final JacksonJaxbJsonProvider jacksonJaxbJsonProvider,
 			final LoggingFeature loggingFeature)
 	{
@@ -76,7 +76,7 @@ public class CxfViaJMSPrintConnectionendpoint implements IPrintConnectionEndpoin
 		logger.info("mfprocurement.sync.url: {}", serverUrl);
 		if (Strings.isNullOrEmpty(serverUrl))
 		{
-// TODO: fail
+			// TODO: fail
 		}
 
 		//
@@ -98,13 +98,6 @@ public class CxfViaJMSPrintConnectionendpoint implements IPrintConnectionEndpoin
 		return serverSync;
 	}
 
-
-	public JacksonJaxbJsonProvider jacksonJaxbJsonProvider()
-	{
-		final JacksonJaxbJsonProvider jacksonJaxbJsonProvider = new JacksonJaxbJsonProvider();
-		return jacksonJaxbJsonProvider;
-	}
-
 	/**
 	 *
 	 * @return
@@ -120,8 +113,8 @@ public class CxfViaJMSPrintConnectionendpoint implements IPrintConnectionEndpoin
 		final int limit = AbstractLoggingInterceptor.DEFAULT_LIMIT + 1;
 
 		final LoggingFeature loggingFeature = new LoggingFeature(
-				null,    // use default
-				null,    // use default
+				null,     // use default
+				null,     // use default
 				limit,
 				prettyPrint,
 				showBinary);
