@@ -49,9 +49,22 @@
 	</dependencyManagement>
 
 	<dependencies>
+
+		<dependency>
+			<groupId>de.metas.commons.cxf</groupId>
+			<artifactId>de.metas.commons.cxf</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
 		<dependency>
 			<groupId>de.metas.printing</groupId>
 			<artifactId>de.metas.printing.api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>de.metas.commons.cxf</groupId>
+			<artifactId>de.metas.commons.cxf</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
@@ -83,31 +96,6 @@
 			<artifactId>cxf-rt-transports-jms</artifactId>
 			<version>${cxf.version}</version>
 		</dependency>
-		
-		<!-- needed, even if we currently communicate with JMS only  -->
-		<dependency>
-			<groupId>org.apache.cxf</groupId>
-			<artifactId>cxf-rt-transports-http</artifactId>
-			<version>${cxf.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.cxf</groupId>
-			<artifactId>cxf-rt-frontend-jaxrs</artifactId>
-			<version>${cxf.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.cxf</groupId>
-			<artifactId>cxf-rt-rs-client</artifactId>
-			<version>${cxf.version}</version>
-		</dependency>
-
-		<!-- this provider can also marshal and unmarshal objects that are not tagged with @XmlRoot -->
-		<dependency>
-			<groupId>com.fasterxml.jackson.jaxrs</groupId>
-			<artifactId>jackson-jaxrs-json-provider</artifactId>
-		</dependency>
-
 
 	</dependencies>
 
