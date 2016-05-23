@@ -1,8 +1,22 @@
 package de.metas.printing.client.endpoint;
 
 import java.io.InputStream;
+import java.util.Collections;
+import java.util.logging.Logger;
+
+import javax.ws.rs.core.MediaType;
+
+import org.apache.cxf.feature.Feature;
+import org.apache.cxf.feature.LoggingFeature;
+import org.apache.cxf.interceptor.AbstractLoggingInterceptor;
+import org.apache.cxf.jaxrs.client.JAXRSClientFactory;
+import org.apache.cxf.jaxrs.client.WebClient;
+
+import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
+import com.google.common.base.Strings;
 
 import de.metas.printing.client.IPrintConnectionEndpoint;
+import de.metas.printing.esb.api.IMetasfreshEPSync;
 import de.metas.printing.esb.api.protocol.LoginRequest;
 import de.metas.printing.esb.api.protocol.LoginResponse;
 import de.metas.printing.esb.api.protocol.PrintJobInstructionsConfirm;
@@ -34,39 +48,114 @@ import de.metas.printing.esb.api.protocol.PrinterHWList;
 public class CxfViaJMSPrintConnectionendpoint implements IPrintConnectionEndpoint
 {
 
+	private final IMetasfreshEPSync metasfreshEPSync;
+
+
+	private final transient Logger logger = Logger.getLogger(getClass().getName());
+
+	public CxfViaJMSPrintConnectionendpoint()
+	{
+		metasfreshEPSync=clientEndPoint(
+				jacksonJaxbJsonProvider(),
+				createLoggingFeature());
+	}
+
+
+
+	/**
+	 * Creates the {@link IServerSync} client endpoint which this application can use to talk to the metasfresh server.
+	 *
+	 * @return
+	 */
+	private IMetasfreshEPSync clientEndPoint(
+			final JacksonJaxbJsonProvider jacksonJaxbJsonProvider,
+			final LoggingFeature loggingFeature)
+	{
+		//
+		// Get server's URL
+		logger.info("mfprocurement.sync.url: {}", serverUrl);
+		if (Strings.isNullOrEmpty(serverUrl))
+		{
+// TODO: fail
+		}
+
+		//
+		// Get MediaType
+		final MediaType mediaType = MediaType.APPLICATION_JSON_TYPE;
+
+		//
+		// Create the server binding.
+		final IMetasfreshEPSync serverSync = JAXRSClientFactory.create(
+				serverUrl.trim(),
+				IMetasfreshEPSync.class,
+				Collections.singletonList(jacksonJaxbJsonProvider),
+				Collections.singletonList((Feature)loggingFeature),
+				null); // not providing a particular configLocation
+
+		WebClient.client(serverSync)
+				.type(mediaType)
+				.accept(mediaType);
+		return serverSync;
+	}
+
+
+	public JacksonJaxbJsonProvider jacksonJaxbJsonProvider()
+	{
+		final JacksonJaxbJsonProvider jacksonJaxbJsonProvider = new JacksonJaxbJsonProvider();
+		return jacksonJaxbJsonProvider;
+	}
+
+	/**
+	 *
+	 * @return
+	 * @task https://metasfresh.atlassian.net/browse/FRESH-87
+	 */
+
+	public LoggingFeature createLoggingFeature()
+	{
+		final boolean prettyPrint = true;
+		final boolean showBinary = true;
+
+		// see LoggingFeature.initializeProvider()...we want to make sure that showBinary is not ignored
+		final int limit = AbstractLoggingInterceptor.DEFAULT_LIMIT + 1;
+
+		final LoggingFeature loggingFeature = new LoggingFeature(
+				null,    // use default
+				null,    // use default
+				limit,
+				prettyPrint,
+				showBinary);
+		return loggingFeature;
+	}
+
 	@Override
 	public LoginResponse login(LoginRequest loginRequest) throws LoginFailedPrintConnectionEndpointException
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return metasfreshEPSync.login(loginRequest);
 	}
 
 	@Override
 	public void addPrinterHW(PrinterHWList printerHWList)
 	{
-		// TODO Auto-generated method stub
-
+		metasfreshEPSync.addPrinterHW(printerHWList);
 	}
 
 	@Override
 	public PrintPackage getNextPrintPackage()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return metasfreshEPSync.getNextPrintPackage();
 	}
 
 	@Override
 	public InputStream getPrintPackageData(PrintPackage printPackage)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return metasfreshEPSync.getPrintPackageData(printPackage);
 	}
 
 	@Override
 	public void sendPrintPackageResponse(PrintJobInstructionsConfirm response)
 	{
-		// TODO Auto-generated method stub
-
+		metasfreshEPSync.sendPrintPackageResponse(response);
 	}
 
 }
