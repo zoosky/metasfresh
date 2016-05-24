@@ -1,8 +1,13 @@
-drop function if exists de_metas_acct.acctBalanceToDate(p_Account_ID numeric, p_C_AcctSchema_ID numeric, p_DateAcct date) CASCADE;
-drop function if exists de_metas_acct.acctBalanceToDate(p_Account_ID numeric, p_C_AcctSchema_ID numeric, p_DateAcct date) CASCADE;
-drop function if exists de_metas_acct.acctBalanceToDate(p_Account_ID numeric, p_C_AcctSchema_ID numeric, p_DateAcct date, p_IncludePostingTypeStatistical char(1)) CASCADE;
-DROP TYPE if exists BalanceAmt CASCADE;
-DROP TYPE if exists de_metas_acct.BalanceAmt CASCADE;
+-- Function: de_metas_acct.acctbalanceuntildate(numeric, numeric, date, character)
+
+ DROP FUNCTION IF EXISTS de_metas_acct.acctbalanceuntildate(numeric, numeric, date, character);
+
+DROP FUNCTION IF EXISTS   de_metas_acct.acctbalanceuntildate(p_account_id numeric, p_c_acctschema_id numeric, p_dateacct date,  ad_org_id numeric, p_includepostingtypestatistical character);
+
+
+/* 
+
+-- This type shall be already in the database. Do not create it again
 
 CREATE TYPE de_metas_acct.BalanceAmt AS
 (
@@ -11,8 +16,11 @@ CREATE TYPE de_metas_acct.BalanceAmt AS
     , Credit numeric
 );
 
-create or replace function de_metas_acct.acctBalanceToDate(p_Account_ID numeric, p_C_AcctSchema_ID numeric, p_DateAcct date, p_AD_Org_ID numeric(10,0),  p_IncludePostingTypeStatistical char(1) = 'N')
-RETURNS de_metas_acct.BalanceAmt AS
+ */
+ 
+
+CREATE OR REPLACE FUNCTION de_metas_acct.acctbalanceuntildate(p_account_id numeric, p_c_acctschema_id numeric, p_dateacct date,  ad_org_id numeric, p_includepostingtypestatistical character DEFAULT 'N'::bpchar)
+  RETURNS de_metas_acct.BalanceAmt AS
 $BODY$
 -- NOTE: we use COALESCE(SUM(..)) just to make sure we are not returning null
 SELECT ROW(SUM((Balance).Balance), SUM((Balance).Debit), SUM((Balance).Credit))::de_metas_acct.BalanceAmt
@@ -33,8 +41,8 @@ FROM (
 			and fas.C_AcctSchema_ID=$2 -- p_C_AcctSchema_ID
 			and fas.PostingType='A'
 			and fas.PA_ReportCube_ID is null
-			and fas.DateAcct <= $3 -- p_DateAcct
-			and fas.ad_org_id = $4 -- p_AD_Org_ID
+			and fas.DateAcct < $3 -- p_DateAcct
+			and fas.ad_org_id = $4
 		ORDER BY fas.DateAcct DESC
 		LIMIT 1
 	)
@@ -57,8 +65,8 @@ FROM (
 			and fas.C_AcctSchema_ID=$2 -- p_C_AcctSchema_ID
 			and fas.PostingType='S'
 			and fas.PA_ReportCube_ID is null
-			and fas.DateAcct <= $3 -- p_DateAcct
-			and fas.ad_org_id = $4 -- p_AD_Org_ID
+			and fas.DateAcct < $3 -- p_DateAcct
+			and fas.ad_org_id = $4
 		ORDER BY fas.DateAcct DESC
 		LIMIT 1
 	)
@@ -69,5 +77,6 @@ FROM (
 	)
 ) t
 $BODY$
-LANGUAGE sql STABLE;
+  LANGUAGE sql STABLE
+  COST 100;
 
