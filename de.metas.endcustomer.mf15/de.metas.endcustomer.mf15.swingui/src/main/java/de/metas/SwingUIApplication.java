@@ -21,11 +21,11 @@ import org.springframework.context.annotation.Bean;
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
+ * License along with this program. If not, see
  * <http://www.gnu.org/licenses/gpl-2.0.html>.
  * #L%
  */
@@ -41,8 +41,9 @@ public class SwingUIApplication
 		new SpringApplicationBuilder(SwingUIApplication.class)
 				.headless(false)
 				// actually we would like to it to start actuator endpoints and register with the spring-boot admin server, BUT
-				// we first need to solve the problem of running multiple clients on the same machine (they need to bind to differnt ports)
-				// there might be resource/performance problems
+				// we first need to solve the problem of running multiple clients on the same machine (they need to bind to different ports)
+				// => can be done using our shell/bat script to find a free port and then set it as environment variable
+				// also there might be resource/performance problems
 				// at any rate, we have not yet a solution as to how to configure them
 				.web(false)
 				.run(args);

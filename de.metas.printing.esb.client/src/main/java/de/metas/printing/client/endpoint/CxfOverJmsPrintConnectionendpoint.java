@@ -7,17 +7,17 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.cxf.feature.Feature;
 import org.apache.cxf.feature.LoggingFeature;
-import org.apache.cxf.interceptor.AbstractLoggingInterceptor;
 import org.apache.cxf.jaxrs.client.JAXRSClientFactory;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
-import com.google.common.base.Strings;
 
+import de.metas.printing.client.Context;
 import de.metas.printing.client.IPrintConnectionEndpoint;
 import de.metas.printing.esb.api.IMetasfreshEPSync;
 import de.metas.printing.esb.api.protocol.LoginRequest;
@@ -47,16 +47,13 @@ import de.metas.printing.esb.api.protocol.PrinterHWList;
  * <http://www.gnu.org/licenses/gpl-2.0.html>.
  * #L%
  */
-
+@Service
 public class CxfOverJmsPrintConnectionendpoint implements IPrintConnectionEndpoint
 {
 
 	private static final transient Logger logger = LoggerFactory.getLogger(CxfOverJmsPrintConnectionendpoint.class);
 
-	/**
-	 * The server-URL to be used by the client. It contains {@link #brokerUrl}, {@link #metasfreshQueueRequest} and {@link #metasfreshQueueResponse} as substrings.
-	 */
-	@Value("${mf.sync.url:}")
+	private Context _ctx;
 	private String serverUrl;
 
 	@Autowired
@@ -67,16 +64,18 @@ public class CxfOverJmsPrintConnectionendpoint implements IPrintConnectionEndpoi
 	 *
 	 * @return
 	 */
+	@Bean
 	public IMetasfreshEPSync metasfreshEPSync(
 			final JacksonJaxbJsonProvider jacksonJaxbJsonProvider,
 			final LoggingFeature loggingFeature)
 	{
 		//
 		// Get server's URL
-		logger.info("mfprocurement.sync.url: {}", serverUrl);
-		if (Strings.isNullOrEmpty(serverUrl))
+		_ctx = Context.getContext();
+		serverUrl = _ctx.getProperty(RestHttpPrintConnectionEndpoint.CTX_ServerUrl);
+		if (serverUrl == null || serverUrl.isEmpty())
 		{
-			// TODO: fail
+			throw new PrintConnectionEndpointException("Config " + RestHttpPrintConnectionEndpoint.CTX_ServerUrl + " not found");
 		}
 
 		//
@@ -96,29 +95,6 @@ public class CxfOverJmsPrintConnectionendpoint implements IPrintConnectionEndpoi
 				.type(mediaType)
 				.accept(mediaType);
 		return serverSync;
-	}
-
-	/**
-	 *
-	 * @return
-	 * @task https://metasfresh.atlassian.net/browse/FRESH-87
-	 */
-
-	public LoggingFeature createLoggingFeature()
-	{
-		final boolean prettyPrint = true;
-		final boolean showBinary = true;
-
-		// see LoggingFeature.initializeProvider()...we want to make sure that showBinary is not ignored
-		final int limit = AbstractLoggingInterceptor.DEFAULT_LIMIT + 1;
-
-		final LoggingFeature loggingFeature = new LoggingFeature(
-				null,     // use default
-				null,     // use default
-				limit,
-				prettyPrint,
-				showBinary);
-		return loggingFeature;
 	}
 
 	@Override

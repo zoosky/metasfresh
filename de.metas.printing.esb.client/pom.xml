@@ -14,6 +14,7 @@
 	<description>Printing client that queries the ESB for print jobs and performs them using the local printer hardware</description>
 
 	<properties>
+		
 		<!-- note that the scripts are not part of the rollout-package.
 		     they are just present when a developer runs mg migrate from their local dev-station -->
 		<migration-sql-basedir>99-de.metas.printing.esb.client</migration-sql-basedir>
@@ -21,32 +22,6 @@
 		<!-- note that we also use 3.1.6 in the metasfresh/de.metas.jaxrs module. -->
 		<cxf.version>3.1.6</cxf.version>
 	</properties>
-
-	<dependencyManagement>
-		<dependencies>
-			<!-- 
-				Pull in the cxf-parents as import scope to re-use the dependenecyManagement 
-				sections of those poms. Those sections define the versions of various third 
-				party deps that CXF used to build with and test with and we would like to 
-				make sure the same versions are used for the samples 
-			-->
-			<dependency>
-				<groupId>org.apache.cxf</groupId>
-				<artifactId>cxf-parent</artifactId>
-				<version>${cxf.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.cxf</groupId>
-				<artifactId>cxf</artifactId>
-				<version>${cxf.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-
-		</dependencies>
-	</dependencyManagement>
 
 	<dependencies>
 
@@ -59,7 +34,6 @@
 		<dependency>
 			<groupId>de.metas.printing</groupId>
 			<artifactId>de.metas.printing.api</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
@@ -71,6 +45,7 @@
 		<dependency>
 			<groupId>commons-httpclient</groupId>
 			<artifactId>commons-httpclient</artifactId>
+			<version>3.1</version>
 		</dependency>
 
 		<dependency>
