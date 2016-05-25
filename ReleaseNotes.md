@@ -12,11 +12,16 @@ Additional notes:
 
 The actual release notes
 
-# metasfresh 4.x.x
+# metasfresh 4.20.19
 
 ## Features
-
+ - FRESH-326 Set the Correct Org in Fact_Acct_Summary
+    * changed the migration script to be more repeatable 
+ 
 ## Fixes
+ - FRESH-343 Unwanted PInstance log shown after olCands were cleared for processing
+ - FRESH-314 Foreign BPartner reference included in sales order C_Order.C_BPartner_ID
+    * some polishing around AD_ChangeLog creation
 
 # metasfresh 4.19.18
 
