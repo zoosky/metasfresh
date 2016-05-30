@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>de.metas.parent</artifactId>
 		<groupId>de.metas</groupId>
-		<version>1.0_IT-SNAPSHOT</version>
+		<version>3-development-SNAPSHOT</version>
 		<relativePath>../de.metas.parent/pom.xml</relativePath>
 	</parent>
 
@@ -27,19 +27,14 @@
 
 		<dependency>
 			<groupId>de.metas.commons.cxf</groupId>
-			<artifactId>de.metas.commons.cxf</artifactId>
-			<version>${project.version}</version>
+			<artifactId>metasfresh-commons-cxf</artifactId>
+			<version>${metasfresh-dependency.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>de.metas.printing</groupId>
 			<artifactId>de.metas.printing.api</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>de.metas.commons.cxf</groupId>
-			<artifactId>de.metas.commons.cxf</artifactId>
-			<version>${project.version}</version>
+			<version>${metasfresh-dependency.version}</version>
 		</dependency>
 
 		<dependency>
