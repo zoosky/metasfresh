@@ -103,6 +103,12 @@
 			<artifactId>de.metas.util</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>de.metas.commons.cxf</groupId>
+			<artifactId>metasfresh-commons-cxf</artifactId>
+			<version>${metasfresh-dependency.version}</version>
+		</dependency>
+
 		<!-- spring -->
 		<!-- Note about all these exclusions:
 			We import apache-cxf's dependency management, which amounts to spring-4.1.8.

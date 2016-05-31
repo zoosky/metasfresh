@@ -13,12 +13,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 
 import de.metas.printing.client.Context;
 import de.metas.printing.client.IPrintConnectionEndpoint;
+import de.metas.printing.client.PrintingClientStandaloneService;
 import de.metas.printing.esb.api.IMetasfreshEPSync;
 import de.metas.printing.esb.api.protocol.LoginRequest;
 import de.metas.printing.esb.api.protocol.LoginResponse;
@@ -47,6 +49,7 @@ import de.metas.printing.esb.api.protocol.PrinterHWList;
  * <http://www.gnu.org/licenses/gpl-2.0.html>.
  * #L%
  */
+@Profile(PrintingClientStandaloneService.PROFILE_PrintingClientStandaloneService)
 @Service
 public class CxfOverJmsPrintConnectionendpoint implements IPrintConnectionEndpoint
 {

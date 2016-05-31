@@ -45,11 +45,14 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 
 public class PrintingClientStandaloneService
 {
+	public static final String PROFILE_PrintingClientStandaloneService = "PrintingClientStandaloneService";
+
 	private final transient Logger logger = Logger.getLogger(getClass().getName());
 
 	public static void main(final String[] args)
 	{
 		new SpringApplicationBuilder(PrintingClientStandaloneService.class)
+				.profiles(PROFILE_PrintingClientStandaloneService)
 				.headless(false)
 				// actually we would like to it to start actuator endpoints and register with the spring-boot admin server, BUT
 				// we first need to solve the problem of running multiple clients on the same machine (they need to bind to different ports)

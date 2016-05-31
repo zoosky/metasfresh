@@ -947,6 +947,5 @@ public final class Ini implements Serializable
 		{
 			return Ini.getRunMode() != RunMode.SWING_CLIENT;
 		}
-
 	}
 }	// Ini

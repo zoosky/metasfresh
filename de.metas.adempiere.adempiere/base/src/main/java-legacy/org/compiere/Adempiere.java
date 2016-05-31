@@ -1,18 +1,18 @@
 /******************************************************************************
- * Product: Adempiere ERP & CRM Smart Business Solution                       *
- * Copyright (C) 1999-2006 ComPiere, Inc. All Rights Reserved.                *
- * This program is free software; you can redistribute it and/or modify it    *
- * under the terms version 2 of the GNU General Public License as published   *
- * by the Free Software Foundation. This program is distributed in the hope   *
+ * Product: Adempiere ERP & CRM Smart Business Solution *
+ * Copyright (C) 1999-2006 ComPiere, Inc. All Rights Reserved. *
+ * This program is free software; you can redistribute it and/or modify it *
+ * under the terms version 2 of the GNU General Public License as published *
+ * by the Free Software Foundation. This program is distributed in the hope *
  * that it will be useful, but WITHOUT ANY WARRANTY; without even the implied *
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.           *
- * See the GNU General Public License for more details.                       *
- * You should have received a copy of the GNU General Public License along    *
- * with this program; if not, write to the Free Software Foundation, Inc.,    *
- * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.                     *
- * For the text or an alternative of this public license, you may reach us    *
- * ComPiere, Inc., 2620 Augustine Dr. #245, Santa Clara, CA 95054, USA        *
- * or via info@compiere.org or http://www.compiere.org/license.html           *
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. *
+ * See the GNU General Public License for more details. *
+ * You should have received a copy of the GNU General Public License along *
+ * with this program; if not, write to the Free Software Foundation, Inc., *
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA. *
+ * For the text or an alternative of this public license, you may reach us *
+ * ComPiere, Inc., 2620 Augustine Dr. #245, Santa Clara, CA 95054, USA *
+ * or via info@compiere.org or http://www.compiere.org/license.html *
  *****************************************************************************/
 package org.compiere;
 
@@ -765,7 +765,13 @@ public class Adempiere
 		{
 			final boolean skipHouseKeeping = Services.get(ISysConfigBL.class).getBooleanValue(SYSCONFIG_SKIP_HOUSE_KEEPING, false);
 			logger.info("Sysconfig {} = {}", new Object[] { SYSCONFIG_SKIP_HOUSE_KEEPING, skipHouseKeeping });
-			if (!skipHouseKeeping)
+
+			// skip running house keeping tasks in dev mode because there aren't usually needed in that mode,
+			// and we had some problems that might have been down to async already having started while house keeping was still running.
+			final boolean developerMode = Services.get(IDeveloperModeBL.class).isEnabled();
+			logger.info("In DeveloperMode={} (true means to skip startup housekeeping tasks!)", developerMode);
+
+			if (!skipHouseKeeping && !developerMode)
 			{
 				// by now the model validation engine has been initialized and therefore model validators had the chance to register their own housekeeping tasks.
 				Services.get(IHouseKeepingBL.class).runStartupHouseKeepingTasks();
@@ -833,7 +839,7 @@ public class Adempiere
 		String className = "org.compiere.apps.AMenu";
 		for (int i = 0; i < args.length; i++)
 		{
-			if (!args[i].equals("-debug"))   // ignore -debug
+			if (!args[i].equals("-debug"))    // ignore -debug
 			{
 				className = args[i];
 				break;

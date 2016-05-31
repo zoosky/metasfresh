@@ -20,7 +20,6 @@ import org.adempiere.util.StringUtils;
 import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.feature.Feature;
 import org.apache.cxf.feature.LoggingFeature;
-import org.apache.cxf.interceptor.AbstractLoggingInterceptor;
 import org.apache.cxf.jaxrs.JAXRSServerFactoryBean;
 import org.apache.cxf.jaxrs.client.JAXRSClientFactory;
 import org.apache.cxf.jaxrs.client.WebClient;
@@ -29,7 +28,6 @@ import org.apache.cxf.transport.jms.JMSConfiguration;
 import org.compiere.util.Env;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
@@ -190,29 +188,6 @@ public class JaxRsBL implements IJaxRsBL
 		jmsConfigFeature.setJmsConfig(conf);
 
 		return jmsConfigFeature;
-	}
-
-	/**
-	 *
-	 * @return
-	 * @task https://metasfresh.atlassian.net/browse/FRESH-87
-	 */
-	@Bean
-	public LoggingFeature createLoggingFeature()
-	{
-		final boolean prettyPrint = true;
-		final boolean showBinary = true;
-
-		// see LoggingFeature.initializeProvider()...we want to make sure that showBinary is not ignored
-		final int limit = AbstractLoggingInterceptor.DEFAULT_LIMIT + 1;
-
-		final LoggingFeature loggingFeature = new LoggingFeature(
-				null, // use default
-				null, // use default
-				limit,
-				prettyPrint,
-				showBinary);
-		return loggingFeature;
 	}
 
 	@Override
