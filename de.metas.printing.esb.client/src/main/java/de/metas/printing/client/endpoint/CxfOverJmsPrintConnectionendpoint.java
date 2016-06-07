@@ -13,11 +13,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 
+import de.metas.commons.cxf.Cxf;
 import de.metas.printing.client.Context;
 import de.metas.printing.client.IPrintConnectionEndpoint;
 import de.metas.printing.client.PrintingClientStandaloneService;
@@ -50,7 +51,7 @@ import de.metas.printing.esb.api.protocol.PrinterHWList;
  * #L%
  */
 @Profile(PrintingClientStandaloneService.PROFILE_PrintingClientStandaloneService)
-@Service
+@ComponentScan(basePackageClasses = Cxf.class)
 public class CxfOverJmsPrintConnectionendpoint implements IPrintConnectionEndpoint
 {
 

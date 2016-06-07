@@ -29,6 +29,8 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.logging.Logger;
 
+import org.springframework.stereotype.Service;
+
 import de.metas.printing.client.IPrintConnectionEndpoint;
 import de.metas.printing.esb.api.protocol.LoginRequest;
 import de.metas.printing.esb.api.protocol.LoginResponse;
@@ -36,6 +38,7 @@ import de.metas.printing.esb.api.protocol.PrintJobInstructionsConfirm;
 import de.metas.printing.esb.api.protocol.PrintPackage;
 import de.metas.printing.esb.api.protocol.PrinterHWList;
 
+@Service
 public class BufferedPrintConnectionEndpoint implements IPrintConnectionEndpoint
 {
 	private final transient Logger log = Logger.getLogger(getClass().getName());

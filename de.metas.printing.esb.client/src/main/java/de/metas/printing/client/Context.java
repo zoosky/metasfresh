@@ -13,11 +13,11 @@ package de.metas.printing.client;
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
+ * License along with this program. If not, see
  * <http://www.gnu.org/licenses/gpl-2.0.html>.
  * #L%
  */
@@ -26,10 +26,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.stereotype.Service;
+
 import de.metas.printing.client.ui.IUserInterface;
 import de.metas.printing.client.util.Util;
 
-public class Context implements IContext
+@Service
+public class Context implements IContext, ApplicationContextAware
 {
 	public static final String CTX_ROOT = "de.metas.printing.client";
 
@@ -78,12 +84,14 @@ public class Context implements IContext
 	private final Properties defaults = new Properties();
 	private final Properties props = new Properties();
 
+	private ApplicationContext applicationContext;
+
 	public static Context getContext()
 	{
 		return instance;
 	}
 
-	private Context()
+	public Context()
 	{
 		init();
 	}
@@ -185,8 +193,15 @@ public class Context implements IContext
 		{
 			throw new RuntimeException("No class of " + interfaceClazz + " found for property " + name);
 		}
-		else if (value instanceof String)
+
+		if (value instanceof String)
 		{
+			final T bean = applicationContext.getBean((String)value, interfaceClazz);
+			if(bean != null)
+			{
+				return bean;
+			}
+
 			final String classname = value.toString();
 			return Util.getInstance(classname, interfaceClazz);
 		}
@@ -258,5 +273,11 @@ public class Context implements IContext
 				+ ", properties=" + props
 				+ ", defaults=" + defaults
 				+ "]";
+	}
+
+	@Override
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException
+	{
+		this.applicationContext = applicationContext;
 	}
 }

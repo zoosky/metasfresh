@@ -42,7 +42,6 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
  *
  */
 @SpringBootApplication
-
 public class PrintingClientStandaloneService
 {
 	public static final String PROFILE_PrintingClientStandaloneService = "PrintingClientStandaloneService";
@@ -51,6 +50,9 @@ public class PrintingClientStandaloneService
 
 	public static void main(final String[] args)
 	{
+		final Context context = Context.getContext();
+		context.addSource(new ConfigFileContext());
+
 		new SpringApplicationBuilder(PrintingClientStandaloneService.class)
 				.profiles(PROFILE_PrintingClientStandaloneService)
 				.headless(false)
@@ -104,9 +106,6 @@ public class PrintingClientStandaloneService
 
 	private void run()
 	{
-		final Context context = Context.getContext();
-		context.addSource(new ConfigFileContext());
-
 		logVersionInfo();
 
 		//

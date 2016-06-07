@@ -24,7 +24,7 @@ package de.metas.printing.client;
 
 import java.io.InputStream;
 
-import javax.ws.rs.Path;
+import org.springframework.stereotype.Service;
 
 import de.metas.printing.client.endpoint.LoginFailedPrintConnectionEndpointException;
 import de.metas.printing.esb.api.protocol.LoginRequest;
@@ -39,7 +39,7 @@ import de.metas.printing.esb.api.protocol.PrinterHWList;
  * @author metas-dev <dev@metasfresh.com>
  *
  */
-@Path("/printing")
+@Service
 public interface IPrintConnectionEndpoint
 {
 	/**
