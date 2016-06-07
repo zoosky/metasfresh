@@ -764,7 +764,7 @@ public class Adempiere
 		if (runMode == RunMode.BACKEND)
 		{
 			final boolean skipHouseKeeping = Services.get(ISysConfigBL.class).getBooleanValue(SYSCONFIG_SKIP_HOUSE_KEEPING, false);
-			logger.info("Sysconfig {} = {}", new Object[] { SYSCONFIG_SKIP_HOUSE_KEEPING, skipHouseKeeping });
+			logger.warn("SysConfig {} = {} => skipping execution of the housekeeping tasks", new Object[] { SYSCONFIG_SKIP_HOUSE_KEEPING, skipHouseKeeping });
 
 			// skip running house keeping tasks in dev mode because there aren't usually needed in that mode,
 			// and we had some problems that might have been down to async already having started while house keeping was still running.
