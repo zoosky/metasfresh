@@ -35,6 +35,11 @@ import de.metas.handlingunits.model.I_M_HU_PI_Item_Product;
  */
 public interface IHUPIItemProductQuery
 {
+	// @formatter:off
+	void setAD_Org_ID(int adOrgId);
+	int getAD_Org_ID();
+	// @formatter:on
+
 	int getM_HU_PI_Item_ID();
 
 	void setM_HU_PI_Item_ID(final int huPIItemId);

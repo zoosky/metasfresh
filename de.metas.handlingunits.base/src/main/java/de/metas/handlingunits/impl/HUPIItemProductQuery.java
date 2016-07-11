@@ -38,6 +38,7 @@ import de.metas.handlingunits.IHUPIItemProductQuery;
  */
 /* package */final class HUPIItemProductQuery implements IHUPIItemProductQuery
 {
+	private int adOrgId = -1;
 	private int huPIItemId = -1;
 	private int productId = -1;
 	private int bpartnerId = -1;
@@ -58,7 +59,9 @@ import de.metas.handlingunits.IHUPIItemProductQuery;
 	@Override
 	public String toString()
 	{
-		return "HUPIItemProductQuery [huPIItemId=" + huPIItemId
+		return "HUPIItemProductQuery ["
+				+ "adOrgId=" + adOrgId
+				+ ", huPIItemId=" + huPIItemId
 				+ ", productId=" + productId
 				+ ", bpartnerId=" + bpartnerId
 				+ ", date=" + date
@@ -76,6 +79,7 @@ import de.metas.handlingunits.IHUPIItemProductQuery;
 	public int hashCode()
 	{
 		return new HashcodeBuilder()
+				.append(adOrgId)
 				.append(huPIItemId)
 				.append(productId)
 				.append(bpartnerId)
@@ -105,6 +109,7 @@ import de.metas.handlingunits.IHUPIItemProductQuery;
 		}
 
 		return new EqualsBuilder()
+				.append(adOrgId, other.adOrgId)
 				.append(huPIItemId, other.huPIItemId)
 				.append(productId, other.productId)
 				.append(bpartnerId, other.bpartnerId)
@@ -117,6 +122,18 @@ import de.metas.handlingunits.IHUPIItemProductQuery;
 				.append(allowDifferentCapacities, other.allowDifferentCapacities)
 				.append(packagingProductId, other.packagingProductId)
 				.isEqual();
+	}
+	
+	@Override
+	public int getAD_Org_ID()
+	{
+		return adOrgId;
+	}
+	
+	@Override
+	public void setAD_Org_ID(int adOrgId)
+	{
+		this.adOrgId = adOrgId;
 	}
 
 	@Override

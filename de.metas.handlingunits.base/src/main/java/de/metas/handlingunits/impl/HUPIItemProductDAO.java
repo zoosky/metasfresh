@@ -50,6 +50,7 @@ import org.adempiere.util.time.SystemTime;
 import org.compiere.model.IQuery;
 import org.compiere.model.I_C_BPartner;
 import org.compiere.model.I_M_Product;
+import org.compiere.util.Env;
 
 import de.metas.adempiere.util.CacheCtx;
 import de.metas.adempiere.util.CacheTrx;
@@ -259,6 +260,13 @@ public class HUPIItemProductDAO implements IHUPIItemProductDAO
 				.setJoinOr()
 				.addOnlyContextClient(ctx);
 		filters.addFilter(adClientFilter);
+		
+		//
+		// AD_Org_ID
+		if (queryVO.getAD_Org_ID() > 0)
+		{
+			filters.addInArrayFilter(I_M_HU_PI_Item_Product.COLUMN_AD_Org_ID, Env.CTXVALUE_AD_Org_ID_System, queryVO.getAD_Org_ID());
+		}
 
 		//
 		// Product Filtering
