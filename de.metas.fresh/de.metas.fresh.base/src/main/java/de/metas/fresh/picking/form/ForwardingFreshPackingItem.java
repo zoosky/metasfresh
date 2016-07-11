@@ -54,6 +54,12 @@ public abstract class ForwardingFreshPackingItem implements IFreshPackingItem
 	@Override
 	public abstract IFreshPackingItem copy();
 	//@formatter:on
+	
+	@Override
+	public int getAD_Org_ID()
+	{
+		return getDelegate().getAD_Org_ID();
+	}
 
 	@Override
 	public I_C_UOM getC_UOM()

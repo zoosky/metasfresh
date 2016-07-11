@@ -351,5 +351,11 @@ public class FreshProductKey extends ProductKey
 		}
 		return _storageEngine;
 	}
+	
+	public int getAD_Org_ID()
+	{
+		final IFreshPackingItem packingItem = getPackingItem();
+		return packingItem == null ? -1 : packingItem.getAD_Org_ID();
+	}
 
 }

@@ -59,6 +59,7 @@ public class PackingMaterialKey extends TerminalKey
 	private final String id;
 	private final String displayName;
 	private final I_M_HU_PI_Item_Product itemProduct;
+	private final int adOrgId;
 	private final I_M_HU_PI huPI;
 	private final KeyNamePair value;
 
@@ -72,6 +73,7 @@ public class PackingMaterialKey extends TerminalKey
 		Check.assumeNotNull(itemProduct, "itemProduct not null");
 		this.itemProduct = itemProduct;
 
+		adOrgId = itemProduct.getAD_Org_ID();
 		huPI = itemProduct.getM_HU_PI_Item().getM_HU_PI_Version().getM_HU_PI();
 
 		tableName = I_M_HU_PI.Table_Name;
@@ -175,6 +177,7 @@ public class PackingMaterialKey extends TerminalKey
 		//
 		// Create query
 		final IHUPIItemProductQuery query = itemProductDAO.createHUPIItemProductQuery();
+		query.setAD_Org_ID(productKey.getAD_Org_ID());
 		query.setC_BPartner_ID(productKey.getC_BPartner_ID());
 		// query.setC_BPartner_Location_ID(productKey.getC_BPartner_Location_ID()); // maybe in future
 		query.setM_Product_ID(productKey.getM_Product_ID());
@@ -261,5 +264,10 @@ public class PackingMaterialKey extends TerminalKey
 	public boolean isInfiniteCapacity()
 	{
 		return itemProduct.isInfiniteCapacity();
+	}
+	
+	public int getAD_Org_ID()
+	{
+		return adOrgId;
 	}
 }

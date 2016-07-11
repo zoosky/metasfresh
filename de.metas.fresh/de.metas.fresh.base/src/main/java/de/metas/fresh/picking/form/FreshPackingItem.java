@@ -30,6 +30,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.adempiere.ad.trx.api.ITrx;
 import org.adempiere.model.InterfaceWrapperHelper;
@@ -38,6 +39,7 @@ import org.adempiere.util.collections.Predicate;
 import org.compiere.model.I_C_BPartner;
 import org.compiere.model.I_M_Warehouse;
 import org.compiere.util.Env;
+import org.slf4j.Logger;
 
 import de.metas.adempiere.form.AbstractPackingItem;
 import de.metas.adempiere.form.IPackingItem;
@@ -47,6 +49,7 @@ import de.metas.handlingunits.model.I_M_HU_PI_Item_Product;
 import de.metas.inoutcandidate.api.IShipmentScheduleBL;
 import de.metas.inoutcandidate.api.IShipmentScheduleEffectiveBL;
 import de.metas.inoutcandidate.model.I_M_ShipmentSchedule;
+import de.metas.logging.LogManager;
 
 /**
  * Item to be packed.
@@ -56,6 +59,9 @@ import de.metas.inoutcandidate.model.I_M_ShipmentSchedule;
  */
 public class FreshPackingItem extends AbstractPackingItem implements IFreshPackingItem
 {
+	private static final Logger logger = LogManager.getLogger(FreshPackingItem.class);
+
+	private Integer _adOrgId; // lazy loaded
 	private I_C_BPartner partner; // lazy loaded
 	private I_C_BPartner_Location bpLocation; // lazy loaded
 
@@ -96,6 +102,33 @@ public class FreshPackingItem extends AbstractPackingItem implements IFreshPacki
 	{
 		final boolean includeBPartner = true;
 		return Services.get(IShipmentScheduleBL.class).mkKeyForGrouping(sched, includeBPartner).hashCode();
+	}
+
+	@Override
+	public int getAD_Org_ID()
+	{
+		if (_adOrgId == null)
+		{
+			final Set<Integer> adOrgIds = getShipmentSchedules()
+					.stream()
+					.map((ss) -> ss.getAD_Org_ID())
+					.collect(Collectors.toSet());
+
+			if (adOrgIds.isEmpty())
+			{
+				_adOrgId = -1;
+			}
+			else
+			{
+				_adOrgId = adOrgIds.iterator().next();
+				if (adOrgIds.size() > 1)
+				{
+					logger.warn("More than one AD_Org_IDs found for {}. Returning the first one: {}", this, _adOrgId);
+				}
+			}
+		}
+		
+		return _adOrgId;
 	}
 
 	@Override

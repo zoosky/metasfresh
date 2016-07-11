@@ -76,18 +76,22 @@ public class PackingMaterialKeyBuilder
 
 	/**
 	 * Create {@link PackingMaterialKey}s for given parameters.
-	 * 
+	 *
+	 * @param adOrgId
 	 * @param productId
 	 * @param bpartnerId
 	 * @param bpartnerLocationId
 	 * @throws AdempiereException if no {@link PackingMaterialKey} was added for this request
 	 */
-	public void addProduct(final int productId,
+	public void addProduct(
+			final int adOrgId,
+			final int productId,
 			final int bpartnerId,
 			final int bpartnerLocationId // will be used in future
 	)
 	{
 		final IHUPIItemProductQuery queryVO = piItemProductDAO.createHUPIItemProductQuery();
+		queryVO.setAD_Org_ID(adOrgId);
 		queryVO.setC_BPartner_ID(bpartnerId);
 		queryVO.setM_Product_ID(productId);
 		queryVO.setDate(date);

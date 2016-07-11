@@ -39,6 +39,8 @@ public interface IFreshPackingItem extends IPackingItem
 	@Override
 	IFreshPackingItem copy();
 
+	int getAD_Org_ID();
+
 	I_C_BPartner getC_BPartner();
 
 	int getBpartnerId();

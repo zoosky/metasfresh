@@ -84,6 +84,7 @@ public class FreshPackingDetailsMd implements IPackingDetailsModel
 		{
 			final IFreshPackingItem freshPackingItem = FreshPackingItemHelper.cast(pi);
 
+			final int adOrgId = freshPackingItem.getAD_Org_ID();
 			final int productId = freshPackingItem.getProductId();
 			final int bpartnerId = freshPackingItem.getBpartnerId();
 			final int bpartnerLocationId = freshPackingItem.getBpartnerLocationId();
@@ -91,7 +92,7 @@ public class FreshPackingDetailsMd implements IPackingDetailsModel
 
 			//
 			// Get/Create PackingMaterialKeys
-			packingMaterialKeysBuilder.addProduct(productId, bpartnerId, bpartnerLocationId);
+			packingMaterialKeysBuilder.addProduct(adOrgId, productId, bpartnerId, bpartnerLocationId);
 
 			//
 			// Get PickingSlots
