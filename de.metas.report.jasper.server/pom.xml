@@ -13,7 +13,7 @@
 	<packaging>pom</packaging>
 
 	<modules>
-	<module>de.metas.report.jasper.server.base</module>
+		<module>de.metas.report.jasper.server.base</module>
 	</modules>
 
 </project>

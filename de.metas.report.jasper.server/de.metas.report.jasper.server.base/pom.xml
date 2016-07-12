@@ -12,6 +12,18 @@
 		<migration-sql-basedir>42-de.metas.report.jasper.server</migration-sql-basedir>
 	</properties>
 
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>de.metas.reports</groupId>
+				<artifactId>reports-parent</artifactId>
+				<version>${project.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 	<dependencies>
 		<dependency>
 			<groupId>net.sf.jasperreports</groupId>
@@ -65,13 +77,13 @@ java.lang.ClassNotFoundException: No ClassLoaders found for: org.springframework
 			<version>3.1</version>
 		</dependency>
 		-->
-		
+
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>de.metas.adempiere.adempiere</groupId>
 			<artifactId>de.metas.adempiere.adempiere.base</artifactId>
@@ -125,15 +137,15 @@ java.lang.ClassNotFoundException: No ClassLoaders found for: org.springframework
 			<groupId>org.jxls</groupId>
 			<artifactId>jxls</artifactId>
 			<version>2.3.0</version>
-			
+
 			<exclusions>
 				<exclusion>
-				  <groupId>ch.qos.logback</groupId>
-				  <artifactId>logback-core</artifactId>
+					<groupId>ch.qos.logback</groupId>
+					<artifactId>logback-core</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.jxls</groupId>
 			<artifactId>jxls-poi</artifactId>
