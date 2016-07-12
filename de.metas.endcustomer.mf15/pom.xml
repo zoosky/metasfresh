@@ -35,6 +35,7 @@
 		<module>de.metas.endcustomer.mf15.base</module>
 		<module>de.metas.endcustomer.mf15.serverRoot</module>
 		<module>de.metas.endcustomer.mf15.swingui</module>
+		<module>de.metas.endcustomer.mf15.reports</module>
 		<module>de.metas.endcustomer.mf15.dist</module>
 	</modules>
 
