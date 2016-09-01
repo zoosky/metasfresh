@@ -1,4 +1,4 @@
-package de.metas.invoice.callout;
+package de.metas.invoice.model.interceptor;
 
 /*
  * #%L

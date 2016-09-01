@@ -81,10 +81,10 @@ import de.metas.adempiere.model.I_C_Invoice;
 import de.metas.adempiere.model.I_C_InvoiceLine;
 import de.metas.adempiere.model.I_C_Order;
 import de.metas.adempiere.model.I_M_PriceList;
-import de.metas.adempiere.service.IInvoiceLineBL;
 import de.metas.document.engine.IDocActionBL;
 import de.metas.inout.model.I_M_InOut;
 import de.metas.interfaces.I_C_OrderLine;
+import de.metas.invoice.IInvoiceLineBL;
 
 @RunWith(IntegrationTestRunner.class)
 public class SalesTestDriver extends AIntegrationTestDriver

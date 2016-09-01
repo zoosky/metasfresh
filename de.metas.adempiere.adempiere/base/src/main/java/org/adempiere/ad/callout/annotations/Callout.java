@@ -10,12 +10,12 @@ package org.adempiere.ad.callout.annotations;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 2 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-2.0.html>.
@@ -28,6 +28,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Also see the javadoc of {@link CalloutMethod} and the package documentation.
+ * @author metas-dev <dev@metasfresh.com>
+ *
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.TYPE })
 public @interface Callout
@@ -51,7 +56,7 @@ public @interface Callout
 
 	/**
 	 * Interface model class on which this Callout will be bound
-	 * 
+	 *
 	 * NOTE: class name shall be the same as the callout name (metas naming conventions)
 	 */
 	public Class<?> value();

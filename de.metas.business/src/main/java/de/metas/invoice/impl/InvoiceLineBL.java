@@ -1,4 +1,4 @@
-package de.metas.adempiere.service.impl;
+package de.metas.invoice.impl;
 
 /*
  * #%L
@@ -52,14 +52,14 @@ import org.compiere.model.I_M_PriceList_Version;
 import org.compiere.model.I_M_Product;
 import org.compiere.model.MPriceList;
 import org.compiere.model.MTax;
-import org.slf4j.Logger;
-import de.metas.logging.LogManager;
 import org.compiere.util.Env;
+import org.slf4j.Logger;
 
 import de.metas.adempiere.model.I_C_BPartner_Location;
 import de.metas.adempiere.model.I_C_InvoiceLine;
 import de.metas.adempiere.model.I_M_ProductPrice;
-import de.metas.adempiere.service.IInvoiceLineBL;
+import de.metas.invoice.IInvoiceLineBL;
+import de.metas.logging.LogManager;
 import de.metas.tax.api.ITaxBL;
 
 public class InvoiceLineBL implements IInvoiceLineBL
@@ -385,7 +385,7 @@ public class InvoiceLineBL implements IInvoiceLineBL
 		invoiceLine.setPrice_UOM_ID(pricingResult.getPrice_UOM_ID());
 
 		invoiceLine.setPriceEntered(pricingResult.getPriceStd());
-		invoiceLine.setPriceActual(pricingResult.getPriceStd());
+		invoiceLine.setPriceActual(pricingResult.getPriceStd()); // might be updated from the discount
 
 		//
 		// Discount
@@ -400,7 +400,8 @@ public class InvoiceLineBL implements IInvoiceLineBL
 
 	}
 
-	private void calculatePriceActual(final I_C_InvoiceLine invoiceLine, final int precision)
+	@Override
+	public void calculatePriceActual(final I_C_InvoiceLine invoiceLine, final int precision)
 	{
 		final BigDecimal discount = invoiceLine.getDiscount();
 		final BigDecimal priceEntered = invoiceLine.getPriceEntered();
@@ -419,8 +420,11 @@ public class InvoiceLineBL implements IInvoiceLineBL
 			}
 			else
 			{
+				// checks to avoid unexplained NPEs
+				Check.errorIf(invoiceLine.getC_Invoice_ID() <= 0, "Optional 'precision' param was not set but param 'invoiceLine' {} has no invoice", invoiceLine);
 				final I_C_Invoice invoice = invoiceLine.getC_Invoice();
 
+				Check.errorIf(invoice.getM_PriceList_ID() <= 0, "Optional 'precision' param was not set but the invoice of param 'invoiceLine' {} has no price list", invoiceLine);
 				precisionToUse = invoice.getM_PriceList().getPricePrecision();
 			}
 

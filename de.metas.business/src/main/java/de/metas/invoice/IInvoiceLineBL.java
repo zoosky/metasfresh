@@ -1,4 +1,4 @@
-package de.metas.adempiere.service;
+package de.metas.invoice;
 
 /*
  * #%L
@@ -10,12 +10,12 @@ package de.metas.adempiere.service;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 2 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-2.0.html>.
@@ -34,7 +34,7 @@ import org.compiere.model.MInvoiceLine;
 import de.metas.adempiere.model.I_C_InvoiceLine;
 
 /**
- * 
+ *
  * Note that many methods you might be searching here might be in {@link IInvoiceBL}.
  *
  */
@@ -47,7 +47,7 @@ public interface IInvoiceLineBL extends ISingletonService
 	 * Retrieves the il's C_Tax_ID if the il has an inout line. {@link MInvoiceLine#getTax()} only uses the bill location date and address, which is not correct (for us).
 	 * <p/>
 	 * <b>IMPORTANT:</b> if the il has M_InoutLine_ID<=0, the method does nothing!
-	 * 
+	 *
 	 * @param ctx
 	 * @param il
 	 * @param getTrxName
@@ -71,7 +71,7 @@ public interface IInvoiceLineBL extends ISingletonService
 	 * <li>a M_PriceList_Version exists for the DateInvoiced and M_PriceList if the invoiceLine's invoice
 	 * <li>a M_ProductPrice exists for the invoiceLine's product and the PLV
 	 * </ul>
-	 * 
+	 *
 	 * @param invoiceLine
 	 * @return C_TaxCategory_ID
 	 * @see org.adempiere.util.Check#assume(boolean, String, Object...)
@@ -82,21 +82,31 @@ public interface IInvoiceLineBL extends ISingletonService
 
 	/**
 	 * Converts the given <code>qty</code> to the given <code>il</code>'s price UOM.
-	 * 
+	 *
 	 * @param qty the "raw" Qty in terms of invoice line's product's UOM
 	 * @param il the invoice line whose price UOM and product we use for the conversion.
 	 * @param errorIfNotPossible if <code>true</code> and the given invoice line has no price, product or the prod has no UOM, then throw an exception. If <code>false</code>, then just return the
 	 *            given qty.
-	 * 
+	 *
 	 * @return the "price" qty.
 	 */
 	BigDecimal calculatedQtyInPriceUOM(BigDecimal qty, I_C_InvoiceLine il, boolean errorIfNotPossible);
 
 	/**
+	 * Calculate and set the given <code>invoiceLine</code>'s <code>PriceActual</code> from <code>PriceEntered</code> and <code>Discount</code>.
+	 * <p>
+	 * Note: does not save invoiceLine after it was changed.
+	 *
+	 * @param orderLine
+	 * @param precision optional, if <code>>= 0</code> then the result will be rounded to this precision. Otherwise the precision of the order's price list will be used.
+	 */
+	void calculatePriceActual(I_C_InvoiceLine invoiceLine, int precision);
+
+	/**
 	 * Uses the given <code>invoiceLine</code>'s <code>QtyInvoiced</code>, <code>C_UOM</code> and <code>Price_UOM</code> to compute and set the given line's <code>QtyInvoicedInPriceUOM</code>.
 	 * <p>
 	 * Note that this method makes use of {@link #calculatedQtyInPriceUOM(BigDecimal, I_C_InvoiceLine)}.
-	 * 
+	 *
 	 * @param invoiceLine
 	 * @see #calculatedQtyInPriceUOM(BigDecimal, I_C_InvoiceLine)
 	 */
@@ -104,7 +114,7 @@ public interface IInvoiceLineBL extends ISingletonService
 
 	/**
 	 * Update the line net amount. Mainly introduced for manual invoices
-	 * 
+	 *
 	 * @param line
 	 * @param qtyEntered
 	 */

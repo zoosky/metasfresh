@@ -92,12 +92,12 @@ public interface IOrderLineBL extends ISingletonService
 	void calculatePriceActualIfNotIgnored(I_C_OrderLine ol, int precision);
 
 	/**
-	 * Calculate and set PriceActual from PriceEntered and Discount.
+	 * Calculate and set the given <code>orderLine</code>'s <code>PriceActual</code> from <code>PriceEntered</code> and <code>Discount</code>.
 	 * <p>
-	 * <b>Note: does not touch the PriceUOM</b>
+	 * <b>Note: does not touch the PriceUOM</b>, also does not save orderline after it was changed.
 	 *
 	 * @param orderLine
-	 * @param optional, if <code>>= 0</code> then the result will be rounded to this precision. Otherwise the precision of the order's price list will be used.
+	 * @param precision optional, if <code>>= 0</code> then the result will be rounded to this precision. Otherwise the precision of the order's price list will be used.
 	 */
 	void calculatePriceActual(I_C_OrderLine orderLine, int precision);
 

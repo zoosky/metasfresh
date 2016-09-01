@@ -637,8 +637,8 @@ public class OrderLineBL implements IOrderLineBL
 				// checks to avoid unexplained NPEs
 				Check.errorIf(orderLine.getC_Order_ID() <= 0, "Optional 'precision' param was not set but param 'orderLine' {} has no order", orderLine);
 				final I_C_Order order = orderLine.getC_Order();
-				Check.errorIf(order.getM_PriceList_ID() <= 0, "Optional 'precision' param was not set but the order of param 'orderLine' {} has no price list", orderLine);
 
+				Check.errorIf(order.getM_PriceList_ID() <= 0, "Optional 'precision' param was not set but the order of param 'orderLine' {} has no price list", orderLine);
 				precisionToUse = order.getM_PriceList().getPricePrecision();
 			}
 			priceActual = subtractDiscount(priceEntered, discount, precisionToUse);

@@ -10,12 +10,12 @@ package org.adempiere.ad.callout.annotations;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 2 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-2.0.html>.
@@ -30,21 +30,24 @@ import java.lang.annotation.Target;
 
 /**
  * Indicates that the annotated callout method shall be triggered when given columns were changed.
- * 
- * Annotated method shall have following signature:
- * 
+ *
+ * Annotated method shall have one of the following signatures:
+ *
  * <pre>
  * public void myCallout(I_C_MyModel model, ICalloutField field)
  * </pre>
- * 
+ * <pre>
+ * public void myCallout(I_C_MyModel model)
+ * </pre>
+ *
  * where
  * <ul>
  * <li>model - is the model on which this callout applies (i.e. shall be the same class that you have used in {@link Callout} annotation)
- * <li>field - is the field on which this callout was triggered (useful to get the ColumnName etc)
+ * <li>field - (optional) is the field on which this callout was triggered (useful to get the ColumnName etc)
  * </ul>
- * 
+ *
  * @author tsa
- * 
+ *
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.METHOD })

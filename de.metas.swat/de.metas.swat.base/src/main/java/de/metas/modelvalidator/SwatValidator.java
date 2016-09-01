@@ -109,10 +109,7 @@ import de.metas.inout.model.validator.M_InOut;
 import de.metas.inoutcandidate.modelvalidator.InOutCandidateValidator;
 import de.metas.inoutcandidate.modelvalidator.ReceiptScheduleValidator;
 import de.metas.interfaces.I_C_OrderLine;
-import de.metas.invoice.callout.C_InvoiceLine_TabCallout;
-import de.metas.invoice.model.validator.C_Invoice;
-import de.metas.invoice.model.validator.C_InvoiceLine;
-import de.metas.invoice.model.validator.M_MatchInv;
+import de.metas.invoice.model.interceptor.C_InvoiceLine_TabCallout;
 import de.metas.logging.LogManager;
 import de.metas.order.document.counterDoc.C_Order_CounterDocHandler;
 import de.metas.pricing.attributebased.I_M_ProductPrice_Attribute;
@@ -172,9 +169,9 @@ public class SwatValidator implements ModelValidator
 
 		//
 		// Services
-	
+
 		//task FRESH-152: BPartner Stats Updater
-		Services.registerService(IBPartnerStatisticsUpdater.class, new AsyncBPartnerStatisticsUpdater());	
+		Services.registerService(IBPartnerStatisticsUpdater.class, new AsyncBPartnerStatisticsUpdater());
 
 		engine.addModelChange(I_C_InvoiceLine.Table_Name, this);
 		engine.addModelChange(I_M_InOutLine.Table_Name, this);
@@ -185,12 +182,12 @@ public class SwatValidator implements ModelValidator
 
 		engine.addModelValidator(new Order(), client);
 		engine.addModelValidator(new OrderLine(), client);
-		engine.addModelValidator(new C_Invoice(), client); // 03771
+
 		engine.addModelValidator(new M_InOut(), client); // 03771
 		engine.addModelValidator(new OrgInfo(), client);
 		engine.addModelValidator(new Payment(), client);
 		engine.addModelValidator(new ProcessValidator(), client);
-		engine.addModelValidator(new C_InvoiceLine(), client);
+
 		// 04359 this MV cripples the processing performance of Sales Orders
 		// the MV has been added to AD_ModelValidator, so that it can be enabled for certain customers *if* required.
 		// engine.addModelValidator(new PurchaseModelValidator(), client);
@@ -269,11 +266,6 @@ public class SwatValidator implements ModelValidator
 
 		//
 		engine.addModelValidator(new de.metas.tourplanning.model.validator.TourPlanningModuleActivator(), client);
-
-		// de.metas.invoice submodule
-		{
-			engine.addModelValidator(new M_MatchInv(), client);
-		}
 
 		Services.get(ITabCalloutFactory.class).registerTabCalloutForTable(I_C_InvoiceLine.Table_Name, C_InvoiceLine_TabCallout.class);
 

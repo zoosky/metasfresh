@@ -1,4 +1,4 @@
-package de.metas.invoice.model.validator;
+package de.metas.invoice.model.interceptor;
 
 /*
  * #%L
@@ -23,45 +23,55 @@ package de.metas.invoice.model.validator;
  */
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 
-import org.adempiere.ad.callout.spi.IProgramaticCalloutProvider;
+import org.adempiere.ad.callout.annotations.Callout;
+import org.adempiere.ad.callout.annotations.CalloutMethod;
+import org.adempiere.ad.callout.api.ICalloutField;
 import org.adempiere.ad.modelvalidator.annotations.DocValidate;
-import org.adempiere.ad.modelvalidator.annotations.Init;
 import org.adempiere.ad.modelvalidator.annotations.Interceptor;
 import org.adempiere.ad.modelvalidator.annotations.ModelChange;
+import org.adempiere.bpartner.service.IBPartnerDAO;
 import org.adempiere.invoice.service.IInvoiceBL;
 import org.adempiere.invoice.service.IInvoiceDAO;
 import org.adempiere.model.InterfaceWrapperHelper;
+import org.adempiere.pricing.api.IPriceListBL;
 import org.adempiere.pricing.api.IPriceListDAO;
 import org.adempiere.util.Services;
 import org.adempiere.util.time.SystemTime;
 import org.compiere.model.I_C_BPartner;
+import org.compiere.model.I_C_DocType;
 import org.compiere.model.I_C_Order;
 import org.compiere.model.I_M_PriceList_Version;
+import org.compiere.model.I_M_PricingSystem;
 import org.compiere.model.I_M_Product;
 import org.compiere.model.ModelValidator;
 import org.compiere.util.Env;
 
+import de.metas.adempiere.model.I_C_BPartner_Location;
 import de.metas.adempiere.model.I_C_Invoice;
 import de.metas.adempiere.model.I_C_InvoiceLine;
+import de.metas.adempiere.model.I_M_PriceList;
 import de.metas.adempiere.model.I_M_ProductPrice;
 import de.metas.allocation.api.IAllocationDAO;
 import de.metas.document.IDocumentLocationBL;
+import de.metas.document.documentNo.IDocumentNoBuilderFactory;
+import de.metas.document.documentNo.impl.IDocumentNoInfo;
 import de.metas.document.engine.IDocActionBL;
 
 @Interceptor(I_C_Invoice.class)
+@Callout(I_C_Invoice.class)
 public class C_Invoice
 {
-	@Init
-	public void setupCallouts()
+	public static final C_Invoice INSTANCE = new C_Invoice();
+
+	private C_Invoice()
 	{
-		// Setup callout C_Invoice
-		final IProgramaticCalloutProvider calloutProvider = Services.get(IProgramaticCalloutProvider.class);
-		calloutProvider.registerAnnotatedCallout(new de.metas.invoice.callout.C_Invoice());
-	}
+	};
 
 	@ModelChange(timings = { ModelValidator.TYPE_BEFORE_NEW, ModelValidator.TYPE_BEFORE_CHANGE }, ifColumnsChanged = { I_C_Invoice.COLUMNNAME_C_BPartner_ID, I_C_Invoice.COLUMNNAME_C_BPartner_Location_ID, I_C_Invoice.COLUMNNAME_AD_User_ID })
 	public void updateBPartnerAddress(final I_C_Invoice doc)
@@ -380,5 +390,115 @@ public class C_Invoice
 		{
 			InterfaceWrapperHelper.delete(line);
 		}
+	}
+
+
+	@CalloutMethod(columnNames = { I_C_Invoice.COLUMNNAME_C_BPartner_ID, I_C_Invoice.COLUMNNAME_C_BPartner_Location_ID, I_C_Invoice.COLUMNNAME_DateInvoiced })
+	public void setPriceListFromBPartner(final I_C_Invoice invoice, final ICalloutField field)
+	{
+		if (invoice == null)
+		{
+			return;
+		}
+
+		final I_C_BPartner partner = InterfaceWrapperHelper.create(invoice.getC_BPartner(), I_C_BPartner.class);
+		if (partner == null)
+		{
+			return;
+		}
+
+		//
+		// TODO: Maybe replace this with Check.assume()?
+		//
+		final boolean isSOTrx = invoice.isSOTrx();
+		if (isSOTrx && !partner.isCustomer())
+		{
+			//
+			// SO => Partner must be a customer
+			return;
+		}
+		else if (!isSOTrx && !partner.isVendor())
+		{
+			//
+			// PO => Partner must be a vendor
+			return;
+		}
+
+		final Properties ctx = InterfaceWrapperHelper.getCtx(invoice);
+		final String trxName = InterfaceWrapperHelper.getTrxName(invoice);
+
+		final I_C_BPartner_Location location = InterfaceWrapperHelper.create(invoice.getC_BPartner_Location(), I_C_BPartner_Location.class);
+		if (location == null)
+		{
+			return;
+		}
+
+		final int pricingSystemID = Services.get(IBPartnerDAO.class).retrievePricingSystemId(ctx, partner.getC_BPartner_ID(), isSOTrx, trxName);
+		if (pricingSystemID <= 0)
+		{
+			return;
+		}
+
+		final I_M_PricingSystem pricingSystem = InterfaceWrapperHelper.create(ctx, pricingSystemID, I_M_PricingSystem.class, trxName);
+		if (pricingSystem == null)
+		{
+			return;
+		}
+
+		//
+		// Get current dateInvoiced or use current time if it's not set
+		Timestamp dateInvoiced = invoice.getDateInvoiced();
+		if (dateInvoiced == null)
+		{
+			dateInvoiced = new Timestamp(System.currentTimeMillis());
+		}
+
+		final IPriceListBL priceListBL = Services.get(IPriceListBL.class);
+		final I_M_PriceList priceListNew = priceListBL.getCurrentPricelistOrNull(
+				pricingSystem,
+				location.getC_Location().getC_Country(),
+				dateInvoiced,
+				isSOTrx);
+		if (priceListNew == null)
+		{
+			return;
+		}
+
+		invoice.setM_PriceList_ID(priceListNew.getM_PriceList_ID());
+	}
+
+	@CalloutMethod(columnNames = { I_C_Invoice.COLUMNNAME_C_DocTypeTarget_ID, I_C_Invoice.COLUMNNAME_AD_Org_ID})
+	public void updateFromDocType(final I_C_Invoice invoice, final ICalloutField field)
+	{
+
+		final IDocumentNoInfo documentNoInfo = Services.get(IDocumentNoBuilderFactory.class)
+				.createPreliminaryDocumentNoBuilder()
+				.setNewDocType(invoice.getC_DocTypeTarget())
+				.setOldDocumentNo(invoice.getDocumentNo())
+				.setDocumentModel(invoice)
+				.buildOrNull();
+		if (documentNoInfo == null)
+		{
+			return;
+		}
+
+		// FRESH-488: Kept from old callout
+		Env.setContext(field.getCtx(), field.getWindowNo(), I_C_DocType.COLUMNNAME_HasCharges, documentNoInfo.isHasChanges());
+
+		// DocumentNo
+		if (documentNoInfo.isDocNoControlled())
+		{
+			invoice.setDocumentNo(documentNoInfo.getDocumentNo());
+		}
+
+		// FRESH-488: Kept from old callout
+		// DocBaseType - Set Context
+		final String docBaseType = documentNoInfo.getDocBaseType();
+		Env.setContext(field.getCtx(), field.getWindowNo(), I_C_DocType.COLUMNNAME_DocBaseType, docBaseType);
+
+		// Task FRESH-488: Set the payment rule to the one from the sys config independent of doctype-letters
+		final String paymentRuleToUse = Services.get(IInvoiceBL.class).getDefaultPaymentRule();
+		invoice.setPaymentRule(paymentRuleToUse);
+
 	}
 }
