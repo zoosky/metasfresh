@@ -10,12 +10,12 @@ package de.metas.ordercandidate.modelvalidator;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 2 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program. If not, see
  * <http://www.gnu.org/licenses/gpl-2.0.html>.
@@ -31,7 +31,6 @@ import org.adempiere.ad.callout.spi.IProgramaticCalloutProvider;
 import org.adempiere.ad.modelvalidator.annotations.Init;
 import org.adempiere.ad.modelvalidator.annotations.ModelChange;
 import org.adempiere.ad.modelvalidator.annotations.Validator;
-import org.adempiere.bpartner.service.IBPartnerDAO;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.util.Check;
 import org.adempiere.util.Services;
@@ -42,6 +41,7 @@ import org.compiere.model.ModelValidator;
 import com.google.common.collect.ImmutableSet;
 
 import de.metas.adempiere.model.I_C_BPartner_Location;
+import de.metas.bpartner.IBPartnerDAO;
 import de.metas.bpartner.api.IBPRelationDAO;
 import de.metas.interfaces.I_C_BP_Relation;
 import de.metas.interfaces.I_C_BPartner_Product;
@@ -90,10 +90,10 @@ public class C_OLCand
 
 	/**
 	 * Calls {@link IOLCandValdiatorBL#validate(I_C_OLCand)}.<br>
-	 * 
+	 *
 	 * Before that it resets the pricing system if there is a new C_BPartner or C_BPartner_Override.<br>
 	 * The {@link de.metas.ordercandidate.spi.IOLCandValdiator} framework is then supposed to call {@link de.metas.ordercandidate.api.IOLCandBL} to come up with the then-correct pricing system.
-	 * 
+	 *
 	 * @param olCand
 	 * @task http://dewiki908/mediawiki/index.php/09686_PricingSystem_sometimes_not_updated_in_C_OLCand_%28105127201494%29
 	 */

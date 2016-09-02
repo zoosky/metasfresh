@@ -10,12 +10,12 @@ package org.compiere.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 2 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-2.0.html>.
@@ -33,6 +33,7 @@ import org.adempiere.util.Services;
 import org.compiere.util.DB;
 import org.compiere.util.Env;
 
+import de.metas.invoice.IInvoiceBL;
 import de.metas.tax.api.ITaxBL;
 
 /**
@@ -44,7 +45,7 @@ import de.metas.tax.api.ITaxBL;
 public class MRMALine extends X_M_RMALine
 {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 8926737621934215278L;
 
@@ -116,8 +117,8 @@ public class MRMALine extends X_M_RMALine
 			// --> m_ioLine.isInvoiced just work for sales orders - so it doesn't work for purchases
 			if (getInvoiceLineId() != 0)
 			{
-				MInvoiceLine invoiceLine = new MInvoiceLine(getCtx(), getInvoiceLineId(), get_TrxName());
-				precision = invoiceLine.getPrecision();
+				final MInvoiceLine invoiceLine = new MInvoiceLine(getCtx(), getInvoiceLineId(), get_TrxName());
+				precision = Services.get(IInvoiceBL.class).getPrecision(invoiceLine.getC_Invoice());
 				unitAmount = invoiceLine.getPriceEntered();
 				originalQty = invoiceLine.getQtyInvoiced();
 				taxId = invoiceLine.getC_Tax_ID();
@@ -147,7 +148,7 @@ public class MRMALine extends X_M_RMALine
 
 	/**
 	 * Get Parent
-	 * 
+	 *
 	 * @return parent
 	 */
 	private MRMA getParent()
@@ -183,7 +184,7 @@ public class MRMALine extends X_M_RMALine
 
 	/**
 	 * Retrieves the invoiceLine Id associated with the Shipment/Receipt Line
-	 * 
+	 *
 	 * @return Invoice Line ID
 	 */
 	private int getInvoiceLineId()
@@ -199,7 +200,7 @@ public class MRMALine extends X_M_RMALine
 
 	/**
 	 * Calculates the unit amount for the product/charge
-	 * 
+	 *
 	 * @return Unit Amount
 	 */
 	private BigDecimal getUnitAmt()
@@ -219,7 +220,7 @@ public class MRMALine extends X_M_RMALine
 
 	/**
 	 * Get Total Amt for the line including tax
-	 * 
+	 *
 	 * @return amt
 	 */
 	private BigDecimal calculateTotalAmt()
@@ -353,7 +354,7 @@ public class MRMALine extends X_M_RMALine
 
 	/**
 	 * Add to Description
-	 * 
+	 *
 	 * @param description text
 	 */
 	/* package */void addDescription(String description)
@@ -367,7 +368,7 @@ public class MRMALine extends X_M_RMALine
 
 	/**
 	 * Get UOM based on Shipment line if present.
-	 * 
+	 *
 	 * @return UOM if based on shipment line or {@link IUOMDAO#C_UOM_ID_Each}
 	 */
 	public int getC_UOM_ID()
@@ -382,7 +383,7 @@ public class MRMALine extends X_M_RMALine
 
 	/**
 	 * Get Product
-	 * 
+	 *
 	 * @return product if based on shipment line and 0 for charge based
 	 */
 	public int getM_Product_ID()
@@ -400,7 +401,7 @@ public class MRMALine extends X_M_RMALine
 
 	/**
 	 * Get Project
-	 * 
+	 *
 	 * @return project if based on shipment line and 0 for charge based
 	 */
 	public int getC_Project_ID()
@@ -414,7 +415,7 @@ public class MRMALine extends X_M_RMALine
 
 	/**
 	 * Get Project Phase
-	 * 
+	 *
 	 * @return project phase if based on shipment line and 0 for charge based
 	 */
 	public int getC_ProjectPhase_ID()
@@ -428,7 +429,7 @@ public class MRMALine extends X_M_RMALine
 
 	/**
 	 * Get Project Task
-	 * 
+	 *
 	 * @return project task if based on shipment line and 0 for charge based
 	 */
 	public int getC_ProjectTask_ID()
@@ -442,7 +443,7 @@ public class MRMALine extends X_M_RMALine
 
 	/**
 	 * Get Activity
-	 * 
+	 *
 	 * @return project phase if based on shipment line and 0 for charge based
 	 */
 	public int getC_Activity_ID()
@@ -456,7 +457,7 @@ public class MRMALine extends X_M_RMALine
 
 	/**
 	 * Get Campaign
-	 * 
+	 *
 	 * @return campaign if based on shipment line and 0 for charge based
 	 */
 	public int getC_Campaign_ID()
@@ -470,7 +471,7 @@ public class MRMALine extends X_M_RMALine
 
 	/**
 	 * Get Org Trx
-	 * 
+	 *
 	 * @return Org Trx if based on shipment line and 0 for charge based
 	 */
 	public int getAD_OrgTrx_ID()
@@ -484,7 +485,7 @@ public class MRMALine extends X_M_RMALine
 
 	/**
 	 * Get User1
-	 * 
+	 *
 	 * @return user1 if based on shipment line and 0 for charge based
 	 */
 	public int getUser1_ID()
@@ -498,7 +499,7 @@ public class MRMALine extends X_M_RMALine
 
 	/**
 	 * Get User2
-	 * 
+	 *
 	 * @return user2 if based on shipment line and 0 for charge based
 	 */
 	public int getUser2_ID()
@@ -512,7 +513,7 @@ public class MRMALine extends X_M_RMALine
 
 	/**
 	 * Get Attribute Set Instance
-	 * 
+	 *
 	 * @return ASI if based on shipment line and 0 for charge based
 	 */
 	public int getM_AttributeSetInstance_ID()
@@ -526,7 +527,7 @@ public class MRMALine extends X_M_RMALine
 
 	/**
 	 * Get Locator
-	 * 
+	 *
 	 * @return locator if based on shipment line and 0 for charge based
 	 */
 	public int getM_Locator_ID()
@@ -540,7 +541,7 @@ public class MRMALine extends X_M_RMALine
 
 	/**
 	 * Get Tax
-	 * 
+	 *
 	 * @return Tax based on Invoice/Order line and Tax exempt for charge based
 	 */
 	public int getC_Tax_ID()

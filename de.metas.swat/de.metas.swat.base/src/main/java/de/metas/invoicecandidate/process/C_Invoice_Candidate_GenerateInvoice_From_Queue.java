@@ -29,7 +29,6 @@ package de.metas.invoicecandidate.process;
 import java.util.Properties;
 
 import org.adempiere.ad.trx.api.ITrx;
-import org.adempiere.invoice.service.IInvoiceBL;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.util.Services;
 import org.compiere.model.I_AD_Note;
@@ -38,6 +37,7 @@ import org.compiere.model.I_C_Invoice;
 import org.compiere.process.SvrProcess;
 
 import de.metas.adempiere.util.ADHyperlinkBuilder;
+import de.metas.invoice.IInvoiceBL;
 import de.metas.invoicecandidate.api.IInvoiceCandBL;
 import de.metas.invoicecandidate.api.IInvoiceCandBL.IInvoiceGenerateResult;
 

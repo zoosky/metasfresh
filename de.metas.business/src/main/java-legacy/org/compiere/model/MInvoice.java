@@ -38,13 +38,8 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.adempiere.ad.trx.api.ITrx;
-import org.adempiere.bpartner.service.IBPartnerStatisticsUpdater;
-import org.adempiere.bpartner.service.IBPartnerStats;
-import org.adempiere.bpartner.service.IBPartnerStatsBL;
-import org.adempiere.bpartner.service.IBPartnerStatsDAO;
 import org.adempiere.exceptions.AdempiereException;
 import org.adempiere.exceptions.BPartnerNoAddressException;
-import org.adempiere.invoice.service.IInvoiceBL;
 import org.adempiere.misc.service.IPOService;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.util.Check;
@@ -63,11 +58,17 @@ import org.slf4j.Logger;
 
 import de.metas.adempiere.model.I_C_Order;
 import de.metas.allocation.api.IAllocationDAO;
+import de.metas.bpartner.IBPartnerStatisticsUpdater;
+import de.metas.bpartner.IBPartnerStats;
+import de.metas.bpartner.IBPartnerStatsBL;
+import de.metas.bpartner.IBPartnerStatsDAO;
 import de.metas.currency.ICurrencyBL;
 import de.metas.currency.ICurrencyDAO;
 import de.metas.document.documentNo.IDocumentNoBuilder;
 import de.metas.document.documentNo.IDocumentNoBuilderFactory;
 import de.metas.document.engine.IDocActionBL;
+import de.metas.invoice.IInvoiceBL;
+import de.metas.invoice.IInvoiceLineBL;
 import de.metas.invoice.IMatchInvBL;
 import de.metas.logging.LogManager;
 import de.metas.logging.LogManager;
@@ -1503,6 +1504,7 @@ public class MInvoice extends X_C_Invoice implements DocAction
 		m_taxes = null;
 
 		final IInvoiceBL invoiceBL = Services.get(IInvoiceBL.class);
+		final IInvoiceLineBL invoiceLineBL = Services.get(IInvoiceLineBL.class);
 		final int taxPrecision = invoiceBL.getPrecision(this);
 
 		// Lines
@@ -1525,7 +1527,7 @@ public class MInvoice extends X_C_Invoice implements DocAction
 				continue;
 			}
 
-			iTax.setIsTaxIncluded(invoiceBL.isTaxIncluded(line));
+			iTax.setIsTaxIncluded(invoiceLineBL.isTaxIncluded(line));
 			if (!iTax.calculateTaxFromLines())
 			{
 				return false;

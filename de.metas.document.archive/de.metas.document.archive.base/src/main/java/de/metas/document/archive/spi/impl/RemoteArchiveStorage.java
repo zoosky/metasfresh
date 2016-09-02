@@ -25,7 +25,6 @@ package de.metas.document.archive.spi.impl;
 
 import java.util.Properties;
 
-import org.adempiere.archive.spi.impl.AbstractArchiveStorage;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.service.ISysConfigBL;
 import org.adempiere.util.Check;
@@ -34,6 +33,7 @@ import org.compiere.model.I_AD_Archive;
 import org.compiere.util.Ini;
 import org.compiere.util.Util;
 
+import de.metas.archive.spi.impl.AbstractArchiveStorage;
 import de.metas.document.archive.esb.api.ArchiveGetDataRequest;
 import de.metas.document.archive.esb.api.ArchiveGetDataResponse;
 import de.metas.document.archive.esb.api.ArchiveSetDataRequest;

@@ -26,11 +26,11 @@ import org.slf4j.Logger;
 import de.metas.logging.LogManager;
 
 import org.adempiere.ad.table.api.IADTableDAO;
-import org.adempiere.archive.api.IArchiveDAO;
 import org.adempiere.exceptions.AdempiereException;
 import org.adempiere.util.Services;
 import com.google.common.collect.ImmutableSet;
 
+import de.metas.archive.api.IArchiveDAO;
 import de.metas.document.archive.model.I_AD_Archive;
 import de.metas.fresh.model.I_C_Order_MFGWarehouse_Report;
 import de.metas.fresh.ordercheckup.IOrderCheckupBL;

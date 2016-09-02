@@ -35,7 +35,6 @@ import org.slf4j.Logger;
 import de.metas.logging.LogManager;
 
 import org.adempiere.ad.trx.api.ITrx;
-import org.adempiere.archive.api.IArchiveDAO;
 import org.adempiere.exceptions.AdempiereException;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.util.Check;
@@ -47,6 +46,7 @@ import org.compiere.util.Util;
 
 import com.google.common.collect.ImmutableList;
 
+import de.metas.archive.api.IArchiveDAO;
 import de.metas.document.archive.api.IDocOutboundProducerService;
 import de.metas.document.archive.model.I_AD_Archive;
 import de.metas.printing.api.IPrintingDAO;

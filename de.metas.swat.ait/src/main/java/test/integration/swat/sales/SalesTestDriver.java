@@ -34,8 +34,6 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Properties;
 
-import org.adempiere.invoice.service.IInvoiceBL;
-import org.adempiere.invoice.service.IInvoiceDAO;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.model.POWrapper;
 import org.adempiere.service.ISysConfigBL;
@@ -84,6 +82,8 @@ import de.metas.adempiere.model.I_M_PriceList;
 import de.metas.document.engine.IDocActionBL;
 import de.metas.inout.model.I_M_InOut;
 import de.metas.interfaces.I_C_OrderLine;
+import de.metas.invoice.IInvoiceBL;
+import de.metas.invoice.IInvoiceDAO;
 import de.metas.invoice.IInvoiceLineBL;
 
 @RunWith(IntegrationTestRunner.class)

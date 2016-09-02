@@ -26,9 +26,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;
 import java.util.Properties;
 
-import org.adempiere.ad.api.ILanguageBL;
 import org.adempiere.ad.persistence.TableModelClassLoader;
-import org.adempiere.bpartner.service.IBPartnerBL;
 import org.adempiere.exceptions.AdempiereException;
 import org.adempiere.service.ISysConfigBL;
 import org.adempiere.util.Check;
@@ -49,7 +47,9 @@ import org.slf4j.Logger;
 
 import de.metas.adempiere.report.jasper.IJasperServer;
 import de.metas.adempiere.report.jasper.OutputType;
+import de.metas.bpartner.IBPartnerBL;
 import de.metas.document.engine.IDocActionBL;
+import de.metas.location.ILanguageBL;
 import de.metas.logging.LogManager;
 import net.sf.jasperreports.engine.JasperPrint;
 
@@ -236,7 +236,7 @@ public class JRClient
 			}
 		}
 
-		
+
 		// task 09740
 		// In case the report is not linked to a window but it has C_BPartner_ID as parameter and it is set, take the language of that bpartner
 		if (lang == null)

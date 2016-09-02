@@ -108,7 +108,7 @@ public final class AdempiereBaseValidator extends AbstractModuleInterceptor
 		//
 		// Tax
 		{
-			engine.addModelValidator(new org.adempiere.tax.model.validator.C_Tax(), client);
+			engine.addModelValidator(de.metas.tax.model.interceptor.C_Tax.INSTANCE, client);
 		}
 
 		//

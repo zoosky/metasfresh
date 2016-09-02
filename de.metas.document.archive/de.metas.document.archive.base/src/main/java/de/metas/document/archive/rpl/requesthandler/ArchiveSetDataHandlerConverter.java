@@ -25,14 +25,14 @@ package de.metas.document.archive.rpl.requesthandler;
 
 import java.util.Properties;
 
-import org.adempiere.archive.api.IArchiveStorageFactory;
-import org.adempiere.archive.spi.IArchiveStorage;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.util.Check;
 import org.adempiere.util.Services;
 import org.adempiere.util.collections.Converter;
 import org.compiere.model.MTable;
 
+import de.metas.archive.api.IArchiveStorageFactory;
+import de.metas.archive.spi.IArchiveStorage;
 import de.metas.document.archive.model.I_AD_Archive;
 
 public class ArchiveSetDataHandlerConverter implements Converter<I_AD_Archive, I_AD_Archive>

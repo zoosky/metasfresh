@@ -32,7 +32,6 @@ import mockit.NonStrictExpectations;
 import mockit.Verifications;
 import mockit.integration.junit4.JMockit;
 
-import org.adempiere.invoice.service.IInvoiceDAO;
 import org.adempiere.util.Services;
 import org.compiere.model.MInvoiceLine;
 import org.compiere.model.ModelValidator;
@@ -40,6 +39,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import de.metas.adempiere.test.POTest;
+import de.metas.invoice.IInvoiceDAO;
 
 // don't know why we need this in this particular class (jmockit.jar is before junit.jar in the classpath), but we do
 @RunWith(JMockit.class)

@@ -28,7 +28,6 @@ import java.math.RoundingMode;
 import java.util.List;
 import java.util.Properties;
 
-import org.adempiere.invoice.service.IInvoiceDAO;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.util.Check;
 import org.adempiere.util.Services;
@@ -46,6 +45,7 @@ import de.metas.document.refid.api.IReferenceNoDAO;
 import de.metas.document.refid.api.IReferenceNoGeneratorInstance;
 import de.metas.document.refid.model.I_C_ReferenceNo_Type;
 import de.metas.document.refid.spi.IReferenceNoGenerator;
+import de.metas.invoice.IInvoiceDAO;
 import de.metas.payment.esr.ESRConstants;
 import de.metas.payment.esr.api.IBPBankAccountBL;
 import de.metas.payment.esr.api.IESRBPBankAccountDAO;

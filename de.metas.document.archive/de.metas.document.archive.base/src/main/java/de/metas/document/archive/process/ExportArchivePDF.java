@@ -24,7 +24,6 @@ package de.metas.document.archive.process;
 
 
 import org.adempiere.ad.process.ISvrProcessPrecondition;
-import org.adempiere.archive.api.IArchiveBL;
 import org.adempiere.exceptions.AdempiereException;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.util.Check;
@@ -36,6 +35,7 @@ import org.compiere.model.PO;
 import org.compiere.process.SvrProcess;
 
 import de.metas.adempiere.form.IClientUI;
+import de.metas.archive.api.IArchiveBL;
 import de.metas.document.archive.model.IArchiveAware;
 import de.metas.document.archive.model.I_AD_Archive;
 

@@ -31,7 +31,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.adempiere.ad.process.ISvrProcessPrecondition;
-import org.adempiere.invoice.service.IInvoiceBL;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.util.Check;
 import org.adempiere.util.Services;
@@ -52,6 +51,7 @@ import de.metas.banking.model.I_C_BankStatement;
 import de.metas.banking.model.I_C_BankStatementLine;
 import de.metas.banking.service.IBankStatementBL;
 import de.metas.document.engine.IDocActionBL;
+import de.metas.invoice.IInvoiceBL;
 import de.metas.payment.esr.api.IESRImportDAO;
 import de.metas.payment.esr.model.I_ESR_Import;
 import de.metas.payment.esr.model.I_ESR_ImportLine;

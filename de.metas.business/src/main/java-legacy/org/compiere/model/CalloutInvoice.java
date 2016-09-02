@@ -26,7 +26,6 @@ import java.util.Properties;
 
 import org.adempiere.ad.security.IUserRolePermissions;
 import org.adempiere.ad.trx.api.ITrx;
-import org.adempiere.invoice.service.IInvoiceBL;
 import org.adempiere.model.GridTabWrapper;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.util.Check;
@@ -37,6 +36,7 @@ import org.compiere.util.Env;
 
 import de.metas.document.documentNo.IDocumentNoBuilderFactory;
 import de.metas.document.documentNo.impl.IDocumentNoInfo;
+import de.metas.invoice.IInvoiceLineBL;
 import de.metas.logging.MetasfreshLastError;
 import de.metas.tax.api.ITaxBL;
 
@@ -540,7 +540,7 @@ public class CalloutInvoice extends CalloutEngine
 		// instance of de.metas.adempiere.model.I_C_InvoiceLine, needed for columns not existing in the original version
 		final de.metas.adempiere.model.I_C_InvoiceLine il = InterfaceWrapperHelper.create(invoiceLine, de.metas.adempiere.model.I_C_InvoiceLine.class);
 		final boolean isManualPrice = il.isManualPrice();
-		
+
 		// log.warn("amt - init");
 		int C_UOM_To_ID = Env.getContextAsInt(ctx, WindowNo, "Price_UOM_ID"); // 07216 : We convert to the price UOM.
 		int M_Product_ID = Env.getContextAsInt(ctx, WindowNo, "M_Product_ID");
@@ -616,7 +616,7 @@ public class CalloutInvoice extends CalloutEngine
 			log.debug("amt - PriceActual=" + PriceActual
 					+ " -> PriceEntered=" + PriceEntered);
 			mTab.setValue("PriceEntered", PriceEntered);
-			
+
 		}
 		else if (mField.getColumnName().equals("PriceEntered"))
 		{
@@ -712,7 +712,7 @@ public class CalloutInvoice extends CalloutEngine
 				{
 					final int C_Tax_ID = taxID.intValue();
 					final I_C_Tax tax = new MTax(ctx, C_Tax_ID, null);
-					final boolean taxIncluded = isTaxIncluded(invoiceLine);
+					final boolean taxIncluded = Services.get(IInvoiceLineBL.class).isTaxIncluded(invoiceLine);
 					TaxAmt = Services.get(ITaxBL.class).calculateTax(tax, LineNetAmt, taxIncluded, StdPrecision);
 					mTab.setValue("TaxAmt", TaxAmt);
 				}
@@ -723,17 +723,6 @@ public class CalloutInvoice extends CalloutEngine
 
 		return "";
 	}	// amt
-
-	/**
-	 * Is Tax Included
-	 *
-	 * @param invoiceLine
-	 * @return tax included (default: false)
-	 */
-	private boolean isTaxIncluded(final I_C_InvoiceLine invoiceLine)
-	{
-		return Services.get(IInvoiceBL.class).isTaxIncluded(invoiceLine);
-	}	// isTaxIncluded
 
 	/**
 	 * Invoice Line - Quantity.
@@ -751,7 +740,7 @@ public class CalloutInvoice extends CalloutEngine
 	{
 		if (isCalloutActive() || value == null)
 			return "";
-		
+
 		final I_C_InvoiceLine invoiceLine = InterfaceWrapperHelper.create(mTab, I_C_InvoiceLine.class);
 		// instance of de.metas.adempiere.model.I_C_InvoiceLine, needed for columns not existing in the original version
 		final de.metas.adempiere.model.I_C_InvoiceLine il = InterfaceWrapperHelper.create(invoiceLine, de.metas.adempiere.model.I_C_InvoiceLine.class);
@@ -785,7 +774,7 @@ public class CalloutInvoice extends CalloutEngine
 			if (QtyInvoiced == null)
 				QtyInvoiced = QtyEntered;
 			boolean conversion = QtyEntered.compareTo(QtyInvoiced) != 0;
-			
+
 			// do not change anything if manual price
 			if (!isManualPrice)
 			{
@@ -803,7 +792,7 @@ public class CalloutInvoice extends CalloutEngine
 				mTab.setValue("PriceEntered", PriceEntered);
 			}
 			mTab.setValue("QtyInvoiced", QtyInvoiced);
-			
+
 		}
 		// QtyEntered changed - calculate QtyInvoiced
 		else if (mField.getColumnName().equals("QtyEntered"))

@@ -26,9 +26,10 @@ package de.metas.invoice;
 import java.math.BigDecimal;
 import java.util.Properties;
 
-import org.adempiere.invoice.service.IInvoiceBL;
 import org.adempiere.pricing.api.IEditablePricingContext;
 import org.adempiere.util.ISingletonService;
+import org.compiere.model.I_C_Invoice;
+import org.compiere.model.I_C_Tax;
 import org.compiere.model.MInvoiceLine;
 
 import de.metas.adempiere.model.I_C_InvoiceLine;
@@ -90,7 +91,7 @@ public interface IInvoiceLineBL extends ISingletonService
 	 *
 	 * @return the "price" qty.
 	 */
-	BigDecimal calculatedQtyInPriceUOM(BigDecimal qty, I_C_InvoiceLine il, boolean errorIfNotPossible);
+	//BigDecimal calculatedQtyInPriceUOM(BigDecimal qty, I_C_InvoiceLine il, boolean errorIfNotPossible);
 
 	/**
 	 * Calculate and set the given <code>invoiceLine</code>'s <code>PriceActual</code> from <code>PriceEntered</code> and <code>Discount</code>.
@@ -116,9 +117,51 @@ public interface IInvoiceLineBL extends ISingletonService
 	 * Update the line net amount. Mainly introduced for manual invoices
 	 *
 	 * @param line
-	 * @param qtyEntered
 	 */
-	void updateLineNetAmt(I_C_InvoiceLine line, BigDecimal qtyEntered);
+	void updateLineNetAmt(I_C_InvoiceLine line);
 
 	void updatePrices(I_C_InvoiceLine invoiceLine);
+
+	/**
+	 * Updates the given invoice line's <code>M_Product_ID</code>, <code>C_UOM_ID</code> and <code>M_AttributeSetInstance_ID</code>.<br>
+	 * Product ID and UOM ID are set to the product and it's respective UOM or to 0 if the given <code>productId</code> is 0. The ASI ID is always set to 0.
+	 * <p>
+	 * Important note: what we do <b>not</b> set there is the price UOM because that one is set only together with the price.
+	 *
+	 * @param invoiceLine
+	 * @param productId
+	 */
+	void setProductAndUOM(I_C_InvoiceLine invoiceLine, int productId);
+
+	/**
+	 * Set the given invoiceline's QtyInvoiced, QtyEntered and QtyInvoicedInPriceUOM.
+	 * This method assumes that the given invoice Line has a product (with an UOM) and a C_UOM and Price_UOM set.
+	 *
+	 * @param invoiceLine
+	 * @param qtyInvoiced qtyInvoice to be set. The other two values are computed from it, using UOM conversions.
+	 */
+	void setQtys(I_C_InvoiceLine invoiceLine, BigDecimal qtyInvoiced);
+
+	/**
+	 * Set the given <code>invoiceLine</code>'s <code>lineNetAmt</code> based on <code>PriceActual</code>, <code>QtyInvoiced</code>, <code>C_UOM_ID</code> and <code>Price_UOM_ID</code>.
+	 *
+	 * @param invoiceLine
+	 */
+	void setQtyInvoicedInPriceUOM_AND_LineNetAmt(I_C_InvoiceLine invoiceLine);
+
+	/**
+	 * Call {@link IInvoiceBL#isTaxIncluded(I_C_Invoice, I_C_Tax)} for the given <code>invoiceLine</code>'s <code>C_Invoice</code> and <code>C_Tax</code>.
+	 *
+	 * @param invoiceLine
+	 * @return
+	 */
+	boolean isTaxIncluded(org.compiere.model.I_C_InvoiceLine invoiceLine);
+
+
+	/**
+	 * Calculate Tax Amt. Assumes Line Net is calculated
+	 */
+	void setTaxAmt(I_C_InvoiceLine invoiceLine);
+
+	BigDecimal calculatedQtyInPriceUOM(BigDecimal qty, I_C_InvoiceLine invoiceLine, boolean errorIfNotPossible);
 }

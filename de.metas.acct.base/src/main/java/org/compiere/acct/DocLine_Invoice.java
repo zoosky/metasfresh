@@ -10,12 +10,12 @@ package org.compiere.acct;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 2 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-2.0.html>.
@@ -25,10 +25,7 @@ package org.compiere.acct;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import org.slf4j.Logger;
-import de.metas.logging.LogManager;
 
-import org.adempiere.invoice.service.IInvoiceBL;
 import org.adempiere.util.Services;
 import org.compiere.model.IQuery;
 import org.compiere.model.I_C_InvoiceLine;
@@ -36,6 +33,7 @@ import org.compiere.model.I_M_MatchInv;
 import org.compiere.model.MInvoiceLine;
 import org.compiere.model.MTax;
 
+import de.metas.invoice.IInvoiceLineBL;
 import de.metas.invoice.IMatchInvDAO;
 import de.metas.tax.api.ITaxBL;
 
@@ -43,7 +41,7 @@ public class DocLine_Invoice extends DocLine
 {
 	// services
 	private final transient IMatchInvDAO matchInvDAO = Services.get(IMatchInvDAO.class);
-	private final transient IInvoiceBL invoiceBL = Services.get(IInvoiceBL.class);
+	private final transient IInvoiceLineBL invoiceLineBL = Services.get(IInvoiceLineBL.class);
 	private final transient ITaxBL taxBL = Services.get(ITaxBL.class);
 
 	private BigDecimal _includedTaxAmt = BigDecimal.ZERO;
@@ -53,7 +51,7 @@ public class DocLine_Invoice extends DocLine
 	{
 		super(invoiceLine, doc);
 
-		setIsTaxIncluded(invoiceBL.isTaxIncluded(invoiceLine));
+		setIsTaxIncluded(invoiceLineBL.isTaxIncluded(invoiceLine));
 
 		// Qty
 		final BigDecimal qtyInvoiced = invoiceLine.getQtyInvoiced();
@@ -107,13 +105,13 @@ public class DocLine_Invoice extends DocLine
 
 	/**
 	 * Adjusts the sign of given relative <code>qty</code> using the credit memo and SOTrx flags.
-	 * 
+	 *
 	 * Mainly it is:
 	 * <ul>
 	 * <li>if {@link #isCreditMemo()}, negate the quantity
 	 * <li>if {@link #isSOTrx()}, negate the quantity
 	 * </ul>
-	 * 
+	 *
 	 * @param qty
 	 * @return quantity (absolute value)
 	 */
@@ -199,7 +197,7 @@ public class DocLine_Invoice extends DocLine
 
 	/**
 	 * Calculate the net amount of quantity received using <code>lineNetAmt</code> as total amount.
-	 * 
+	 *
 	 * @param lineNetAmt
 	 * @return quantity received invoiced amount
 	 */
@@ -239,7 +237,7 @@ public class DocLine_Invoice extends DocLine
 
 	/**
 	 * Checks if invoice reposting is needed when given <code>matchInv</code> was created.
-	 * 
+	 *
 	 * @param matchInv
 	 * @return true if invoice reposting is needed
 	 */

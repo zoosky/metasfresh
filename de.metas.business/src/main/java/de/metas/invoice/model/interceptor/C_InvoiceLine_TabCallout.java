@@ -24,13 +24,13 @@ package de.metas.invoice.model.interceptor;
 
 
 import org.adempiere.ad.ui.spi.TabCalloutAdapter;
-import org.adempiere.invoice.service.IInvoiceBL;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.util.Services;
 import org.compiere.model.GridTab;
 
 import de.metas.adempiere.model.I_C_Invoice;
 import de.metas.adempiere.model.I_C_InvoiceLine;
+import de.metas.invoice.IInvoiceBL;
 
 /**
  * @task http://dewiki908/mediawiki/index.php/09182_Manuelle_EDI_Rechnungen_Retourenbestellung_%28102698247514%29

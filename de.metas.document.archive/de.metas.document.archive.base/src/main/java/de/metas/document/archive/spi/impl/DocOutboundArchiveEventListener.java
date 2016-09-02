@@ -26,14 +26,14 @@ package de.metas.document.archive.spi.impl;
 import java.sql.Timestamp;
 import java.util.Properties;
 
-import org.adempiere.archive.api.IArchiveEventManager;
-import org.adempiere.archive.spi.IArchiveEventListener;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.util.Check;
 import org.adempiere.util.Services;
 import org.compiere.model.I_AD_Archive;
 import org.compiere.model.I_AD_User;
 
+import de.metas.archive.api.IArchiveEventManager;
+import de.metas.archive.spi.IArchiveEventListener;
 import de.metas.document.archive.api.IArchiveDAO;
 import de.metas.document.archive.model.I_C_Doc_Outbound_Log;
 import de.metas.document.archive.model.I_C_Doc_Outbound_Log_Line;

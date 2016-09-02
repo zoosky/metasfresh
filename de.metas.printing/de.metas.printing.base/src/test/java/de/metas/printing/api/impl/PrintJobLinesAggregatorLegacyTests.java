@@ -30,9 +30,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.adempiere.ad.wrapper.POJOWrapper;
-import org.adempiere.archive.api.IArchiveStorageFactory;
-import org.adempiere.archive.api.impl.ArchiveStorageFactory;
-import org.adempiere.archive.spi.impl.DBArchiveStorage;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.util.Check;
 import org.adempiere.util.Services;
@@ -43,6 +40,9 @@ import org.compiere.util.Util.ArrayKey;
 import org.junit.Assert;
 import org.junit.Test;
 
+import de.metas.archive.api.IArchiveStorageFactory;
+import de.metas.archive.api.impl.ArchiveStorageFactory;
+import de.metas.archive.spi.impl.DBArchiveStorage;
 import de.metas.printing.api.IPrintPackageBL;
 import de.metas.printing.api.IPrintPackageCtx;
 import de.metas.printing.api.util.PdfCollator;

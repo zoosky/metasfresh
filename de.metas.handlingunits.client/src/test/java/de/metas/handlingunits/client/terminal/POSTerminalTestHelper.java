@@ -34,8 +34,8 @@ import de.metas.adempiere.form.terminal.context.TerminalContext;
 import de.metas.adempiere.form.terminal.context.TerminalContextTestFactory;
 import de.metas.adempiere.model.I_C_BPartner_Location;
 import de.metas.adempiere.service.IPOSAccessBL;
-import de.metas.adempiere.service.impl.MockedPOSAccessBL;
 import de.metas.handlingunits.model.I_M_Locator;
+import de.metas.location.impl.MockedPOSAccessBL;
 
 /**
  * Helper class used when testing HU POS terminals.

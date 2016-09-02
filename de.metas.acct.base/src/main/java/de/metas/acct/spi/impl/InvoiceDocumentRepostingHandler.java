@@ -4,10 +4,10 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Properties;
 
-import org.adempiere.invoice.service.IInvoiceDAO;
 import org.adempiere.util.Services;
 
 import de.metas.acct.spi.IDocumentRepostingHandler;
+import de.metas.invoice.IInvoiceDAO;
 
 /*
  * #%L

@@ -25,7 +25,7 @@ package de.metas.flatrate.interfaces;
 
 import de.metas.flatrate.model.X_C_Flatrate_Term;
 
-public interface I_C_DocType extends de.metas.interfaces.I_C_DocType
+public interface I_C_DocType extends de.metas.document.model.I_C_DocType
 {
 
 	/**

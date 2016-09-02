@@ -19,11 +19,12 @@ package org.compiere.print;
 import java.awt.print.Pageable;
 
 import org.adempiere.ad.trx.api.ITrx;
-import org.adempiere.archive.api.IArchiveBL;
 import org.adempiere.pdf.Document;
 import org.adempiere.util.Services;
 import org.compiere.model.PrintInfo;
 import org.compiere.print.layout.LayoutEngine;
+
+import de.metas.archive.api.IArchiveBL;
 
 
 /**

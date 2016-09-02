@@ -17,7 +17,6 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import org.adempiere.ad.security.IUserRolePermissions;
-import org.adempiere.archive.api.IArchiveDAO;
 import org.adempiere.util.Services;
 import org.compiere.model.I_AD_Archive;
 import org.compiere.model.MBPartner;
@@ -29,6 +28,7 @@ import org.compiere.util.KeyNamePair;
 import org.compiere.util.TimeUtil;
 
 import de.metas.adempiere.form.IClientUI;
+import de.metas.archive.api.IArchiveDAO;
 
 public class Archive {
 	

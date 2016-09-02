@@ -23,10 +23,11 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Properties;
 import org.slf4j.Logger;
+
+import de.metas.invoice.IInvoiceBL;
 import de.metas.logging.LogManager;
 
 import org.adempiere.ad.trx.api.ITrx;
-import org.adempiere.invoice.service.IInvoiceBL;
 import org.adempiere.model.GridTabWrapper;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.util.Services;

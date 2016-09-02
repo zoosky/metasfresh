@@ -20,7 +20,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.adempiere.invoice.service.IInvoiceBL;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.util.Check;
 import org.adempiere.util.Services;
@@ -42,6 +41,8 @@ import ch.qos.logback.classic.Level;
 import de.metas.adempiere.model.I_C_InvoiceLine;
 import de.metas.currency.ICurrencyBL;
 import de.metas.currency.ICurrencyConversionContext;
+import de.metas.invoice.IInvoiceBL;
+import de.metas.invoice.IInvoiceLineBL;
 import de.metas.product.IProductBL;
 import de.metas.tax.api.ITaxBL;
 
@@ -65,6 +66,7 @@ public class Doc_MatchInv extends Doc
 {
 	// services
 	private final transient IInvoiceBL invoiceBL = Services.get(IInvoiceBL.class);
+	private final transient IInvoiceLineBL invoiceLineBL = Services.get(IInvoiceLineBL.class);
 	private final transient ITaxBL taxBL = Services.get(ITaxBL.class);
 
 	public Doc_MatchInv(final IDocBuilder docBuilder)
@@ -114,7 +116,7 @@ public class Doc_MatchInv extends Doc
 			invoiceLineNetAmt = m_invoiceLine.getLineNetAmt();
 
 			// Correct included Tax
-			final boolean taxIncluded = invoiceBL.isTaxIncluded(m_invoiceLine);
+			final boolean taxIncluded = invoiceLineBL.isTaxIncluded(m_invoiceLine);
 			final int C_Tax_ID = m_invoiceLine.getC_Tax_ID();
 			if (taxIncluded && C_Tax_ID > 0)
 			{

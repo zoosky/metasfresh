@@ -25,9 +25,6 @@ package org.adempiere.invoice.process;
 import java.math.BigDecimal;
 import java.util.Properties;
 
-import org.adempiere.invoice.service.IInvoiceBL;
-import org.adempiere.invoice.service.IInvoiceCreditContext;
-import org.adempiere.invoice.service.impl.InvoiceCreditContext;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.util.Services;
 import org.compiere.apps.AEnv;
@@ -35,6 +32,9 @@ import org.compiere.process.ProcessInfoParameter;
 import org.compiere.process.SvrProcess;
 
 import de.metas.adempiere.model.I_C_Invoice;
+import de.metas.invoice.IInvoiceBL;
+import de.metas.invoice.IInvoiceCreditContext;
+import de.metas.invoice.impl.InvoiceCreditContext;
 
 public class CreateCreditMemoFromInvoice extends SvrProcess
 {

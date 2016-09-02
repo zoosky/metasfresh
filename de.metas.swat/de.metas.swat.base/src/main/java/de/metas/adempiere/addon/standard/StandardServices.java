@@ -22,19 +22,11 @@ package de.metas.adempiere.addon.standard;
  * #L%
  */
 
-import org.adempiere.bpartner.service.IBPartnerBL;
-import org.adempiere.bpartner.service.IBPartnerDAO;
-import org.adempiere.bpartner.service.impl.BPartnerBL;
-import org.adempiere.bpartner.service.impl.BPartnerDAO;
 import org.adempiere.db.IDBService;
 import org.adempiere.db.IDatabaseBL;
 import org.adempiere.db.impl.DatabaseBL;
 import org.adempiere.inout.replenish.service.IReplenishForFutureQty;
 import org.adempiere.inout.replenish.service.ReplenishForFutureQty;
-import org.adempiere.invoice.service.IInvoiceBL;
-import org.adempiere.invoice.service.IInvoiceDAO;
-import org.adempiere.invoice.service.impl.InvoiceBL;
-import org.adempiere.invoice.service.impl.InvoiceDAO;
 import org.adempiere.misc.service.IClientOrgPA;
 import org.adempiere.misc.service.IPOService;
 import org.adempiere.misc.service.IPrintPA;
@@ -74,6 +66,10 @@ import de.metas.adempiere.service.impl.PrinterRoutingBL;
 import de.metas.adempiere.service.impl.SweepTableBL;
 import de.metas.adempiere.service.impl.TableColumnPathBL;
 import de.metas.dpd.service.RoutingService;
+import de.metas.invoice.IInvoiceBL;
+import de.metas.invoice.IInvoiceDAO;
+import de.metas.invoice.impl.InvoiceBL;
+import de.metas.invoice.impl.InvoiceDAO;
 
 /**
  * <b>IMPORTANT</p>: this class is old. Most of the stuff done in here is obsolete and could be removed.
@@ -97,8 +93,6 @@ public class StandardServices implements IAddOn
 		//
 		// misc services
 		Services.registerService(IAddonService.class, new AddonService());
-		Services.registerService(IBPartnerBL.class, new BPartnerBL());
-		Services.registerService(IBPartnerDAO.class, new BPartnerDAO());
 		Services.registerService(IClientOrgPA.class, new ClientOrgPA());
 		Services.registerService(IDatabaseBL.class, new DatabaseBL());
 		Services.registerService(IDBService.class, new org.adempiere.db.impl.DBService());

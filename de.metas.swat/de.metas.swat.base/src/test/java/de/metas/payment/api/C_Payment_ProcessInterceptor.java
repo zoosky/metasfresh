@@ -29,7 +29,6 @@ package de.metas.payment.api;
 import java.math.BigDecimal;
 
 import org.adempiere.ad.wrapper.POJOWrapper;
-import org.adempiere.invoice.service.IInvoiceDAO;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.util.Check;
 import org.adempiere.util.Services;
@@ -41,6 +40,7 @@ import de.metas.allocation.api.IAllocationBL;
 import de.metas.allocation.api.IAllocationBuilder;
 import de.metas.allocation.api.IAllocationLineBuilder;
 import de.metas.document.engine.impl.PlainDocActionBL.IProcessInterceptor;
+import de.metas.invoice.IInvoiceDAO;
 
 /**
  * @author cg

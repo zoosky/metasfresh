@@ -35,8 +35,6 @@ import java.util.UUID;
 
 import javax.imageio.ImageIO;
 
-import org.adempiere.archive.api.IArchiveStorageFactory;
-import org.adempiere.archive.spi.IArchiveStorage;
 import org.adempiere.exceptions.AdempiereException;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.util.Check;
@@ -52,6 +50,8 @@ import com.lowagie.text.pdf.PdfWriter;
 
 import de.metas.adempiere.form.terminal.IDisposable;
 import de.metas.adempiere.form.terminal.context.ITerminalContext;
+import de.metas.archive.api.IArchiveStorageFactory;
+import de.metas.archive.spi.IArchiveStorage;
 import de.metas.handlingunits.model.I_M_ReceiptSchedule;
 
 /**

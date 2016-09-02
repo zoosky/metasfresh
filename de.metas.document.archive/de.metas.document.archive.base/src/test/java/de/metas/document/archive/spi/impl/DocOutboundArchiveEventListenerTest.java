@@ -26,7 +26,6 @@ package de.metas.document.archive.spi.impl;
 import java.util.Properties;
 
 import org.adempiere.ad.trx.api.ITrx;
-import org.adempiere.archive.api.IArchiveEventManager;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.test.AdempiereTestHelper;
 import org.adempiere.util.Services;
@@ -40,6 +39,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.metas.archive.api.IArchiveEventManager;
 import de.metas.document.archive.model.I_AD_Archive;
 import de.metas.document.archive.model.I_C_Doc_Outbound_Log_Line;
 

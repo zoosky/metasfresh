@@ -27,11 +27,6 @@ import java.util.Properties;
 import java.util.UUID;
 
 import org.adempiere.ad.trx.api.ITrx;
-import org.adempiere.archive.api.IArchiveStorageFactory;
-import org.adempiere.archive.api.IArchiveStorageFactory.AccessMode;
-import org.adempiere.archive.spi.IArchiveStorage;
-import org.adempiere.archive.spi.impl.DBArchiveStorage;
-import org.adempiere.archive.spi.impl.FilesystemArchiveStorage;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.service.ISysConfigBL;
 import org.adempiere.test.AdempiereTestHelper;
@@ -48,6 +43,12 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.junit.rules.TestWatcher;
+
+import de.metas.archive.api.IArchiveStorageFactory;
+import de.metas.archive.api.IArchiveStorageFactory.AccessMode;
+import de.metas.archive.spi.IArchiveStorage;
+import de.metas.archive.spi.impl.DBArchiveStorage;
+import de.metas.archive.spi.impl.FilesystemArchiveStorage;
 
 /**
  * Integration test for {@link RemoteArchiveStorage}

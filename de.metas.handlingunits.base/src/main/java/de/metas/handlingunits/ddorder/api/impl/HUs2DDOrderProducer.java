@@ -44,7 +44,7 @@ import de.metas.logging.LogManager;
 import com.google.common.collect.ImmutableMap;
 
 import ch.qos.logback.classic.Level;
-import de.metas.adempiere.service.IBPartnerOrgBL;
+import de.metas.bpartner.IBPartnerOrgBL;
 import de.metas.document.IDocTypeDAO;
 import de.metas.document.engine.IDocActionBL;
 import de.metas.handlingunits.IHUContext;

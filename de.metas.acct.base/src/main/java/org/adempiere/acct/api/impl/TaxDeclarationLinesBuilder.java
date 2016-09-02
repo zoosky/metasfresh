@@ -40,8 +40,6 @@ import org.adempiere.ad.dao.IQueryBuilder;
 import org.adempiere.ad.dao.impl.DateTruncQueryFilterModifier;
 import org.adempiere.ad.trx.api.ITrx;
 import org.adempiere.ad.trx.api.ITrxManager;
-import org.adempiere.invoice.service.IInvoiceBL;
-import org.adempiere.invoice.service.IInvoiceDAO;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.util.Check;
 import org.adempiere.util.ILoggable;
@@ -59,6 +57,9 @@ import org.compiere.model.I_Fact_Acct;
 import org.compiere.model.I_GL_Journal;
 import org.compiere.model.I_GL_JournalLine;
 import org.compiere.util.TrxRunnable;
+
+import de.metas.invoice.IInvoiceBL;
+import de.metas.invoice.IInvoiceDAO;
 
 /**
  * Builder class which creates the {@link I_C_TaxDeclarationLine}s and {@link I_C_TaxDeclarationAcct}s.

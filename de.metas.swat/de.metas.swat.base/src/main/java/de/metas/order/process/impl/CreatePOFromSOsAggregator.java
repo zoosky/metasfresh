@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import org.adempiere.bpartner.service.IBPartnerDAO;
 import org.adempiere.exceptions.AdempiereException;
 import org.adempiere.model.IContextAware;
 import org.adempiere.model.InterfaceWrapperHelper;
@@ -22,6 +21,7 @@ import org.compiere.process.DocAction;
 import org.compiere.util.Env;
 
 import de.metas.adempiere.service.IOrderBL;
+import de.metas.bpartner.IBPartnerDAO;
 import de.metas.interfaces.I_C_OrderLine;
 
 /*
@@ -34,12 +34,12 @@ import de.metas.interfaces.I_C_OrderLine;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 2 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-2.0.html>.
@@ -122,7 +122,7 @@ public class CreatePOFromSOsAggregator extends MapReduceAggregator<I_C_Order, I_
 			{
 				// task 09802: Make docAction COmplete
 				purchaseOrder.setDocAction(DocAction.ACTION_Complete);
-				
+
 				InterfaceWrapperHelper.save(purchaseOrder);
 			}
 		}
@@ -204,7 +204,7 @@ public class CreatePOFromSOsAggregator extends MapReduceAggregator<I_C_Order, I_
 
 		orderBL.setBPartner(purchaseOrder, vendor);
 		orderBL.setBill_User_ID(purchaseOrder);
-		
+
 		//
 		// SalesRep:
 		// * let it to be set from BPartner (this was done above, by orderBL.setBPartner method)

@@ -38,7 +38,6 @@ import net.sf.jasperreports.engine.export.JRPrintServiceExporter;
 import net.sf.jasperreports.engine.export.JRPrintServiceExporterParameter;
 
 import org.adempiere.ad.trx.api.ITrx;
-import org.adempiere.archive.api.IArchiveEventManager;
 import org.adempiere.exceptions.AdempiereException;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.util.Check;
@@ -52,6 +51,7 @@ import org.compiere.util.DB;
 import org.compiere.util.Env;
 
 import de.metas.adempiere.service.IPrinterRoutingBL;
+import de.metas.archive.api.IArchiveEventManager;
 
 /**
  * Old school Jasper Printing Service.
@@ -93,7 +93,7 @@ public final class JasperService extends AbstractJasperService
 			{
 				logger.info("Jasper report " + jasperPrint.getName() + " has been printed");
 
-				final org.adempiere.archive.api.IArchiveBL archiveService = Services.get(org.adempiere.archive.api.IArchiveBL.class);
+				final de.metas.archive.api.IArchiveBL archiveService = Services.get(de.metas.archive.api.IArchiveBL.class);
 
 				if (archiveService.isToArchive(printInfo))
 				{

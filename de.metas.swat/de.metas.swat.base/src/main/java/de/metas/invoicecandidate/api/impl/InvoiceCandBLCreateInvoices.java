@@ -36,7 +36,6 @@ import java.util.Set;
 import org.adempiere.ad.trx.api.ITrx;
 import org.adempiere.ad.trx.api.ITrxManager;
 import org.adempiere.exceptions.AdempiereException;
-import org.adempiere.invoice.service.IInvoiceBL;
 import org.adempiere.mm.attributes.api.IAttributeDAO;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.util.Check;
@@ -65,10 +64,13 @@ import org.compiere.util.Env;
 import org.compiere.util.TrxRunnable;
 import org.compiere.util.TrxRunnable2;
 import org.slf4j.Logger;
+
 import de.metas.adempiere.model.I_C_InvoiceLine;
 import de.metas.adempiere.model.I_C_Order;
 import de.metas.document.engine.IDocActionBL;
 import de.metas.interfaces.I_C_OrderLine;
+import de.metas.invoice.IInvoiceBL;
+import de.metas.invoice.IInvoiceLineBL;
 import de.metas.invoice.IMatchInvBL;
 import de.metas.invoicecandidate.api.IAggregationEngine;
 import de.metas.invoicecandidate.api.IInvoiceCandAggregate;
@@ -97,6 +99,7 @@ public class InvoiceCandBLCreateInvoices implements IInvoiceGenerator
 	private static final transient Logger logger = InvoiceCandidate_Constants.getLogger(InvoiceCandBLCreateInvoices.class);
 	private final transient IInvoiceCandBL invoiceCandBL = Services.get(IInvoiceCandBL.class);
 	private final transient IInvoiceBL invoiceBL = Services.get(IInvoiceBL.class);
+	private final transient IInvoiceLineBL invoiceLineBL = Services.get(IInvoiceLineBL.class);
 	private final transient IInvoiceCandidateListeners invoiceCandListeners = Services.get(IInvoiceCandidateListeners.class);
 	private final transient IDocActionBL docActionBL = Services.get(IDocActionBL.class);
 	private final transient IProductPA productPA = Services.get(IProductPA.class);
@@ -586,7 +589,7 @@ public class InvoiceCandBLCreateInvoices implements IInvoiceGenerator
 				if (ilVO.getM_Product_ID() > 0)
 				{
 					invoiceLine.setM_Product_ID(ilVO.getM_Product_ID());
-					invoiceBL.setQtys(invoiceLine, qtyToInvoice); // task: 08841; note that we need to call this method *after* UOMs and product were set
+					invoiceLineBL.setQtys(invoiceLine, qtyToInvoice); // task: 08841; note that we need to call this method *after* UOMs and product were set
 				}
 				else
 				{
@@ -618,8 +621,8 @@ public class InvoiceCandBLCreateInvoices implements IInvoiceGenerator
 				}
 
 				// Set Line Net Amount and Tax Amount
-				invoiceBL.setLineNetAmt(invoiceLine);
-				invoiceBL.setTaxAmt(invoiceLine);
+				invoiceLineBL.setQtyInvoicedInPriceUOM_AND_LineNetAmt(invoiceLine);
+				invoiceLineBL.setTaxAmt(invoiceLine);
 
 				final List<I_C_Invoice_Candidate> candsForIlVO = aggregate.getCandsFor(ilVO);
 

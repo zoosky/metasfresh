@@ -10,12 +10,12 @@ package de.metas.invoicecandidate.callout;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 2 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-2.0.html>.
@@ -28,7 +28,6 @@ import java.sql.Timestamp;
 import java.util.Properties;
 
 import org.adempiere.ad.trx.api.ITrx;
-import org.adempiere.bpartner.service.IBPartnerDAO;
 import org.adempiere.model.GridTabWrapper;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.util.Services;
@@ -36,6 +35,7 @@ import org.compiere.model.CalloutEngine;
 import org.compiere.model.GridField;
 import org.compiere.model.GridTab;
 
+import de.metas.bpartner.IBPartnerDAO;
 import de.metas.invoicecandidate.api.IAggregationBL;
 import de.metas.invoicecandidate.api.IInvoiceCandBL;
 import de.metas.invoicecandidate.api.IInvoiceCandidateHandlerDAO;
@@ -59,10 +59,10 @@ public class InvoiceCandidate extends CalloutEngine
 		}
 
 		// first chek price actual override
-		invoiceScheduleBL.setPriceActual_Override(ic); 
-		
+		invoiceScheduleBL.setPriceActual_Override(ic);
+
 		invoiceScheduleBL.setNetAmtToInvoice(ic);
-		
+
 		invoiceScheduleBL.setPriceActualNet(ic);
 
 		return NO_ERROR;
@@ -140,7 +140,7 @@ public class InvoiceCandidate extends CalloutEngine
 
 	/**
 	 * Update HeaderAggregationKey
-	 * 
+	 *
 	 * @param ctx
 	 * @param WindowNo
 	 * @param mTab
@@ -151,7 +151,7 @@ public class InvoiceCandidate extends CalloutEngine
 	public String setHeaderAggregationKey(final Properties ctx, final int WindowNo, final GridTab mTab, final GridField mField, final Object value)
 	{
 		final IAggregationBL aggregationBL = Services.get(IAggregationBL.class);
-		
+
 		final I_C_Invoice_Candidate ic = InterfaceWrapperHelper.create(mTab, I_C_Invoice_Candidate.class);
 		aggregationBL.setHeaderAggregationKey(ic);
 

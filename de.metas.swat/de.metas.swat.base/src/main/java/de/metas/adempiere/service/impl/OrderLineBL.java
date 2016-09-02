@@ -30,7 +30,6 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.adempiere.ad.trx.api.ITrx;
-import org.adempiere.bpartner.service.IBPartnerDAO;
 import org.adempiere.model.GridTabWrapper;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.pricing.api.IEditablePricingContext;
@@ -60,6 +59,7 @@ import org.slf4j.Logger;
 import de.metas.adempiere.model.I_M_Product;
 import de.metas.adempiere.service.IOrderBL;
 import de.metas.adempiere.service.IOrderLineBL;
+import de.metas.bpartner.IBPartnerDAO;
 import de.metas.document.IDocTypeBL;
 import de.metas.document.engine.IDocActionBL;
 import de.metas.interfaces.I_C_OrderLine;

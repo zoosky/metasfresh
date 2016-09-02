@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.adempiere.banking.model.I_C_Invoice;
 import org.adempiere.exceptions.AdempiereException;
-import org.adempiere.invoice.service.IInvoiceBL;
 import org.adempiere.model.POWrapper;
 import org.adempiere.util.Constants;
 import org.adempiere.util.MiscUtils;
@@ -25,6 +24,7 @@ import org.slf4j.Logger;
 import de.metas.banking.model.I_C_RecurrentPayment;
 import de.metas.banking.model.X_C_RecurrentPaymentLine;
 import de.metas.banking.service.IBankingBL;
+import de.metas.invoice.IInvoiceBL;
 import de.metas.logging.LogManager;
 
 public class BankingBL implements IBankingBL

@@ -31,7 +31,8 @@ import java.util.Set;
 import de.metas.event.Event;
 import de.metas.event.IEventBus;
 import de.metas.event.IEventListener;
-import org.adempiere.invoice.event.InvoiceGeneratedEventBus;
+import de.metas.invoice.event.InvoiceGeneratedEventBus;
+
 import org.adempiere.util.lang.ITableRecordReference;
 import org.compiere.model.I_C_Invoice;
 import org.junit.Assert;

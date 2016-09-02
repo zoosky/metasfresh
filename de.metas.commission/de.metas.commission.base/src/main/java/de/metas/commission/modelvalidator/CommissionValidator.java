@@ -10,12 +10,12 @@ package de.metas.commission.modelvalidator;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 2 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-2.0.html>.
@@ -35,8 +35,6 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.adempiere.ad.dao.IQueryFilter;
-import org.adempiere.bpartner.service.IBPartnerBL;
-import org.adempiere.invoice.service.IInvoiceBL;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.model.MRelation;
 import org.adempiere.pricing.api.IPriceListBL;
@@ -68,6 +66,7 @@ import org.eevolution.model.I_HR_Process;
 import org.eevolution.model.MHRProcess;
 import org.slf4j.Logger;
 
+import de.metas.bpartner.IBPartnerBL;
 import de.metas.commission.exception.CommissionException;
 import de.metas.commission.inout.model.validator.M_InOut;
 import de.metas.commission.interfaces.I_AD_User;
@@ -111,15 +110,16 @@ import de.metas.commission.util.Messages;
 import de.metas.document.ICopyHandlerBL;
 import de.metas.document.IDocumentPA;
 import de.metas.document.engine.IDocActionBL;
+import de.metas.invoice.IInvoiceBL;
 import de.metas.logging.LogManager;
 import de.metas.logging.MetasfreshLastError;
 
 /**
  * Commission Module Main Validator
- * 
+ *
  * @author ts
  * @author Cris
- * 
+ *
  * @see "<a href='http://dewiki908/mediawiki/index.php/Sponsor_(2009_0023_G107)'>(2009 0023 G107)</a>"
  * @see "<a href='http://dewiki908/mediawiki/index.php/Sponsor_(2009_0023_G108)'>(2009 0023 G108)</a>"
  */
@@ -195,11 +195,11 @@ public class CommissionValidator implements ModelValidator
 			engine.addModelValidator(new C_InvoiceLine(), client);
 			engine.addModelValidator(new C_Invoice(), client);
 			engine.addModelValidator(new M_InOut(), client);
-			
+
 			Services.get(IPriceListBL.class).addPlvCreationListener(new CommissionPlvCreationListener());
 
 			Services.get(ICopyHandlerBL.class).registerCopyHandler(
-					org.compiere.model.I_C_Order.class, 
+					org.compiere.model.I_C_Order.class,
 					new IQueryFilter<Pair<org.compiere.model.I_C_Order, org.compiere.model.I_C_Order>>()
 					{
 						@Override
@@ -209,9 +209,9 @@ public class CommissionValidator implements ModelValidator
 						}
 					},
 					new CommissionOrderCopyHandler());
-			
+
 			Services.get(ICopyHandlerBL.class).registerCopyHandler(
-					org.compiere.model.I_C_Invoice.class, 
+					org.compiere.model.I_C_Invoice.class,
 					new IQueryFilter<Pair<org.compiere.model.I_C_Invoice, org.compiere.model.I_C_Invoice>>()
 					{
 						@Override
@@ -473,7 +473,7 @@ public class CommissionValidator implements ModelValidator
 			invoice.setBPartnerAddress(addressField);
 
 			// TODO: get the payment rule from commission contract
-			// FRESH-488: Set the payment rule 
+			// FRESH-488: Set the payment rule
 			final String paymentRuleToUse = Services.get(IInvoiceBL.class).getDefaultPaymentRule();
 			invoice.setPaymentRule(paymentRuleToUse);
 

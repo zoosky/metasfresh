@@ -10,12 +10,12 @@ package de.metas.adempiere.callout;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 2 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-2.0.html>.
@@ -31,7 +31,6 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.adempiere.ad.trx.api.ITrx;
-import org.adempiere.bpartner.service.IBPartnerDAO;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.util.Check;
 import org.adempiere.util.Services;
@@ -49,12 +48,14 @@ import org.compiere.model.X_C_Order;
 import org.compiere.model.X_M_Product;
 import org.compiere.util.Env;
 import org.slf4j.Logger;
-import de.metas.logging.LogManager;
+
 import de.metas.adempiere.form.IClientUI;
 import de.metas.adempiere.model.I_C_Order;
 import de.metas.adempiere.service.IOrderBL;
 import de.metas.adempiere.service.IOrderLineBL;
+import de.metas.bpartner.IBPartnerDAO;
 import de.metas.interfaces.I_C_OrderLine;
+import de.metas.logging.LogManager;
 
 /**
  * This callout's default behavior is determined by {@link ProductQtyOrderFastInputHandler}. To change the behavior, explicitly add further handlers using
@@ -64,7 +65,7 @@ import de.metas.interfaces.I_C_OrderLine;
  * <ul>
  * <li>{@link C_OrderFastInputTabCallout}: this tabcallout makes sure that the quick-input fields are empty (and not "0"!) when a new order record is created (task 09232).
  * </ul>
- * 
+ *
  * @author ts
  * @see "<a href='http://dewiki908/mediawiki/index.php/Geschwindigkeit_Erfassung_%282009_0027_G131%29'>(2009 0027 G131)</a>"
  */
@@ -248,8 +249,8 @@ public class OrderFastInput extends CalloutEngine
 		return NO_ERROR;
 	}
 
-	private void clearFieldsLater(final int WindowNo, 
-			final GridTab mTab, 
+	private void clearFieldsLater(final int WindowNo,
+			final GridTab mTab,
 			final boolean save)
 	{
 		Services.get(IClientUI.class).invokeLater(WindowNo, new Runnable()
@@ -318,7 +319,7 @@ public class OrderFastInput extends CalloutEngine
 
 	/**
 	 * Checks if the Weight of the given Product is zero or less and shows a warning if so.
-	 * 
+	 *
 	 * @param product
 	 * @param WindowNo
 	 */

@@ -58,7 +58,7 @@ import org.eevolution.model.I_HR_Process;
 import org.eevolution.model.MHRMovement;
 import org.eevolution.model.X_HR_Movement;
 
-import de.metas.adempiere.service.IBPartnerOrgBL;
+import de.metas.bpartner.IBPartnerOrgBL;
 import de.metas.commission.exception.CommissionException;
 import de.metas.commission.interfaces.IAdvComInstance;
 import de.metas.commission.interfaces.I_C_BPartner;

@@ -27,7 +27,6 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Properties;
 
-import org.adempiere.archive.api.IArchiveDAO;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.util.Services;
 import org.adempiere.util.lang.ObjectUtils;
@@ -39,6 +38,7 @@ import de.metas.logging.LogManager;
 import com.google.common.base.Optional;
 
 import de.metas.adempiere.model.I_C_Invoice;
+import de.metas.archive.api.IArchiveDAO;
 import de.metas.document.archive.model.I_AD_Archive;
 import de.metas.document.engine.IDocActionBL;
 import de.metas.inoutcandidate.api.IShipmentScheduleAllocDAO;

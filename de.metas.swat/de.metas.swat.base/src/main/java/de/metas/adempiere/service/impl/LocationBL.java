@@ -43,10 +43,11 @@ import org.compiere.util.Env;
 import com.akunagroup.uk.postcode.AddressInterface;
 
 import de.metas.adempiere.model.I_C_Postal;
-import de.metas.adempiere.service.ICountryDAO;
 import de.metas.adempiere.service.ILocationBL;
 import de.metas.adempiere.util.CacheCtx;
 import de.metas.dpd.model.I_DPD_Route;
+import de.metas.location.AddressBuilder;
+import de.metas.location.ICountryDAO;
 
 public class LocationBL implements ILocationBL
 {

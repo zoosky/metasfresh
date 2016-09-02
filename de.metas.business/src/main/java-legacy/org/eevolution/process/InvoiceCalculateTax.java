@@ -18,7 +18,6 @@ package org.eevolution.process;
 import java.util.Collections;
 
 import org.adempiere.acct.api.IFactAcctDAO;
-import org.adempiere.bpartner.service.IBPartnerStatisticsUpdater;
 import org.adempiere.exceptions.FillMandatoryException;
 import org.adempiere.util.Services;
 import org.compiere.model.I_C_BPartner;
@@ -27,9 +26,11 @@ import org.compiere.model.MPeriod;
 import org.compiere.process.ProcessInfoParameter;
 import org.compiere.process.SvrProcess;
 
+import de.metas.bpartner.IBPartnerStatisticsUpdater;
+
 /**
  * Re-calculate Invoice Tax (and unpost the document)
- * 
+ *
  * @author victor.perez@e-evolution.com, e-Evolution http://www.e-evolution.com
  *         <li>FR [ 2520591 ] Support multiples calendar for Org
  * @see http://sourceforge.net/tracker2/?func=detail&atid=879335&aid=2520591&group_id=176962

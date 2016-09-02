@@ -29,6 +29,8 @@ import java.beans.VetoableChangeListener;
 import java.io.InputStream;
 import java.sql.Timestamp;
 import org.slf4j.Logger;
+
+import de.metas.archive.api.IArchiveBL;
 import de.metas.logging.LogManager;
 
 import javax.swing.Icon;
@@ -36,7 +38,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JSplitPane;
 
-import org.adempiere.archive.api.IArchiveBL;
 import org.adempiere.images.Images;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.pdf.Document;

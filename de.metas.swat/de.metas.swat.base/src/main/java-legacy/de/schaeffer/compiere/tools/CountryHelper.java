@@ -33,8 +33,8 @@ import org.adempiere.util.time.SystemTime;
 import org.compiere.model.I_C_Country;
 import org.compiere.util.Env;
 
-import de.metas.adempiere.service.ICountryAreaBL;
-import de.metas.adempiere.service.ICountryDAO;
+import de.metas.location.ICountryAreaBL;
+import de.metas.location.ICountryDAO;
 
 public class CountryHelper {
 	public static List<I_C_Country> countries = new ArrayList<I_C_Country>();

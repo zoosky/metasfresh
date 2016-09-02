@@ -28,7 +28,6 @@ import java.awt.Frame;
 
 import org.adempiere.ad.process.ISvrProcessPrecondition;
 import org.adempiere.exceptions.AdempiereException;
-import org.adempiere.invoice.service.IInvoiceBL;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.util.Check;
 import org.adempiere.util.Services;
@@ -41,6 +40,7 @@ import org.compiere.process.ProcessInfo;
 import de.metas.adempiere.model.I_C_Invoice;
 import de.metas.banking.payment.IPaymentRequestBL;
 import de.metas.banking.payment.IPaymentRequestDAO;
+import de.metas.invoice.IInvoiceBL;
 import de.metas.payment.model.I_C_Payment_Request;
 
 /**

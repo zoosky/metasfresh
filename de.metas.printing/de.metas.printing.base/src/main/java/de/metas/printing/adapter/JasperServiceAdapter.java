@@ -27,7 +27,6 @@ import net.sf.jasperreports.engine.JRExporter;
 import net.sf.jasperreports.engine.JasperPrint;
 
 import org.adempiere.ad.trx.api.ITrx;
-import org.adempiere.archive.api.IArchiveBL;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.util.Check;
 import org.adempiere.util.Services;
@@ -36,6 +35,7 @@ import org.compiere.process.ProcessInfo;
 import org.compiere.report.AbstractJasperService;
 import org.compiere.report.IJasperService;
 
+import de.metas.archive.api.IArchiveBL;
 import de.metas.printing.model.I_AD_Archive;
 
 

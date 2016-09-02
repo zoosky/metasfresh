@@ -5,7 +5,6 @@ import org.adempiere.ad.callout.annotations.CalloutMethod;
 import org.adempiere.ad.callout.api.ICalloutField;
 import org.adempiere.ad.modelvalidator.annotations.Interceptor;
 import org.adempiere.ad.modelvalidator.annotations.ModelChange;
-import org.adempiere.invoice.service.IInvoiceBL;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.util.Services;
 import org.compiere.model.I_C_OrderLine;
@@ -14,6 +13,7 @@ import org.compiere.model.ModelValidator;
 
 import de.metas.adempiere.model.I_C_Invoice;
 import de.metas.adempiere.model.I_C_InvoiceLine;
+import de.metas.invoice.IInvoiceBL;
 import de.metas.invoice.IInvoiceLineBL;
 
 /*
@@ -59,6 +59,7 @@ public class C_InvoiceLine
 	{
 		final IInvoiceLineBL invoiceLineBL = Services.get(IInvoiceLineBL.class);
 		invoiceLineBL.calculatePriceActual(invoiceLine, -1);
+		invoiceLineBL.updateLineNetAmt(invoiceLine);
 	}
 
 	@CalloutMethod(columnNames = { I_C_InvoiceLine.COLUMNNAME_QtyEntered,
@@ -75,11 +76,7 @@ public class C_InvoiceLine
 		}
 
 		final IInvoiceLineBL invoiceLineBL = Services.get(IInvoiceLineBL.class);
-		final IInvoiceBL invoiceBL = Services.get(IInvoiceBL.class);
-
-		invoiceLineBL.setQtyInvoicedInPriceUOM(invoiceLine);
-
-		invoiceBL.setLineNetAmt(invoiceLine);
+		invoiceLineBL.setQtyInvoicedInPriceUOM_AND_LineNetAmt(invoiceLine);
 	}
 
 	/**

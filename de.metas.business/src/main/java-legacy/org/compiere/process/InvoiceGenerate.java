@@ -25,7 +25,6 @@ import org.slf4j.Logger;
 import de.metas.logging.LogManager;
 
 import org.adempiere.exceptions.DBException;
-import org.adempiere.invoice.service.IInvoiceBL;
 import org.adempiere.misc.service.IPOService;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.util.CustomColNames;
@@ -51,6 +50,7 @@ import org.compiere.util.Language;
 
 import de.metas.adempiere.model.I_C_Invoice;
 import de.metas.interfaces.I_C_OrderLine;
+import de.metas.invoice.IInvoiceBL;
 
 /**
  * Generate Invoices

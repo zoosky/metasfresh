@@ -24,11 +24,11 @@ package de.metas.document.archive.async.spi.impl;
 
 import java.util.List;
 
-import org.adempiere.archive.api.IArchiveEventManager;
 import org.adempiere.util.Services;
 
 import com.google.common.annotations.VisibleForTesting;
 
+import de.metas.archive.api.IArchiveEventManager;
 import de.metas.async.api.IQueueDAO;
 import de.metas.async.model.I_C_Queue_WorkPackage;
 import de.metas.async.spi.IWorkpackageProcessor;

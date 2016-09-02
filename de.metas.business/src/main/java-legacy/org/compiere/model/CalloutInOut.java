@@ -23,10 +23,6 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Properties;
 
-import org.adempiere.bpartner.service.IBPartnerBL;
-import org.adempiere.bpartner.service.IBPartnerDAO;
-import org.adempiere.bpartner.service.IBPartnerStats;
-import org.adempiere.bpartner.service.IBPartnerStatsDAO;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.util.Check;
 import org.adempiere.util.Services;
@@ -38,12 +34,16 @@ import org.compiere.util.Env;
 import de.metas.adempiere.form.IClientUI;
 import de.metas.adempiere.model.I_AD_User;
 import de.metas.adempiere.model.I_C_BPartner_Location;
+import de.metas.bpartner.IBPartnerBL;
+import de.metas.bpartner.IBPartnerDAO;
+import de.metas.bpartner.IBPartnerStats;
+import de.metas.bpartner.IBPartnerStatsDAO;
 import de.metas.document.documentNo.IDocumentNoBuilderFactory;
 import de.metas.document.documentNo.impl.IDocumentNoInfo;
 
 /**
  * Shipment/Receipt Callouts
- * 
+ *
  * @author Jorg Janke
  * @version $Id: CalloutInOut.java,v 1.7 2006/07/30 00:51:05 jjanke Exp $
  * @author victor.perez@e-evolution.com www.e-evolution.com [ 1867464 ]
@@ -52,14 +52,14 @@ import de.metas.document.documentNo.impl.IDocumentNoInfo;
  *         =176962&atid=879332
  * @author kh http://dewiki908/mediawiki/index.php/Fehlerliste_Integrationstest#B062
  */
-//metas: synched with rev. 10203 
+//metas: synched with rev. 10203
 public class CalloutInOut extends CalloutEngine {
 
 	public static final String MSG_SERIALNO_QTY_ONE = "CalloutInOut.QtySerNoMustBeOne";
 
 	/**
 	 * C_Order - Order Defaults.
-	 * 
+	 *
 	 * @param ctx
 	 * @param WindowNo
 	 * @param mTab
@@ -70,13 +70,13 @@ public class CalloutInOut extends CalloutEngine {
 	public String order(final Properties ctx, final int WindowNo, final GridTab mTab, final GridField mField, final Object value)
 	{
 		final I_M_InOut inout = InterfaceWrapperHelper.create(mTab, I_M_InOut.class);
-		
+
 		final I_C_Order order = inout.getC_Order();
 		if(order == null || order.getC_Order_ID() <= 0)
 		{
 			return NO_ERROR;
 		}
-		
+
 		// No Callout Active to fire dependent values
 		if (isCalloutActive()) // prevent recursive
 			return NO_ERROR;
@@ -91,12 +91,12 @@ public class CalloutInOut extends CalloutEngine {
 		inout.setC_Project_ID(order.getC_Project_ID());
 		inout.setUser1_ID(order.getUser1_ID());
 		inout.setUser2_ID(order.getUser2_ID());
-		
+
 		// Warehouse (05251 begin: we need to use the advisor)
 		final I_M_Warehouse wh =  Services.get(IWarehouseAdvisor.class).evaluateOrderWarehouse(order);
 		Check.assumeNotNull(wh, "IWarehouseAdvisor finds a ware house for {}", order);
 		inout.setM_Warehouse_ID(wh.getM_Warehouse_ID());
-		
+
 		//
 		inout.setDeliveryRule(order.getDeliveryRule());
 		inout.setDeliveryViaRule(order.getDeliveryViaRule());
@@ -107,13 +107,13 @@ public class CalloutInOut extends CalloutEngine {
 		inout.setC_BPartner_ID(order.getC_BPartner_ID());
 		inout.setC_BPartner_Location_ID(order.getC_BPartner_Location_ID());
 		inout.setAD_User_ID(new Integer(order.getAD_User_ID()));
-		
+
 		return NO_ERROR;
 	} // order
 
 	/**
 	 * M_RMA - RMA Defaults.
-	 * 
+	 *
 	 * @param ctx
 	 * @param WindowNo
 	 * @param mTab
@@ -176,7 +176,7 @@ public class CalloutInOut extends CalloutEngine {
 
 	/**
 	 * InOut - DocType. - sets MovementType - gets DocNo
-	 * 
+	 *
 	 * @param ctx
 	 * @param WindowNo
 	 * @param mTab
@@ -230,7 +230,7 @@ public class CalloutInOut extends CalloutEngine {
 
 	/**
 	 * M_InOut - Defaults for BPartner. - Location - Contact
-	 * 
+	 *
 	 * @param ctx
 	 * @param WindowNo
 	 * @param mTab
@@ -283,7 +283,7 @@ public class CalloutInOut extends CalloutEngine {
 		}
 		return NO_ERROR;
 	} // bpartner
-	
+
 	public static I_C_BPartner_Location suggestShipToLocation(final Properties ctx, final int windowNo, final I_C_BPartner bpartner)
 	{
 		final int infoWindow_bpartnerId = Env.getContextAsInt(ctx, windowNo, Env.TAB_INFO, "C_BPartner_ID");
@@ -292,13 +292,13 @@ public class CalloutInOut extends CalloutEngine {
 		{
 			infoWindow_bpartnerLocationId = Env.getContextAsInt(ctx, windowNo, Env.TAB_INFO, "C_BPartner_Location_ID");
 		}
-		
+
 		final List<I_C_BPartner_Location> shipToLocations = Services.get(IBPartnerDAO.class).retrieveBPartnerShipToLocations(bpartner);
 		if (shipToLocations.isEmpty())
 		{
 			return null;
 		}
-		
+
 		if(infoWindow_bpartnerLocationId > 0)
 		{
 			for (final I_C_BPartner_Location shipToLocation : shipToLocations)
@@ -309,14 +309,14 @@ public class CalloutInOut extends CalloutEngine {
 				}
 			}
 		}
-		
+
 		final I_C_BPartner_Location shipToLocation = shipToLocations.get(0);
 		return shipToLocation;
 	}
 
 	/**
 	 * M_Warehouse. Set Organization and Default Locator
-	 * 
+	 *
 	 * @param ctx
 	 * @param WindowNo
 	 * @param mTab
@@ -370,7 +370,7 @@ public class CalloutInOut extends CalloutEngine {
 
 	/**************************************************************************
 	 * OrderLine Callout
-	 * 
+	 *
 	 * @param ctx
 	 *            context
 	 * @param WindowNo
@@ -428,7 +428,7 @@ public class CalloutInOut extends CalloutEngine {
 
 	/**************************************************************************
 	 * RMALine Callout
-	 * 
+	 *
 	 * @param ctx
 	 *            context
 	 * @param WindowNo
@@ -482,7 +482,7 @@ public class CalloutInOut extends CalloutEngine {
 
 	/**
 	 * M_InOutLine - Default UOM/Locator for Product.
-	 * 
+	 *
 	 * @param ctx
 	 *            context
 	 * @param WindowNo
@@ -549,7 +549,7 @@ public class CalloutInOut extends CalloutEngine {
 	/**
 	 * InOut Line - Quantity. - called from C_UOM_ID, QtyEntered, MovementQty -
 	 * enforces qty UOM relationship
-	 * 
+	 *
 	 * @param ctx
 	 *            context
 	 * @param WindowNo
@@ -670,7 +670,7 @@ public class CalloutInOut extends CalloutEngine {
 
 	/**
 	 * M_InOutLine - ASI.
-	 * 
+	 *
 	 * @param ctx
 	 *            context
 	 * @param WindowNo

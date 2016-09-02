@@ -28,8 +28,6 @@ import java.util.List;
 import java.util.Properties;
 
 import org.adempiere.ad.table.api.IADTableDAO;
-import org.adempiere.archive.api.IArchiveEventManager;
-import org.adempiere.bpartner.service.IBPartnerBL;
 import org.adempiere.exceptions.AdempiereException;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.util.Check;
@@ -44,10 +42,12 @@ import org.compiere.model.I_C_DocType;
 import org.compiere.process.DocAction;
 import org.compiere.util.Env;
 
+import de.metas.archive.api.IArchiveEventManager;
 import de.metas.async.api.IQueueDAO;
 import de.metas.async.exceptions.WorkpackageSkipRequestException;
 import de.metas.async.model.I_C_Queue_WorkPackage;
 import de.metas.async.spi.IWorkpackageProcessor;
+import de.metas.bpartner.IBPartnerBL;
 import de.metas.document.archive.model.I_C_Doc_Outbound_Log;
 import de.metas.document.archive.model.I_C_Doc_Outbound_Log_Line;
 import de.metas.document.archive.model.X_C_Doc_Outbound_Log_Line;
@@ -160,12 +160,12 @@ public class MailWorkpackageProcessor implements IWorkpackageProcessor
 		final Mailbox mailbox = mailBL.findMailBox(client, orgID, processID, docType,  mailCustomType, userFrom);
 
 		I_AD_User userTo = null;
-		
+
 		// check if the column for the user is specified
 		if (!Check.isEmpty(mailbox.getColumnUserTo(), true))
 		{
 			final String tableName = adTableDAO.retrieveTableName(log.getAD_Table_ID());
-			
+
 			// chekc if the column exists
 			final boolean existsColumn = adTableDAO.hasColumnName(tableName, mailbox.getColumnUserTo());
 			if (existsColumn)
@@ -179,7 +179,7 @@ public class MailWorkpackageProcessor implements IWorkpackageProcessor
 				}
 			}
 		}
-		
+
 		//
 		// fallback to old logic
 		if (userTo == null)

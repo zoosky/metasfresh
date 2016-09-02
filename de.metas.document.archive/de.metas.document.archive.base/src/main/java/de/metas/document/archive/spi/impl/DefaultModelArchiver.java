@@ -10,8 +10,6 @@ import org.adempiere.ad.dao.IQueryBuilderOrderByClause;
 import org.adempiere.ad.dao.IQueryOrderBy.Direction;
 import org.adempiere.ad.dao.IQueryOrderBy.Nulls;
 import org.adempiere.ad.trx.api.ITrx;
-import org.adempiere.archive.api.IArchiveBL;
-import org.adempiere.bpartner.service.IBPartnerBL;
 import org.adempiere.exceptions.AdempiereException;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.util.Check;
@@ -30,6 +28,8 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Optional;
 
+import de.metas.archive.api.IArchiveBL;
+import de.metas.bpartner.IBPartnerBL;
 import de.metas.document.archive.api.IArchiveDAO;
 import de.metas.document.archive.async.spi.impl.DocOutboundCCWorkpackageProcessor;
 import de.metas.document.archive.model.I_AD_Archive;
@@ -70,7 +70,7 @@ public class DefaultModelArchiver
 
 	// services
 	private static final Logger logger = LogManager.getLogger(DefaultModelArchiver.class);
-	private final transient IArchiveBL archiveBL = Services.get(org.adempiere.archive.api.IArchiveBL.class);
+	private final transient IArchiveBL archiveBL = Services.get(de.metas.archive.api.IArchiveBL.class);
 	private final transient IArchiveDAO archiveDAO = Services.get(IArchiveDAO.class);
 	private final transient IBPartnerBL bpartnerBL = Services.get(IBPartnerBL.class);
 	private final transient IDocActionBL docActionBL = Services.get(IDocActionBL.class);
@@ -166,13 +166,13 @@ public class DefaultModelArchiver
 		this._pdfData = pdfData;
 		return archive;
 	}
-	
+
 	public I_AD_Archive getAD_Archive()
 	{
 		assertProcessed();
 		return _archive;
 	}
-	
+
 	public byte[] getPdfData()
 	{
 		assertProcessed();
@@ -193,7 +193,7 @@ public class DefaultModelArchiver
 	{
 		Check.assume(!_processed.get(), "not already processed: {}", this);
 	}
-	
+
 	protected final void assertProcessed()
 	{
 		Check.assume(_processed.get(), "processed: {}", this);

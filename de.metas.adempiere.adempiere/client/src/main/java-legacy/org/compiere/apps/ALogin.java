@@ -42,7 +42,6 @@ import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.adempiere.ad.api.ILanguageBL;
 import org.adempiere.exceptions.AdempiereException;
 import org.adempiere.plaf.AdempierePLAF;
 import org.adempiere.plaf.MetasFreshTheme;
@@ -83,6 +82,7 @@ import com.google.common.base.Throwables;
 
 import de.metas.adempiere.model.I_AD_Role;
 import de.metas.adempiere.service.IPrinterRoutingBL;
+import de.metas.location.ILanguageBL;
 import de.metas.logging.LogManager;
 import de.metas.logging.LogManager;
 

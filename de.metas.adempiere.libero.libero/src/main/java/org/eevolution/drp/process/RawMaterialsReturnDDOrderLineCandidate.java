@@ -52,7 +52,7 @@ import org.eevolution.model.I_DD_NetworkDistribution;
 import org.eevolution.model.I_DD_NetworkDistributionLine;
 import org.eevolution.model.I_PP_Product_Planning;
 
-import de.metas.adempiere.service.IBPartnerOrgBL;
+import de.metas.bpartner.IBPartnerOrgBL;
 import de.metas.product.IProductBL;
 import de.metas.storage.IStorageRecord;
 

@@ -27,7 +27,6 @@ package de.metas.payment.esr.process;
 
 
 import org.adempiere.exceptions.FillMandatoryException;
-import org.adempiere.invoice.service.IInvoiceBL;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.util.Services;
 import org.compiere.model.I_C_Invoice;
@@ -35,6 +34,7 @@ import org.compiere.process.ProcessInfoParameter;
 
 import de.metas.allocation.api.IAllocationBL;
 import de.metas.banking.model.I_C_Payment;
+import de.metas.invoice.IInvoiceBL;
 
 /**
  * @author cg

@@ -77,6 +77,12 @@ java.lang.ClassNotFoundException: No ClassLoaders found for: org.springframework
 			<artifactId>de.metas.adempiere.adempiere.base</artifactId>
 		</dependency>
 
+		<!-- needed for the OrgLogoLocalFileLoader -->
+		<dependency>
+			<groupId>de.metas.business</groupId>
+			<artifactId>de.metas.business</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>de.metas.report.jasper.commons</groupId>
 			<artifactId>de.metas.report.jasper.commons</artifactId>

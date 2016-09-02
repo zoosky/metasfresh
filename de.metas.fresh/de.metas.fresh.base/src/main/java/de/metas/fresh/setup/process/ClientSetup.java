@@ -5,8 +5,6 @@ import java.util.Properties;
 import org.adempiere.ad.trx.api.ITrx;
 import org.adempiere.ad.trx.api.ITrxManager;
 import org.adempiere.ad.trx.api.OnTrxMissingPolicy;
-import org.adempiere.bpartner.service.IBPartnerBL;
-import org.adempiere.bpartner.service.IBPartnerDAO;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.service.IClientDAO;
 import org.adempiere.service.IOrgDAO;
@@ -29,10 +27,12 @@ import org.compiere.util.TrxRunnable;
 import de.metas.adempiere.model.I_AD_User;
 import de.metas.adempiere.model.I_C_BPartner_Location;
 import de.metas.adempiere.model.I_M_PriceList;
-import de.metas.adempiere.service.IBPartnerOrgBL;
 import de.metas.adempiere.service.ILocationBL;
 import de.metas.adempiere.util.cache.CacheInterceptor;
 import de.metas.banking.service.IBankingBPBankAccountDAO;
+import de.metas.bpartner.IBPartnerBL;
+import de.metas.bpartner.IBPartnerDAO;
+import de.metas.bpartner.IBPartnerOrgBL;
 import de.metas.interfaces.I_C_BP_BankAccount;
 import de.metas.payment.esr.ESRConstants;
 
@@ -66,9 +66,9 @@ import de.metas.payment.esr.ESRConstants;
  * <li>save everything: {@link #save()}
  * <li>when a getter is called, it will fetch the value directly from the loaded database record
  * </ul>
- * 
+ *
  * This shall be a short living object.
- * 
+ *
  * @author metas-dev <dev@metasfresh.com>
  *
  */
@@ -157,24 +157,24 @@ class ClientSetup
 	private final void saveInTrx()
 	{
 		setOtherDefaults();
-		
+
 		InterfaceWrapperHelper.save(adClient, ITrx.TRXNAME_ThreadInherited);
 		InterfaceWrapperHelper.save(adClientInfo, ITrx.TRXNAME_ThreadInherited);
 		InterfaceWrapperHelper.save(adOrg, ITrx.TRXNAME_ThreadInherited);
 		InterfaceWrapperHelper.save(adOrgInfo, ITrx.TRXNAME_ThreadInherited);
-		
+
 		InterfaceWrapperHelper.save(orgBPartner, ITrx.TRXNAME_ThreadInherited);
 
 		InterfaceWrapperHelper.disableReadOnlyColumnCheck(orgBPartnerLocation); // disable it because AD_Org_ID is not updateable
 		orgBPartnerLocation.setAD_Org(adOrg); // FRESH-211
 		InterfaceWrapperHelper.save(orgBPartnerLocation, ITrx.TRXNAME_ThreadInherited);
-		
+
 		InterfaceWrapperHelper.save(orgContact, ITrx.TRXNAME_ThreadInherited);
-		
+
 		InterfaceWrapperHelper.save(orgBankAccount, ITrx.TRXNAME_ThreadInherited);
-		
+
 		InterfaceWrapperHelper.save(acctSchema, ITrx.TRXNAME_ThreadInherited);
-		
+
 		InterfaceWrapperHelper.save(priceList_None, ITrx.TRXNAME_ThreadInherited);
 	}
 
@@ -215,10 +215,10 @@ class ClientSetup
 		//
 		// ESR
 		ESRConstants.setEnabled(getCtx(), false);
-		
+
 		// task FRESH-129
 		// Make sure the org contact is both sales and purchase contact
-		
+
 		orgContact.setIsSalesContact(true);
 		orgContact.setIsPurchaseContact(true);
 	}

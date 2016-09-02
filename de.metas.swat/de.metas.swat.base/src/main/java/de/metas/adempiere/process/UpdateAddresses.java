@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package de.metas.adempiere.process;
 
@@ -13,12 +13,12 @@ package de.metas.adempiere.process;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 2 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-2.0.html>.
@@ -30,7 +30,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import org.adempiere.bpartner.service.IBPartnerBL;
+
 import org.adempiere.exceptions.AdempiereException;
 import org.adempiere.exceptions.FillMandatoryException;
 import org.adempiere.model.InterfaceWrapperHelper;
@@ -45,6 +45,7 @@ import org.compiere.util.Util;
 
 import de.metas.adempiere.model.I_C_BPartner_Location;
 import de.metas.adempiere.model.I_C_Order;
+import de.metas.bpartner.IBPartnerBL;
 import de.metas.document.IDocumentLocationBL;
 import de.metas.document.model.IDocumentBillLocation;
 import de.metas.document.model.IDocumentDeliveryLocation;
@@ -52,7 +53,7 @@ import de.metas.document.model.IDocumentLocation;
 
 /**
  * @author cg
- * 
+ *
  */
 public class UpdateAddresses extends SvrProcess
 {
@@ -264,7 +265,7 @@ public class UpdateAddresses extends SvrProcess
 		{
 			whereClause.append(" AND ( ").append(whereAddresses).append(" )");
 		}
-		
+
 		return new Query(getCtx(), table.getTableName(), whereClause.toString(), get_TrxName())
 				.setClient_ID()
 				.setOnlyActiveRecords(true)

@@ -35,8 +35,6 @@ import org.adempiere.ad.trx.api.ITrxRunConfig;
 import org.adempiere.ad.trx.api.ITrxRunConfig.OnRunnableFail;
 import org.adempiere.ad.trx.api.ITrxRunConfig.OnRunnableSuccess;
 import org.adempiere.ad.trx.api.ITrxRunConfig.TrxPropagation;
-import org.adempiere.invoice.service.IInvoiceBL;
-import org.adempiere.invoice.service.IInvoiceDAO;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.util.Services;
 import org.compiere.model.I_C_AllocationHdr;
@@ -47,6 +45,8 @@ import org.compiere.model.I_C_Payment;
 import org.junit.Assert;
 import org.junit.Test;
 
+import de.metas.invoice.IInvoiceBL;
+import de.metas.invoice.IInvoiceDAO;
 import de.metas.payment.esr.ESRTestBase;
 import de.metas.payment.esr.api.impl.ESRLineMatcher;
 import de.metas.payment.esr.model.I_ESR_Import;

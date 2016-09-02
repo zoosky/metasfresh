@@ -26,11 +26,6 @@ import java.util.Properties;
 import java.util.Random;
 
 import org.adempiere.ad.trx.api.ITrx;
-import org.adempiere.archive.api.IArchiveStorageFactory;
-import org.adempiere.archive.api.IArchiveStorageFactory.AccessMode;
-import org.adempiere.archive.spi.IArchiveStorage;
-import org.adempiere.archive.spi.impl.DBArchiveStorage;
-import org.adempiere.archive.spi.impl.FilesystemArchiveStorage;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.server.rpl.api.IIMPProcessorBL;
 import org.adempiere.service.ISysConfigBL;
@@ -51,6 +46,11 @@ import org.junit.rules.TemporaryFolder;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import de.metas.adempiere.model.I_AD_Session;
+import de.metas.archive.api.IArchiveStorageFactory;
+import de.metas.archive.api.IArchiveStorageFactory.AccessMode;
+import de.metas.archive.spi.IArchiveStorage;
+import de.metas.archive.spi.impl.DBArchiveStorage;
+import de.metas.archive.spi.impl.FilesystemArchiveStorage;
 import de.metas.document.archive.esb.test.util.ArchiveImportHelper;
 import de.metas.document.archive.esb.test.util.MockedAdempiereImportProcessor;
 import de.metas.document.archive.spi.impl.RemoteArchiveStorage;

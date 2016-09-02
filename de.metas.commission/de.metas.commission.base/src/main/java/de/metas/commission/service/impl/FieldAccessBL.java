@@ -29,7 +29,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.adempiere.invoice.service.IInvoiceDAO;
 import org.adempiere.model.GenericPO;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.util.Check;
@@ -67,6 +66,7 @@ import de.metas.commission.model.I_C_Sponsor_SalesRep;
 import de.metas.commission.model.MCAdvComCorrection;
 import de.metas.commission.service.IFieldAccessBL;
 import de.metas.inout.IInOutDAO;
+import de.metas.invoice.IInvoiceDAO;
 
 public class FieldAccessBL implements IFieldAccessBL
 {

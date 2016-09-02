@@ -38,7 +38,6 @@ import java.util.concurrent.ExecutionException;
 
 import org.adempiere.ad.dao.IQueryBL;
 import org.adempiere.ad.trx.api.ITrx;
-import org.adempiere.invoice.service.IInvoiceBL;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.service.ISysConfigBL;
 import org.adempiere.test.AdempiereTestHelper;
@@ -71,6 +70,7 @@ import de.metas.banking.payment.paymentallocation.model.IInvoiceRow;
 import de.metas.banking.payment.paymentallocation.model.IPaymentRow;
 import de.metas.banking.payment.paymentallocation.model.InvoiceRow;
 import de.metas.banking.payment.paymentallocation.model.PaymentRow;
+import de.metas.invoice.IInvoiceBL;
 import de.metas.payment.api.IPaymentDAO;
 
 public class PaymentAllocationBuilderTest

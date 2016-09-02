@@ -35,9 +35,6 @@ import org.adempiere.ad.callout.api.ICalloutField;
 import org.adempiere.ad.modelvalidator.annotations.DocValidate;
 import org.adempiere.ad.modelvalidator.annotations.Interceptor;
 import org.adempiere.ad.modelvalidator.annotations.ModelChange;
-import org.adempiere.bpartner.service.IBPartnerDAO;
-import org.adempiere.invoice.service.IInvoiceBL;
-import org.adempiere.invoice.service.IInvoiceDAO;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.pricing.api.IPriceListBL;
 import org.adempiere.pricing.api.IPriceListDAO;
@@ -58,10 +55,13 @@ import de.metas.adempiere.model.I_C_InvoiceLine;
 import de.metas.adempiere.model.I_M_PriceList;
 import de.metas.adempiere.model.I_M_ProductPrice;
 import de.metas.allocation.api.IAllocationDAO;
+import de.metas.bpartner.IBPartnerDAO;
 import de.metas.document.IDocumentLocationBL;
 import de.metas.document.documentNo.IDocumentNoBuilderFactory;
 import de.metas.document.documentNo.impl.IDocumentNoInfo;
 import de.metas.document.engine.IDocActionBL;
+import de.metas.invoice.IInvoiceBL;
+import de.metas.invoice.IInvoiceDAO;
 
 @Interceptor(I_C_Invoice.class)
 @Callout(I_C_Invoice.class)

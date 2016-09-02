@@ -10,12 +10,12 @@ package de.metas.adempiere.ait.helper;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 2 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-2.0.html>.
@@ -37,7 +37,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
-import org.adempiere.bpartner.service.IBPartnerDAO;
 import org.adempiere.exceptions.AdempiereException;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.model.POWrapper;
@@ -48,18 +47,19 @@ import org.compiere.model.MOrder;
 import org.compiere.model.Query;
 import org.compiere.model.X_C_Order;
 import org.compiere.process.DocAction;
-import org.slf4j.Logger;
-import de.metas.logging.LogManager;
 import org.junit.Assert;
+import org.slf4j.Logger;
 
 import de.metas.adempiere.ait.helper.ProductPriceVO.LineType;
 import de.metas.adempiere.model.I_C_Order;
 import de.metas.adempiere.model.I_M_PriceList;
 import de.metas.adempiere.service.IOrderBL;
+import de.metas.bpartner.IBPartnerDAO;
 import de.metas.currency.ICurrencyDAO;
 import de.metas.interfaces.I_C_BPartner;
 import de.metas.interfaces.I_C_OrderLine;
 import de.metas.interfaces.I_M_Shipper;
+import de.metas.logging.LogManager;
 
 public class OrderHelper
 {
@@ -120,7 +120,7 @@ public class OrderHelper
 	private String currencyCode;
 	private String countryCode;
 	private String bPartnerName = null;
-	
+
 	private boolean isSOTrx = true;
 	private String docSubType;
 
@@ -147,7 +147,7 @@ public class OrderHelper
 		this.dateOrdered = helper.getNow();
 		this.datePromised = helper.getNow();
 
-		// not yet ported from 
+		// not yet ported from
 //		final TestClientUI clientUI = (TestClientUI)Services.get(IClientUI.class);
 //		clientUI.setYesNoAnswer(C_Order_Deprecated.AD_Message_SyncAddressChangeToExistingLines, Boolean.TRUE);
 	}
@@ -177,7 +177,7 @@ public class OrderHelper
 	 * Returns the currency code used when creating the order and making sure that there is also pricing data. If no
 	 * value has been set using {@link #setCurrencyCode(String)}, then the method delegates to
 	 * {@link IHelper#getCurrencyCode()}.
-	 * 
+	 *
 	 * @return
 	 */
 	public String getCurrencyCode()
@@ -199,7 +199,7 @@ public class OrderHelper
 	 * Returns the country code used when creating the order and making sure that there is also pricing data. If no
 	 * value has been set using {@link #setCountryCode(String)}, then the method delegates to
 	 * {@link IHelper#getCountryCode()}.
-	 * 
+	 *
 	 * @return
 	 */
 	public String getCountryCode()
@@ -262,7 +262,7 @@ public class OrderHelper
 	/**
 	 * Method calls {@link #addLine(Class)} with {@link OrderLineHelper}.class as parameter. Feel free to override it in
 	 * subclasses of this {@link OrderHelper}.
-	 * 
+	 *
 	 * @return
 	 */
 	public OrderLineHelper addLine()
@@ -298,9 +298,9 @@ public class OrderHelper
 	/**
 	 * Returns an order line helper with the given class. By using this method, one can add module-custom order line
 	 * helpers to create order lines with additional columns
-	 * 
+	 *
 	 * For an example, check out the <code>ContractsOrderLineHelper</code> in the de.metas.contracts-ait project
-	 * 
+	 *
 	 * @param clazz
 	 * @return
 	 */
@@ -330,7 +330,7 @@ public class OrderHelper
 
 	/**
 	 * Tells this helper to complete the order after creation.
-	 * 
+	 *
 	 * @param expectedCompleteStatus
 	 *            the expected docstatus after the completion ('WP' or 'CO'). If <code>null</code>, the order is not
 	 *            completed.
@@ -346,7 +346,7 @@ public class OrderHelper
 	{
 		return createOrder(I_C_Order.class);
 	}
-	
+
 	public <T extends I_C_Order> T createOrder(Class<T> clazz)
 	{
 		Assert.assertNull("Builder already run", order);
@@ -482,11 +482,11 @@ public class OrderHelper
 
 		final I_C_Currency currency = Services.get(ICurrencyDAO.class).retrieveCurrencyByISOCode(ctx, getCurrencyCode());
 		final I_M_PricingSystem ps = helper.getM_PricingSystem(pricingSystemValue);
-		
+
 		// setting these two first, because some callouts assume that e.g. the correct ps is selected prior to the bpartner
 		order.setM_PricingSystem_ID(ps.getM_PricingSystem_ID());
 		order.setC_Currency_ID(currency.getC_Currency_ID());
-		
+
 		// Make sure we a created the PriceSystem/PriceList/Version
 		final I_M_PriceList priceList = helper.getM_PriceList(pricingSystemValue, getCurrencyCode(), getCountryCode(), isSOTrx);
 
@@ -510,14 +510,14 @@ public class OrderHelper
 			bp = helper.mkBPartnerHelper().getC_BPartnerByName(bPartnerName);
 		}
 		order.setC_BPartner_ID(bp.getC_BPartner_ID());
-		
+
 		order.setDateOrdered(dateOrdered);
 		order.setDatePromised(datePromised);
 		order.setDateAcct(dateOrdered);
 
 		// metas-ts: Warehouse is not mandatory anymore, plus the returned value might not be valid for the order's DocType
-		// order.setM_Warehouse_ID(helper.getM_Warehouse().getM_Warehouse_ID()); 
-		
+		// order.setM_Warehouse_ID(helper.getM_Warehouse().getM_Warehouse_ID());
+
 		order.setInvoiceRule(invoiceRule.toString());
 		order.setDeliveryRule(MOrder.DELIVERYRULE_Force);
 		order.setFreightCostRule(MOrder.FREIGHTCOSTRULE_Calculated);
@@ -542,8 +542,8 @@ public class OrderHelper
 																						// reseted because at save the
 																						// field is empty
 			}
-		} 
-		else 
+		}
+		else
 		{
 			order.setFreightCostRule(freighCostRule);
 			order.setDeliveryRule(deliveryRule.toString());
@@ -594,7 +594,7 @@ public class OrderHelper
 
 	/**
 	 * Enable GridTab level mode. If enabled, document will be created using only GridTab
-	 * 
+	 *
 	 * @param gridTabLevel
 	 * @return
 	 */

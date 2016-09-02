@@ -12,12 +12,12 @@ import java.math.BigDecimal;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 2 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-2.0.html>.
@@ -27,8 +27,6 @@ import java.math.BigDecimal;
 
 import java.util.Properties;
 
-import org.adempiere.bpartner.service.IBPartnerStats;
-import org.adempiere.bpartner.service.IBPartnerStatsDAO;
 import org.adempiere.inout.util.CachedObjects;
 import org.adempiere.inout.util.IShipmentCandidates;
 import org.adempiere.inout.util.IShipmentCandidates.OverallStatus;
@@ -36,13 +34,15 @@ import org.adempiere.model.POWrapper;
 import org.adempiere.util.Services;
 import org.compiere.util.Msg;
 
+import de.metas.bpartner.IBPartnerStats;
+import de.metas.bpartner.IBPartnerStatsDAO;
 import de.metas.inout.model.I_M_InOut;
 import de.metas.inout.model.I_M_InOutLine;
 import de.metas.inoutcandidate.spi.ICandidateProcessor;
 import de.metas.interfaces.I_C_BPartner;
 
 /**
- * 
+ *
  * @author ts
  * @see "<a href='http://dewiki908/mediawiki/index.php?title=Auftrag_versenden_mit_Abo-Lieferung_(2009_0027_G62)'>(2009 0027 G62)</a>"
  *
@@ -80,7 +80,7 @@ public class OnlyOneOpenInvoiceCandProcessor implements ICandidateProcessor
 			final I_M_InOutLine inOutLine, final String trxName, int removeCount)
 	{
 		final I_C_BPartner billPartner = POWrapper.create(inOutLine.getC_OrderLine().getC_Order().getBill_BPartner(), I_C_BPartner.class);
-		
+
 		final IBPartnerStats stats = Services.get(IBPartnerStatsDAO.class).retrieveBPartnerStats(billPartner);
 
 		final String creditStatus = I_C_BPartner.SO_CREDITSTATUS_ONE_OPEN_INVOICE;
@@ -88,7 +88,7 @@ public class OnlyOneOpenInvoiceCandProcessor implements ICandidateProcessor
 		if (creditStatus.equals(stats.getSOCreditStatus()))
 		{
 			final BigDecimal soCreditUsed = stats.getSOCreditUsed();
-			
+
 			if (soCreditUsed.signum() > 0)
 			{
 				candidates.addStatusInfo(inOutLine, Msg.getMsg(ctx, MSG_OPEN_INVOICE_1P, new Object[] { soCreditUsed }));

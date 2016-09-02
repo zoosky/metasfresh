@@ -46,7 +46,6 @@ import net.miginfocom.swing.MigLayout;
 import org.adempiere.ad.table.api.IADTableDAO;
 import org.adempiere.ad.trx.api.ITrxManager;
 import org.adempiere.exceptions.AdempiereException;
-import org.adempiere.invoice.service.IInvoiceDAO;
 import org.adempiere.model.IContextAware;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.model.PlainContextAware;
@@ -81,6 +80,7 @@ import de.metas.banking.payment.IPaySelectionDAO;
 import de.metas.banking.payment.IPaymentRequestBL;
 import de.metas.interfaces.I_C_BP_BankAccount;
 import de.metas.interfaces.I_C_BPartner;
+import de.metas.invoice.IInvoiceDAO;
 
 /**
  * {@link I_C_PaySelection} dialog. See {@link #SelectPaySelectionDialog(Frame, String, List)}

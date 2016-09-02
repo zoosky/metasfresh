@@ -30,6 +30,7 @@ import org.adempiere.util.Check;
 import org.adempiere.util.Services;
 import org.compiere.model.I_AD_Archive;
 
+import de.metas.archive.api.impl.ArchiveDAO;
 import de.metas.document.archive.api.IArchiveDAO;
 import de.metas.document.archive.model.I_C_Doc_Outbound_Log;
 import de.metas.document.archive.model.I_C_Doc_Outbound_Log_Line;

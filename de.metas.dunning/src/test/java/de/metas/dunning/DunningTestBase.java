@@ -40,8 +40,6 @@ import org.adempiere.ad.trx.api.ITrxRunConfig.TrxPropagation;
 import org.adempiere.ad.wrapper.POJOLookupMap;
 import org.adempiere.ad.wrapper.POJOWrapper;
 import org.adempiere.document.service.impl.DummyDocumentLocationBL;
-import org.adempiere.invoice.service.IInvoiceBL;
-import org.adempiere.invoice.service.impl.PlainInvoiceBL;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.test.AdempiereTestHelper;
 import org.adempiere.test.AdempiereTestWatcher;
@@ -74,6 +72,8 @@ import de.metas.dunning.model.I_C_DunningDoc;
 import de.metas.dunning.model.I_C_Dunning_Candidate;
 import de.metas.dunning.spi.impl.MockedCloseableIterator;
 import de.metas.dunning.spi.impl.MockedDunnableSource;
+import de.metas.invoice.IInvoiceBL;
+import de.metas.invoice.impl.PlainInvoiceBL;
 
 public class DunningTestBase
 {

@@ -26,7 +26,6 @@ package de.metas.commission.service.impl;
 import java.math.BigDecimal;
 import java.util.Properties;
 
-import org.adempiere.invoice.service.IInvoiceBL;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.model.POWrapper;
 import org.adempiere.util.MiscUtils;
@@ -50,6 +49,7 @@ import de.metas.commission.model.I_C_Sponsor;
 import de.metas.commission.service.IContractBL;
 import de.metas.commission.service.IInstanceTriggerBL;
 import de.metas.commission.util.CommissionTools;
+import de.metas.invoice.IInvoiceBL;
 
 public class InstanceTriggerBL implements IInstanceTriggerBL
 {

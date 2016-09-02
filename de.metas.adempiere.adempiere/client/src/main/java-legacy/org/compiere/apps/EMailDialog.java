@@ -36,8 +36,6 @@ import java.util.Properties;
 import java.util.StringTokenizer;
 
 import org.adempiere.ad.trx.api.ITrx;
-import org.adempiere.archive.api.IArchiveDAO;
-import org.adempiere.archive.api.IArchiveEventManager;
 import org.adempiere.model.IContextAware;
 import org.adempiere.model.PlainContextAware;
 import org.adempiere.util.Check;
@@ -67,6 +65,8 @@ import org.compiere.util.Env;
 import org.slf4j.Logger;
 import org.slf4j.Logger;
 
+import de.metas.archive.api.IArchiveDAO;
+import de.metas.archive.api.IArchiveEventManager;
 import de.metas.email.EMail;
 import de.metas.email.EMailSentStatus;
 import de.metas.letters.model.I_AD_BoilerPlate;

@@ -29,7 +29,6 @@ package de.metas.allocation.api;
 import java.util.List;
 
 import org.adempiere.ad.wrapper.POJOWrapper;
-import org.adempiere.invoice.service.IInvoiceBL;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.util.Services;
 import org.compiere.model.I_C_AllocationHdr;
@@ -39,6 +38,7 @@ import org.compiere.model.I_C_Payment;
 import org.compiere.process.DocAction;
 
 import de.metas.document.engine.impl.PlainDocActionBL.IProcessInterceptor;
+import de.metas.invoice.IInvoiceBL;
 import de.metas.payment.api.IPaymentBL;
 
 /**

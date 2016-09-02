@@ -101,7 +101,6 @@ import de.metas.adempiere.model.I_M_PriceList;
 import de.metas.adempiere.model.I_M_Product;
 import de.metas.adempiere.model.I_M_ProductPrice;
 import de.metas.adempiere.model.I_M_Product_Category;
-import de.metas.adempiere.service.ICountryDAO;
 import de.metas.currency.ICurrencyBL;
 import de.metas.currency.ICurrencyDAO;
 import de.metas.freighcost.api.IFreightCostBL;
@@ -114,6 +113,7 @@ import de.metas.interfaces.I_C_BPartner;
 import de.metas.interfaces.I_C_OrderLine;
 import de.metas.invoicecandidate.model.I_C_Invoice_Candidate;
 import de.metas.invoicecandidate.process.C_Invoice_Candidate_GenerateInvoice;
+import de.metas.location.ICountryDAO;
 import de.metas.logging.LogManager;
 import de.metas.order.IOrderPA;
 

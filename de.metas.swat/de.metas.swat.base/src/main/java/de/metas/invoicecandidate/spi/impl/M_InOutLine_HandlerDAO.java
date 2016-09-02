@@ -34,7 +34,7 @@ import org.compiere.model.IQuery;
 import org.compiere.model.I_M_InOut;
 import org.compiere.process.DocAction;
 
-import de.metas.interfaces.I_C_DocType;
+import de.metas.document.model.I_C_DocType;
 import de.metas.interfaces.I_C_OrderLine;
 import de.metas.invoicecandidate.model.I_M_InOutLine;
 

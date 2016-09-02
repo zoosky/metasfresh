@@ -25,7 +25,6 @@ package org.adempiere.invoice.process;
 
 import java.math.BigDecimal;
 
-import org.adempiere.invoice.service.IInvoiceBL;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.util.Services;
 import org.compiere.apps.AEnv;
@@ -33,6 +32,7 @@ import org.compiere.process.ProcessInfoParameter;
 import org.compiere.process.SvrProcess;
 
 import de.metas.adempiere.model.I_C_Invoice;
+import de.metas.invoice.IInvoiceBL;
 
 public class CreateAdjustmentChargeFromInvoice extends SvrProcess
 {

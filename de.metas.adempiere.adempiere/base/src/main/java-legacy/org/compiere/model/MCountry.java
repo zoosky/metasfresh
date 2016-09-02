@@ -24,28 +24,28 @@ import org.adempiere.util.LegacyAdapters;
 import org.adempiere.util.Services;
 import org.compiere.util.Language;
 
-import de.metas.adempiere.service.ICountryDAO;
+import de.metas.location.ICountryDAO;
 
 /**
  *	Location Country Model (Value Object)
  *
  *  @author 	Jorg Janke
  *  @version 	$Id: MCountry.java,v 1.3 2006/07/30 00:58:18 jjanke Exp $
- *   
+ *
  *   * @author Michael Judd (Akuna Ltd)
  * 				<li>BF [ 2695078 ] Country is not translated on invoice
  */
 public final class MCountry extends X_C_Country
 {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -3098295201595847612L;
 
 
 	/**
 	 * Get Country (cached)
-	 * 
+	 *
 	 * @param ctx
 	 *            context
 	 * @param C_Country_ID
@@ -65,7 +65,7 @@ public final class MCountry extends X_C_Country
 
 	/**
 	 * Return Countries as Array
-	 * 
+	 *
 	 * @param ctx
 	 *            context
 	 * @return MCountry Array
@@ -80,7 +80,7 @@ public final class MCountry extends X_C_Country
 
 	/**
 	 * Get Default Country
-	 * 
+	 *
 	 * @param ctx
 	 *            context
 	 * @return Country
@@ -102,13 +102,13 @@ public final class MCountry extends X_C_Country
 		if (Language.isBaseLanguage(AD_Language))
 			s_AD_Language = null;
 	}	//	setDisplayLanguage
-	
+
 	/**	Display Language				*/
 	private static String		s_AD_Language = null;
 	//	Default DisplaySequence	*/
 	private static String		DISPLAYSEQUENCE = "@C@, @P@";
 
-	
+
 	/*************************************************************************
 	 *	Create empty Country
 	 * 	@param ctx context
@@ -143,8 +143,8 @@ public final class MCountry extends X_C_Country
 
 	/**	Translated Name			*/
 	private String	m_trlName = null;
-	
-	
+
+
 	/**
 	 *	Return Name - translated if DisplayLanguage is set.
 	 *  @return Name
@@ -175,10 +175,10 @@ public final class MCountry extends X_C_Country
 		}
 		return m_trlName;
 	}	//	getTrlName
-	
+
 	/**
 	 * 	Get Translated Name
-	 *  @param language 
+	 *  @param language
 	 *	@return name
 	 */
 	String getTrlName(String language)
@@ -189,8 +189,8 @@ public final class MCountry extends X_C_Country
 		}
 		return m_trlName;
 	}	//	getTrlName
-	
-	
+
+
 	/**
 	 * 	Get Display Sequence
 	 *	@return display sequence
@@ -225,7 +225,7 @@ public final class MCountry extends X_C_Country
 	 */
 	public boolean isValidRegion(int C_Region_ID)
 	{
-		if (C_Region_ID == 0 
+		if (C_Region_ID == 0
 			|| getC_Country_ID() == 0
 			|| !isHasRegion())
 			return false;
@@ -240,7 +240,7 @@ public final class MCountry extends X_C_Country
 
 	/**
 	 * Compare based on Name
-	 * 
+	 *
 	 * @param o1
 	 *            object 1
 	 * @param o2

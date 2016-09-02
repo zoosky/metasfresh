@@ -32,7 +32,6 @@ import java.util.Properties;
 
 import org.adempiere.ad.table.api.IADTableDAO;
 import org.adempiere.ad.trx.api.ITrxManager;
-import org.adempiere.bpartner.service.IBPartnerDAO;
 import org.adempiere.exceptions.AdempiereException;
 import org.adempiere.model.IContextAware;
 import org.adempiere.model.InterfaceWrapperHelper;
@@ -78,6 +77,7 @@ import de.metas.adempiere.model.I_M_Product;
 import de.metas.adempiere.model.I_M_ProductPrice;
 import de.metas.adempiere.service.ICalendarBL;
 import de.metas.adempiere.service.ICalendarDAO;
+import de.metas.bpartner.IBPartnerDAO;
 import de.metas.contracts.subscription.ISubscriptionBL;
 import de.metas.contracts.subscription.model.I_C_OrderLine;
 import de.metas.document.IDocumentPA;
@@ -1419,7 +1419,7 @@ public class FlatrateBL implements IFlatrateBL
 	private void updateNoticeDate(final I_C_Flatrate_Transition transition, final I_C_Flatrate_Term term)
 	{
 		final Timestamp lastDayOfNewTerm = term.getEndDate();
-		
+
 		final Timestamp noticeDate;
 		if(lastDayOfNewTerm == null)
 		{
@@ -1443,7 +1443,7 @@ public class FlatrateBL implements IFlatrateBL
 			Check.assume(false, "TermOfNoticeDuration " + transition.getTermOfNoticeUnit() + " doesn't exist");
 			noticeDate = null; // code won't be reached
 		}
-		
+
 		term.setNoticeDate(noticeDate);
 	}
 
@@ -1597,7 +1597,7 @@ public class FlatrateBL implements IFlatrateBL
 			InterfaceWrapperHelper.save(entry);
 		}
 	}
-	
+
 	@Override
 	public I_C_Flatrate_Term createTerm(
 			final IContextAware context,
@@ -1693,7 +1693,7 @@ public class FlatrateBL implements IFlatrateBL
 		}
 		return newTerm;
 	}
-	
+
 	@Override
 	public void complete(final I_C_Flatrate_Term term)
 	{
@@ -1706,6 +1706,6 @@ public class FlatrateBL implements IFlatrateBL
 	{
 		// NOTE: the whole reason why we have this method is for readability ease of refactoring.
 		Services.get(IDocActionBL.class).processEx(term, DocAction.ACTION_Void, DocAction.STATUS_Voided);
-		
+
 	}
 }

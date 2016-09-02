@@ -47,6 +47,7 @@ import org.compiere.util.TimeUtil;
 import org.junit.Assert;
 import org.junit.Test;
 
+import de.metas.document.model.I_C_DocType;
 import de.metas.dunning.DunningTestBase;
 import de.metas.dunning.api.IDunnableDoc;
 import de.metas.dunning.api.IDunningEventDispatcher;
@@ -58,7 +59,6 @@ import de.metas.dunning.invoice.api.impl.DunnableDocBuilder;
 import de.metas.dunning.model.I_C_DunningDoc_Line_Source;
 import de.metas.dunning.model.I_C_Dunning_Candidate;
 import de.metas.dunning.spi.impl.MockedDunningCandidateListener;
-import de.metas.interfaces.I_C_DocType;
 
 /**
  * @author tsa

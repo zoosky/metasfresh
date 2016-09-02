@@ -31,9 +31,6 @@ import static org.junit.Assert.assertThat;
 import java.math.BigDecimal;
 
 import org.adempiere.ad.trx.api.ITrxManager;
-import org.adempiere.invoice.service.IInvoiceBL;
-import org.adempiere.invoice.service.IInvoiceCreditContext;
-import org.adempiere.invoice.service.impl.InvoiceCreditContext;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.util.Services;
 import org.adempiere.util.lang.Mutable;
@@ -50,6 +47,9 @@ import de.metas.adempiere.ait.test.IntegrationTestRunner;
 import de.metas.adempiere.ait.test.annotation.IntegrationTest;
 import de.metas.adempiere.model.I_C_Invoice;
 import de.metas.allocation.api.IAllocationDAO;
+import de.metas.invoice.IInvoiceBL;
+import de.metas.invoice.IInvoiceCreditContext;
+import de.metas.invoice.impl.InvoiceCreditContext;
 
 @RunWith(IntegrationTestRunner.class)
 public class InvoiceTests extends AIntegrationTestDriver

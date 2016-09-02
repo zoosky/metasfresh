@@ -59,7 +59,7 @@ import org.compiere.util.TrxRunnable2;
 import de.metas.adempiere.model.I_AD_User;
 import de.metas.adempiere.model.I_C_Order;
 import de.metas.adempiere.model.I_M_PriceList;
-import de.metas.adempiere.service.IBPartnerOrgBL;
+import de.metas.bpartner.IBPartnerOrgBL;
 import de.metas.contracts.subscription.ISubscriptionBL;
 import de.metas.contracts.subscription.ISubscriptionDAO;
 import de.metas.contracts.subscription.model.I_C_OrderLine;

@@ -30,14 +30,14 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
-import org.adempiere.archive.api.IArchiveStorageFactory;
-import org.adempiere.archive.spi.IArchiveStorage;
 import org.adempiere.exceptions.AdempiereException;
 import org.adempiere.util.Check;
 import org.adempiere.util.FileUtils;
 import org.adempiere.util.Services;
 import org.adempiere.util.StreamUtils;
 
+import de.metas.archive.api.IArchiveStorageFactory;
+import de.metas.archive.spi.IArchiveStorage;
 import de.metas.async.api.IQueueDAO;
 import de.metas.async.model.I_C_Queue_WorkPackage;
 import de.metas.async.spi.IWorkpackageProcessor;
@@ -61,7 +61,7 @@ public class DocOutboundCCWorkpackageProcessor implements IWorkpackageProcessor
 
 	// services
 	private final transient IQueueDAO queueDAO = Services.get(IQueueDAO.class);
-	private final transient org.adempiere.archive.api.IArchiveDAO archiveDAO = Services.get(org.adempiere.archive.api.IArchiveDAO.class);
+	private final transient de.metas.archive.api.IArchiveDAO archiveDAO = Services.get(de.metas.archive.api.IArchiveDAO.class);
 	private final transient IArchiveStorageFactory archiveStorageFactory = Services.get(IArchiveStorageFactory.class);
 	private final transient ICCAbleDocumentFactoryService ccAbleDocumentFactoryService = Services.get(ICCAbleDocumentFactoryService.class);
 

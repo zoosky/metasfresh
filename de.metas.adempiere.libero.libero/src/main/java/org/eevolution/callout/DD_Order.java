@@ -3,7 +3,6 @@ package org.eevolution.callout;
 import org.adempiere.ad.callout.annotations.Callout;
 import org.adempiere.ad.callout.annotations.CalloutMethod;
 import org.adempiere.ad.callout.api.ICalloutField;
-import org.adempiere.bpartner.service.IBPartnerBL;
 import org.adempiere.util.Check;
 import org.adempiere.util.Services;
 import org.adempiere.warehouse.spi.IWarehouseAdvisor;
@@ -15,6 +14,7 @@ import org.eevolution.model.I_DD_Order;
 
 import de.metas.adempiere.model.I_AD_User;
 import de.metas.adempiere.model.I_C_BPartner_Location;
+import de.metas.bpartner.IBPartnerBL;
 import de.metas.document.documentNo.IDocumentNoBuilderFactory;
 import de.metas.document.documentNo.impl.IDocumentNoInfo;
 
@@ -28,12 +28,12 @@ import de.metas.document.documentNo.impl.IDocumentNoInfo;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 2 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program. If not, see
  * <http://www.gnu.org/licenses/gpl-2.0.html>.
@@ -109,7 +109,7 @@ public class DD_Order
 		{
 			return;
 		}
-		
+
 		// Get Details
 		ddOrder.setDateOrdered(order.getDateOrdered());
 		ddOrder.setPOReference(order.getPOReference());
@@ -120,12 +120,12 @@ public class DD_Order
 		ddOrder.setC_Project_ID(order.getC_Project_ID());
 		ddOrder.setUser1_ID(order.getUser1_ID());
 		ddOrder.setUser2_ID(order.getUser2_ID());
-		
+
 		// Warehouse (05251 begin: we need to use the advisor)
 		final I_M_Warehouse wh =  Services.get(IWarehouseAdvisor.class).evaluateOrderWarehouse(order);
 		Check.assumeNotNull(wh, "IWarehouseAdvisor finds a ware house for {}", order);
 		ddOrder.setM_Warehouse_ID(wh.getM_Warehouse_ID());
-		
+
 		//
 		ddOrder.setDeliveryRule(order.getDeliveryRule());
 		ddOrder.setDeliveryViaRule(order.getDeliveryViaRule());

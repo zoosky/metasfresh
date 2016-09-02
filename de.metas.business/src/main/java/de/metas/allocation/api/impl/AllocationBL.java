@@ -30,8 +30,6 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import org.adempiere.exceptions.AdempiereException;
-import org.adempiere.invoice.service.IInvoiceBL;
-import org.adempiere.invoice.service.IInvoiceDAO;
 import org.adempiere.model.IContextAware;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.util.Check;
@@ -48,6 +46,8 @@ import de.metas.allocation.api.IAllocationBL;
 import de.metas.allocation.api.IAllocationBuilder;
 import de.metas.allocation.api.IAllocationDAO;
 import de.metas.allocation.api.IAllocationLineBuilder;
+import de.metas.invoice.IInvoiceBL;
+import de.metas.invoice.IInvoiceDAO;
 import de.metas.payment.api.IPaymentDAO;
 
 public class AllocationBL implements IAllocationBL

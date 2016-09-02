@@ -13,15 +13,14 @@ package de.metas.invoice.impl;
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
+ * License along with this program. If not, see
  * <http://www.gnu.org/licenses/gpl-2.0.html>.
  * #L%
  */
-
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -29,8 +28,6 @@ import java.sql.Timestamp;
 import java.util.Properties;
 
 import org.adempiere.exceptions.AdempiereException;
-import org.adempiere.exceptions.TaxNotFoundException;
-import org.adempiere.invoice.service.IInvoiceBL;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.pricing.api.IEditablePricingContext;
 import org.adempiere.pricing.api.IPriceListDAO;
@@ -52,15 +49,20 @@ import org.compiere.model.I_M_PriceList_Version;
 import org.compiere.model.I_M_Product;
 import org.compiere.model.MPriceList;
 import org.compiere.model.MTax;
+import org.compiere.model.X_C_Tax;
 import org.compiere.util.Env;
+import org.compiere.util.TimeUtil;
 import org.slf4j.Logger;
 
 import de.metas.adempiere.model.I_C_BPartner_Location;
 import de.metas.adempiere.model.I_C_InvoiceLine;
 import de.metas.adempiere.model.I_M_ProductPrice;
+import de.metas.invoice.IInvoiceBL;
 import de.metas.invoice.IInvoiceLineBL;
 import de.metas.logging.LogManager;
 import de.metas.tax.api.ITaxBL;
+import de.metas.tax.api.ITaxDAO;
+import de.metas.tax.exceptions.TaxNotFoundException;
 
 public class InvoiceLineBL implements IInvoiceLineBL
 {
@@ -75,9 +77,9 @@ public class InvoiceLineBL implements IInvoiceLineBL
 
 		final int taxId = il.getC_Tax_ID();
 
-		final boolean taxIncluded = invoiceBL.isTaxIncluded(il);
+		final boolean taxIncluded = isTaxIncluded(il);
 		final BigDecimal lineNetAmt = il.getLineNetAmt();
-		final int taxPrecision = invoiceBL.getPrecision(il);
+		final int taxPrecision = invoiceBL.getPrecision(il.getC_Invoice());
 
 		final I_C_Tax tax = MTax.get(ctx, taxId);
 		final BigDecimal taxAmtInfo = taxBL.calculateTax(tax, lineNetAmt, taxIncluded, taxPrecision);
@@ -177,10 +179,9 @@ public class InvoiceLineBL implements IInvoiceLineBL
 		final IPriceListDAO priceListDAO = Services.get(IPriceListDAO.class);
 		final Boolean processedPLVFiltering = null; // task 09533: the user doesn't know about PLV's processed flag, so we can't filter by it
 
-		if (invoice.getM_PriceList_ID() != 100) // FIXME use PriceList_None constant
+		if (invoice.getM_PriceList_ID() != 100)  // FIXME use PriceList_None constant
 		{
 			final I_M_PriceList priceList = invoice.getM_PriceList();
-
 
 			final I_M_PriceList_Version priceListVersion = priceListDAO.retrievePriceListVersionOrNull(priceList, invoice.getDateInvoiced(), processedPLVFiltering);
 			Check.errorIf(priceListVersion == null, "Missing PLV for M_PriceList and DateInvoiced of {}", invoice);
@@ -242,6 +243,213 @@ public class InvoiceLineBL implements IInvoiceLineBL
 	}
 
 	@Override
+	public final void setProductAndUOM(final I_C_InvoiceLine invoiceLine, final int productId)
+	{
+		if (productId > 0)
+		{
+			invoiceLine.setM_Product_ID(productId);
+			invoiceLine.setC_UOM_ID(invoiceLine.getM_Product().getC_UOM_ID());
+		}
+		else
+		{
+			invoiceLine.setM_Product_ID(0);
+			invoiceLine.setC_UOM_ID(0);
+
+		}
+		invoiceLine.setM_AttributeSetInstance_ID(0);
+	}
+
+	@Override
+	public final void setQtys(final I_C_InvoiceLine invoiceLine, final BigDecimal qtyInvoiced)
+	{
+		// for now we are lenient, because i'm not sure because strict doesn't break stuff
+		// Check.assume(invoiceLine.getM_Product_ID() > 0, "invoiceLine {} has M_Product_ID > 0", invoiceLine);
+		// Check.assume(invoiceLine.getC_UOM_ID() > 0, "invoiceLine {} has C_UOM_ID > 0", invoiceLine);
+		// Check.assume(invoiceLine.getPrice_UOM_ID() > 0, "invoiceLine {} has Price_UOM_ID > 0", invoiceLine);
+
+		invoiceLine.setQtyInvoiced(qtyInvoiced);
+
+		final Properties ctx = InterfaceWrapperHelper.getCtx(invoiceLine);
+		final IUOMConversionBL uomConversionBL = Services.get(IUOMConversionBL.class);
+
+		boolean fallback = false;
+		if (invoiceLine.getM_Product_ID() <= 0)
+		{
+			fallback = true;
+		}
+
+		final I_M_Product product = invoiceLine.getM_Product();
+		if (product.getC_UOM_ID() < 0)
+		{
+			fallback = true;
+		}
+		if (fallback)
+		{
+			invoiceLine.setQtyEntered(qtyInvoiced);
+			invoiceLine.setQtyInvoicedInPriceUOM(qtyInvoiced);
+			return;
+		}
+
+		if (invoiceLine.getC_UOM_ID() <= 0)
+		{
+			invoiceLine.setQtyEntered(qtyInvoiced);
+		}
+		else
+		{
+			final BigDecimal qtyEntered = uomConversionBL.convertFromProductUOM(ctx, product, invoiceLine.getC_UOM(), qtyInvoiced);
+			invoiceLine.setQtyEntered(qtyEntered);
+		}
+
+		final BigDecimal qtyInvoicedInPriceUOM = calculatedQtyInPriceUOM(qtyInvoiced, invoiceLine, false);
+		invoiceLine.setQtyInvoicedInPriceUOM(qtyInvoicedInPriceUOM);
+	}
+
+	@Override
+	public final void setQtyInvoicedInPriceUOM_AND_LineNetAmt(final I_C_InvoiceLine invoiceLine)
+	{
+		// services
+		final IInvoiceBL invoiceBL = Services.get(IInvoiceBL.class);
+		final ITaxDAO taxDAO = Services.get(ITaxDAO.class);
+		final ITaxBL taxBL = Services.get(ITaxBL.class);
+
+		// // Make sure QtyInvoicedInPriceUOM is up2date
+		setQtyInvoicedInPriceUOM(invoiceLine);
+
+		// Calculations & Rounding
+		BigDecimal lineNetAmt = invoiceLine.getPriceActual().multiply(invoiceLine.getQtyInvoicedInPriceUOM());
+
+		final Properties ctx = InterfaceWrapperHelper.getCtx(invoiceLine);
+		final String trxName = InterfaceWrapperHelper.getTrxName(invoiceLine);
+		final I_C_Tax invoiceTax = InterfaceWrapperHelper.create(ctx, invoiceLine.getC_Tax_ID(), I_C_Tax.class, trxName);
+		final boolean isTaxIncluded = isTaxIncluded(invoiceLine);
+		final int taxPrecision = invoiceBL.getPrecision(invoiceLine.getC_Invoice());
+
+		// ts: note: our taxes are always on document, so currently the following if-block doesn't apply to us
+		final boolean documentLevel = invoiceTax != null // guard against NPE
+				&& invoiceTax.isDocumentLevel();
+
+		// juddm: Tax Exempt & Tax Included in Price List & not Document Level - Adjust Line Amount
+		// http://sourceforge.net/tracker/index.php?func=detail&aid=1733602&group_id=176962&atid=879332
+		if (isTaxIncluded && !documentLevel)
+		{
+			BigDecimal taxStdAmt = Env.ZERO, taxThisAmt = Env.ZERO;
+
+			I_C_Tax stdTax = null;
+
+			if (invoiceLine.getM_Product() != null)
+			{
+				if (invoiceLine.getC_Charge() != null)	// Charge
+				{
+					stdTax = createTax(ctx, taxDAO.getDefaultTax(invoiceLine.getC_Charge().getC_TaxCategory()).getC_Tax_ID(), trxName);
+				}
+
+			}
+			else
+			// Product
+			{
+				// FIXME metas 05129 need proper concept (link between M_Product and C_TaxCategory_ID was removed!!!!!)
+				throw new AdempiereException("Unsupported tax calculation when tax is included, but it's not on document level");
+				// stdTax = createTax(ctx, taxDAO.getDefaultTax(invoiceLine.getM_Product().getC_TaxCategory()).getC_Tax_ID(), trxName);
+			}
+			if (stdTax != null)
+			{
+				logger.debug("stdTax rate is " + stdTax.getRate());
+				logger.debug("invoiceTax rate is " + invoiceTax.getRate());
+
+				taxThisAmt = taxThisAmt.add(taxBL.calculateTax(invoiceTax, lineNetAmt, isTaxIncluded, taxPrecision));
+				taxStdAmt = taxThisAmt.add(taxBL.calculateTax(stdTax, lineNetAmt, isTaxIncluded, taxPrecision));
+
+				lineNetAmt = lineNetAmt.subtract(taxStdAmt).add(taxThisAmt);
+
+				logger.debug("Price List includes Tax and Tax Changed on Invoice Line: New Tax Amt: "
+						+ taxThisAmt + " Standard Tax Amt: " + taxStdAmt + " Line Net Amt: " + lineNetAmt);
+			}
+		}
+
+		if (lineNetAmt.scale() > taxPrecision)
+		{
+			lineNetAmt = lineNetAmt.setScale(taxPrecision, BigDecimal.ROUND_HALF_UP);
+		}
+
+		invoiceLine.setLineNetAmt(lineNetAmt);
+
+	}// setLineNetAmt
+
+	private I_C_Tax createTax(final Properties ctx, final int taxId, final String trxName)
+	{
+		final I_C_Tax tax = InterfaceWrapperHelper.create(ctx, taxId, I_C_Tax.class, trxName);
+
+		if (taxId == 0)
+		{
+			tax.setIsDefault(false);
+			tax.setIsDocumentLevel(true);
+			tax.setIsSummary(false);
+			tax.setIsTaxExempt(false);
+			tax.setRate(Env.ZERO);
+			tax.setRequiresTaxCertificate(false);
+			tax.setSOPOType(X_C_Tax.SOPOTYPE_Both);
+			tax.setValidFrom(TimeUtil.getDay(1990, 1, 1));
+			tax.setIsSalesTax(false);
+		}
+
+		return tax;
+	}
+
+	@Override
+	public final void setTaxAmt(final I_C_InvoiceLine invoiceLine)
+	{
+		final int taxID = invoiceLine.getC_Tax_ID();
+		if (taxID <= 0)
+		{
+			return;
+		}
+
+		// setLineNetAmt();
+		final I_C_Tax tax = invoiceLine.getC_Tax();
+		final org.compiere.model.I_C_Invoice invoice = invoiceLine.getC_Invoice();
+		if (tax.isDocumentLevel() && invoice.isSOTrx())
+		{
+			return;
+		}
+
+		final ITaxBL taxBL = Services.get(ITaxBL.class);
+		final IInvoiceBL invoiceBL = Services.get(IInvoiceBL.class);
+
+		//
+		final boolean isTaxIncluded = isTaxIncluded(invoiceLine);
+		final BigDecimal lineNetAmt = invoiceLine.getLineNetAmt();
+		final int taxPrecision = invoiceBL.getPrecision(invoiceLine.getC_Invoice());
+
+		final BigDecimal TaxAmt = taxBL.calculateTax(tax, lineNetAmt, isTaxIncluded, taxPrecision);
+		if (isTaxIncluded)
+		{
+			invoiceLine.setLineTotalAmt(lineNetAmt);
+		}
+		else
+		{
+			invoiceLine.setLineTotalAmt(lineNetAmt.add(TaxAmt));
+		}
+		invoiceLine.setTaxAmt(TaxAmt);
+	}	// setTaxAmt
+
+	/**
+	 * Calls {@link #isTaxIncluded(I_C_Invoice, I_C_Tax)} for the given <code>invoiceLine</code>'s <code>C_Invoice</code> and <code>C_Tax</code>.
+	 *
+	 * @param invoiceLine
+	 * @return
+	 */
+	@Override
+	public final boolean isTaxIncluded(final org.compiere.model.I_C_InvoiceLine invoiceLine)
+	{
+		Check.assumeNotNull(invoiceLine, "invoiceLine not null");
+
+		final I_C_Tax tax = invoiceLine.getC_Tax();
+		final org.compiere.model.I_C_Invoice invoice = invoiceLine.getC_Invoice();
+
+		return Services.get(IInvoiceBL.class).isTaxIncluded(invoice, tax);
+	}
+
+	@Override
 	public BigDecimal calculatedQtyInPriceUOM(final BigDecimal qty,
 			final I_C_InvoiceLine invoiceLine,
 			final boolean errorIfNotPossible)
@@ -287,8 +495,7 @@ public class InvoiceLineBL implements IInvoiceLineBL
 
 	public IEditablePricingContext createPricingContext(I_C_InvoiceLine invoiceLine,
 			final int priceListId,
-			final BigDecimal priceQty
-			)
+			final BigDecimal priceQty)
 	{
 		final org.compiere.model.I_C_Invoice invoice = invoiceLine.getC_Invoice();
 
@@ -320,31 +527,28 @@ public class InvoiceLineBL implements IInvoiceLineBL
 	}
 
 	@Override
-	public void updateLineNetAmt(final I_C_InvoiceLine line, final BigDecimal qtyEntered)
+	public void updateLineNetAmt(final I_C_InvoiceLine line)
 	{
-		if (qtyEntered != null)
+		final Properties ctx = InterfaceWrapperHelper.getCtx(line);
+		final I_C_Invoice invoice = line.getC_Invoice();
+		final int priceListId = invoice.getM_PriceList_ID();
+
+		//
+		// We need to get the quantity in the pricing's UOM (if different)
+		final BigDecimal convertedQty = calculateQtyInvoicedInPriceUOM(line);
+
+		// this code has been borrowed from
+		// org.compiere.model.CalloutOrder.amt
+		final int stdPrecision = MPriceList.getStandardPrecision(ctx, priceListId);
+
+		BigDecimal lineNetAmt = convertedQty.multiply(line.getPriceActual());
+
+		if (lineNetAmt.scale() > stdPrecision)
 		{
-			final Properties ctx = InterfaceWrapperHelper.getCtx(line);
-			final I_C_Invoice invoice = line.getC_Invoice();
-			final int priceListId = invoice.getM_PriceList_ID();
-
-			//
-			// We need to get the quantity in the pricing's UOM (if different)
-			final BigDecimal convertedQty = calculateQtyInvoicedInPriceUOM(line);
-
-			// this code has been borrowed from
-			// org.compiere.model.CalloutOrder.amt
-			final int stdPrecision = MPriceList.getStandardPrecision(ctx, priceListId);
-
-			BigDecimal lineNetAmt = convertedQty.multiply(line.getPriceActual());
-
-			if (lineNetAmt.scale() > stdPrecision)
-			{
-				lineNetAmt = lineNetAmt.setScale(stdPrecision, BigDecimal.ROUND_HALF_UP);
-			}
-			logger.info("LineNetAmt=" + lineNetAmt);
-			line.setLineNetAmt(lineNetAmt);
+			lineNetAmt = lineNetAmt.setScale(stdPrecision, BigDecimal.ROUND_HALF_UP);
 		}
+		logger.info("LineNetAmt=" + lineNetAmt);
+		line.setLineNetAmt(lineNetAmt);
 	}
 
 	@Override
@@ -364,9 +568,9 @@ public class InvoiceLineBL implements IInvoiceLineBL
 
 		pricingCtx.setManualPrice(invoiceLine.isManualPrice());
 
-		if(pricingCtx.isManualPrice())
+		if (pricingCtx.isManualPrice())
 		{
-			// Task 08908: 	do not calculate the prices in case the price is manually set
+			// Task 08908: do not calculate the prices in case the price is manually set
 			return;
 		}
 

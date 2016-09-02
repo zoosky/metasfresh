@@ -35,6 +35,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.metas.archive.spi.impl.DBArchiveStorage;
+
 public class DBArchiveStorageTest
 {
 	@BeforeClass

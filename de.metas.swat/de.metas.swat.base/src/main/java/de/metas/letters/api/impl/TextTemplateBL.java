@@ -10,12 +10,12 @@ package de.metas.letters.api.impl;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 2 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-2.0.html>.
@@ -27,12 +27,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import org.slf4j.Logger;
-import de.metas.logging.LogManager;
 
 import org.adempiere.ad.trx.api.ITrx;
-import org.adempiere.bpartner.service.IBPartnerBL;
-import org.adempiere.bpartner.service.IBPartnerDAO;
 import org.adempiere.exceptions.FillMandatoryException;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.util.Check;
@@ -45,10 +41,13 @@ import org.compiere.model.MProcess;
 import org.compiere.model.Query;
 import org.compiere.util.DB;
 import org.compiere.util.Env;
+import org.slf4j.Logger;
 
 import de.metas.adempiere.report.jasper.OutputType;
 import de.metas.adempiere.report.jasper.client.JRClient;
 import de.metas.adempiere.util.CacheCtx;
+import de.metas.bpartner.IBPartnerBL;
+import de.metas.bpartner.IBPartnerDAO;
 import de.metas.document.IDocumentLocationBL;
 import de.metas.document.model.IDocumentLocation;
 import de.metas.letters.api.ITextTemplateBL;
@@ -58,6 +57,7 @@ import de.metas.letters.model.I_T_Letter_Spool;
 import de.metas.letters.model.LetterDocumentLocationAdapter;
 import de.metas.letters.model.MADBoilerPlate;
 import de.metas.letters.spi.ILetterProducer;
+import de.metas.logging.LogManager;
 
 public final class TextTemplateBL implements ITextTemplateBL
 {
@@ -67,7 +67,7 @@ public final class TextTemplateBL implements ITextTemplateBL
 	private static final int AD_Process_ID_T_Letter_Spool_Print = 540278; // TODO: HARDCODED
 
 	private final IBPartnerDAO bPartnerDAO = Services.get(IBPartnerDAO.class);
-	
+
 	public static TextTemplateBL get()
 	{
 		return instance;
@@ -138,7 +138,7 @@ public final class TextTemplateBL implements ITextTemplateBL
 		{
 			final Properties ctx = InterfaceWrapperHelper.getCtx(letter);
 			final String trxName = InterfaceWrapperHelper.getTrxName(letter);
-			
+
 			bpl = bPartnerDAO.retrieveShipToLocation(ctx, letter.getC_BPartner_ID(), trxName);
 			letter.setC_BPartner_Location(bpl);
 		}

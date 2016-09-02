@@ -24,7 +24,6 @@ package de.metas.dunning.invoice.process;
 
 
 import org.adempiere.exceptions.FillMandatoryException;
-import org.adempiere.invoice.service.IInvoiceDAO;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.util.Services;
 import org.adempiere.util.collections.IteratorUtils;
@@ -33,6 +32,7 @@ import org.compiere.process.ProcessInfoParameter;
 import org.compiere.process.SvrProcess;
 
 import de.metas.dunning.invoice.api.IInvoiceSourceBL;
+import de.metas.invoice.IInvoiceDAO;
 
 public class C_Invoice_UpdateAutomaticDunningGrace extends SvrProcess
 {

@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import org.adempiere.invoice.service.IInvoiceDAO;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.util.Services;
 import org.compiere.model.I_C_Payment;
@@ -46,6 +45,7 @@ import de.metas.adempiere.model.I_C_Invoice;
 import de.metas.adempiere.model.I_C_Order;
 import de.metas.currency.ICurrencyDAO;
 import de.metas.interfaces.I_C_BPartner;
+import de.metas.invoice.IInvoiceDAO;
 
 public class PaymentHelper
 {

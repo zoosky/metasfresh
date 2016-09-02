@@ -31,10 +31,6 @@ import de.metas.logging.LogManager;
 import org.adempiere.ad.service.IADProcessDAO;
 import org.adempiere.ad.service.IDeveloperModeBL;
 import org.adempiere.ad.trx.api.ITrx;
-import org.adempiere.archive.api.IArchiveEventManager;
-import org.adempiere.archive.api.IArchiveStorageFactory;
-import org.adempiere.archive.api.IArchiveStorageFactory.AccessMode;
-import org.adempiere.archive.spi.impl.FilesystemArchiveStorage;
 import org.adempiere.exceptions.AdempiereException;
 import org.adempiere.util.Services;
 import org.compiere.model.I_AD_Column;
@@ -47,6 +43,10 @@ import org.compiere.util.CacheMgt;
 import org.compiere.util.DisplayType;
 import org.compiere.util.Env;
 
+import de.metas.archive.api.IArchiveEventManager;
+import de.metas.archive.api.IArchiveStorageFactory;
+import de.metas.archive.api.IArchiveStorageFactory.AccessMode;
+import de.metas.archive.spi.impl.FilesystemArchiveStorage;
 import de.metas.document.archive.model.I_C_Doc_Outbound_Config;
 import de.metas.document.archive.process.ExportArchivePDF;
 import de.metas.document.archive.spi.impl.DocOutboundArchiveEventListener;
@@ -89,7 +89,7 @@ public class Archive_Main_Validator implements ModelValidator
 		//
 		// Register services
 		Services.registerService(de.metas.document.archive.api.IArchiveDAO.class, new de.metas.document.archive.api.impl.ArchiveDAO());
-		Services.registerService(org.adempiere.archive.api.IArchiveDAO.class, new org.adempiere.archive.api.impl.DocumentArchiveDAO());
+		Services.registerService(de.metas.archive.api.IArchiveDAO.class, new org.adempiere.archive.api.impl.DocumentArchiveDAO());
 
 		// Register RemoteArchiveStorage
 		archiveStorageFactory.registerArchiveStorage(IArchiveStorageFactory.STORAGETYPE_Filesystem, AccessMode.CLIENT, RemoteArchiveStorage.class);

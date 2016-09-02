@@ -21,9 +21,6 @@ import java.sql.SQLException;
 import java.util.Collections;
 import java.util.Iterator;
 
-import org.adempiere.bpartner.service.IBPartnerStatisticsUpdater;
-import org.adempiere.bpartner.service.IBPartnerStats;
-import org.adempiere.bpartner.service.IBPartnerStatsDAO;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.util.Services;
 import org.compiere.model.I_C_BPartner;
@@ -34,9 +31,13 @@ import org.compiere.model.Query;
 import org.compiere.util.AdempiereUserError;
 import org.compiere.util.Msg;
 
+import de.metas.bpartner.IBPartnerStatisticsUpdater;
+import de.metas.bpartner.IBPartnerStats;
+import de.metas.bpartner.IBPartnerStatsDAO;
+
 /**
  * Validate Business Partner
- * 
+ *
  * @author Jorg Janke
  * @version $Id: BPartnerValidate.java,v 1.2 2006/07/30 00:51:02 jjanke Exp $
  *          FR: [ 2214883 ] Remove SQL code and Replace for Query - red1, teo_sarca
@@ -72,7 +73,7 @@ public class BPartnerValidate extends SvrProcess
 
 	/**
 	 * Process
-	 * 
+	 *
 	 * @return info
 	 * @throws Exception
 	 */
@@ -108,7 +109,7 @@ public class BPartnerValidate extends SvrProcess
 
 	/**
 	 * Check BP
-	 * 
+	 *
 	 * @param bp bp
 	 * @throws SQLException
 	 */
@@ -140,7 +141,7 @@ public class BPartnerValidate extends SvrProcess
 
 	/**
 	 * Check Payments
-	 * 
+	 *
 	 * @param bp business partner
 	 */
 	private void checkPayments(MBPartner bp)
@@ -164,7 +165,7 @@ public class BPartnerValidate extends SvrProcess
 
 	/**
 	 * Check Invoices
-	 * 
+	 *
 	 * @param bp business partner
 	 */
 	private void checkInvoices(MBPartner bp)

@@ -31,7 +31,6 @@ import java.util.Map;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import org.adempiere.exceptions.AdempiereException;
-import org.adempiere.invoice.service.IInvoiceBL;
 import org.adempiere.model.POWrapper;
 import org.adempiere.util.Check;
 import org.adempiere.util.Services;
@@ -53,6 +52,7 @@ import de.metas.adempiere.service.IPackagingBL;
 import de.metas.inout.model.I_M_InOut;
 import de.metas.inoutcandidate.api.IShipmentSchedulePA;
 import de.metas.inoutcandidate.model.I_M_ShipmentSchedule;
+import de.metas.invoice.IInvoiceBL;
 
 public class PerformPackaging extends SvrProcess
 {

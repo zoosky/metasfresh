@@ -72,7 +72,7 @@ import org.eevolution.mrp.api.IMRPDemandToSupplyAllocation;
 import org.eevolution.mrp.api.IMRPExecutor;
 import org.eevolution.mrp.api.IMRPSourceEvent;
 
-import de.metas.adempiere.service.IBPartnerOrgBL;
+import de.metas.bpartner.IBPartnerOrgBL;
 
 public class DDOrderMRPSupplyProducer extends AbstractMRPSupplyProducer
 {

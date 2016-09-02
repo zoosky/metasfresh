@@ -36,7 +36,6 @@ import org.adempiere.ad.service.ITaskExecutorService;
 import org.adempiere.ad.trx.api.ITrx;
 import org.adempiere.ad.trx.api.ITrxManager;
 import org.adempiere.ad.trx.spi.TrxListenerAdapter;
-import org.adempiere.archive.api.IArchiveEventManager;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.service.ISysConfigBL;
 import org.adempiere.util.Pair;
@@ -48,6 +47,7 @@ import org.compiere.model.I_AD_Archive;
 import org.compiere.model.I_AD_User;
 import org.compiere.model.ModelValidator;
 
+import de.metas.archive.api.IArchiveEventManager;
 import de.metas.notification.INotificationBL;
 import de.metas.printing.api.IPrintingDAO;
 import de.metas.printing.model.I_AD_PrinterRouting;

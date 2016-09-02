@@ -32,7 +32,6 @@ import de.metas.logging.LogManager;
 import org.adempiere.ad.table.api.IADTableDAO;
 import org.adempiere.ad.trx.api.ITrx;
 import org.adempiere.ad.trx.api.ITrxManager;
-import org.adempiere.invoice.service.IInvoiceBL;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.util.Check;
 import org.adempiere.util.ILoggable;
@@ -50,6 +49,7 @@ import de.metas.dunning.invoice.api.IInvoiceSourceBL;
 import de.metas.dunning.invoice.api.IInvoiceSourceDAO;
 import de.metas.dunning.model.I_C_DunningDoc_Line_Source;
 import de.metas.dunning.model.I_C_Dunning_Candidate;
+import de.metas.invoice.IInvoiceBL;
 
 public class InvoiceSourceBL implements IInvoiceSourceBL
 {

@@ -29,7 +29,6 @@ import java.util.Properties;
 import org.adempiere.ad.wrapper.POJOLookupMap;
 import org.adempiere.ad.wrapper.POJOWrapper;
 import org.adempiere.exceptions.AdempiereException;
-import org.adempiere.invoice.service.IInvoiceDAO;
 import org.adempiere.test.AdempiereTestHelper;
 import org.adempiere.test.AdempiereTestWatcher;
 import org.adempiere.util.Services;
@@ -47,6 +46,7 @@ import org.junit.Test;
 import de.metas.adempiere.model.I_C_Invoice;
 import de.metas.currency.ICurrencyDAO;
 import de.metas.currency.impl.PlainCurrencyDAO;
+import de.metas.invoice.IInvoiceDAO;
 
 public class PaymentBLTest
 {

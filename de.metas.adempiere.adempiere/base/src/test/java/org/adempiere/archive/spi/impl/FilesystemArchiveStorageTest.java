@@ -40,6 +40,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
+import de.metas.archive.spi.impl.FilesystemArchiveStorage;
+
 public class FilesystemArchiveStorageTest
 {
 	@BeforeClass

@@ -31,6 +31,7 @@ import org.adempiere.ad.security.IUserRolePermissions;
 import org.adempiere.ad.security.IUserRolePermissionsDAO;
 import org.adempiere.ad.security.permissions.DocumentApprovalConstraint;
 import org.adempiere.ad.service.IADReferenceDAO;
+import org.adempiere.ad.trx.api.ITrx;
 import org.adempiere.ad.trx.api.ITrxSavepoint;
 import org.adempiere.exceptions.AdempiereException;
 import org.adempiere.model.InterfaceWrapperHelper;
@@ -43,7 +44,6 @@ import org.compiere.model.I_AD_PInstance_Para;
 import org.compiere.model.I_AD_Role;
 import org.compiere.model.I_AD_User;
 import org.compiere.model.MAttachment;
-import org.compiere.model.MBPartner;
 import org.compiere.model.MClient;
 import org.compiere.model.MColumn;
 import org.compiere.model.MNote;
@@ -70,6 +70,7 @@ import org.compiere.util.Util;
 import de.metas.currency.ICurrencyBL;
 import de.metas.email.IMailBL;
 import de.metas.email.IMailTextBuilder;
+import de.metas.interfaces.I_C_BPartner;
 
 /**
  * Workflow Activity Model.
@@ -1591,7 +1592,7 @@ public class MWFActivity extends X_AD_WF_Activity implements Runnable
 	private void sendEMail()
 	{
 		DocAction doc = (DocAction)m_po;
-		
+
 		final IMailBL mailBL = Services.get(IMailBL.class);
 		final IMailTextBuilder mailTextBuilder = mailBL.newMailTextBuilder(m_node.getR_MailText());
 		mailTextBuilder.setRecord(m_po, true);
@@ -1876,7 +1877,7 @@ public class MWFActivity extends X_AD_WF_Activity implements Runnable
 			Integer bp = (Integer)po.get_Value(index);
 			if (bp != null)
 			{
-				MBPartner partner = MBPartner.get(getCtx(), bp.intValue());
+				I_C_BPartner partner = InterfaceWrapperHelper.create(getCtx(), bp.intValue(), I_C_BPartner.class, ITrx.TRXNAME_None);
 				if (partner != null)
 					sb.append(partner.getName()).append(" ");
 			}
