@@ -6,8 +6,11 @@ import org.adempiere.ad.modelvalidator.annotations.Interceptor;
 import org.adempiere.ad.modelvalidator.annotations.ModelChange;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.util.Services;
+import org.compiere.model.I_C_OrderLine;
+import org.compiere.model.I_M_Product;
 import org.compiere.model.ModelValidator;
 
+import de.metas.adempiere.model.I_C_InvoiceLine;
 import de.metas.inout.IInOutBL;
 import de.metas.inout.IInOutDAO;
 import de.metas.inout.model.I_M_InOutLine;
@@ -74,5 +77,34 @@ public class M_InOutLine
 	public void handleInOutLineDelete(final I_M_InOutLine iol)
 	{
 		Services.get(IInOutBL.class).deleteMatchInvsForInOutLine(iol); // task 08627
+	}
+
+
+	/**
+	 * Set the product and productDescription as soon as the order line is set.
+	 * the part about <code>ProductDescription</code> is a port from ancient "SwatValidator" code.
+	 *
+	 * @param invoiceLine
+	 * @param field
+	 */
+
+	@ModelChange(timings = { ModelValidator.TYPE_BEFORE_NEW, ModelValidator.TYPE_BEFORE_CHANGE
+	}, ifColumnsChanged = { I_C_InvoiceLine.COLUMNNAME_C_OrderLine_ID })
+	public void setProduct(final I_M_InOutLine iol)
+	{
+		if (InterfaceWrapperHelper.isNull(iol, I_C_InvoiceLine.COLUMNNAME_C_OrderLine_ID))
+		{
+			// set the product to null if the orderline was set to null
+			iol.setM_Product(null);
+			iol.setProductDescription(null);
+
+			return;
+		}
+
+		final I_C_OrderLine ol = iol.getC_OrderLine();
+		final I_M_Product product = ol.getM_Product();
+		iol.setM_Product(product);
+
+		iol.setProductDescription(ol.getProductDescription()); // this is a port from ancient "SwatValidator" code
 	}
 }

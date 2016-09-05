@@ -621,7 +621,7 @@ public class InvoiceCandBLCreateInvoices implements IInvoiceGenerator
 				}
 
 				// Set Line Net Amount and Tax Amount
-				invoiceLineBL.setQtyInvoicedInPriceUOM_AND_LineNetAmt(invoiceLine);
+				invoiceLineBL.updateQtyInvoicedInPriceUomAndLineNetAmt(invoiceLine);
 				invoiceLineBL.setTaxAmt(invoiceLine);
 
 				final List<I_C_Invoice_Candidate> candsForIlVO = aggregate.getCandsFor(ilVO);

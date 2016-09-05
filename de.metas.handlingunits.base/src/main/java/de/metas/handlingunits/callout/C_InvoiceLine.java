@@ -13,15 +13,14 @@ package de.metas.handlingunits.callout;
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
+ * License along with this program. If not, see
  * <http://www.gnu.org/licenses/gpl-2.0.html>.
  * #L%
  */
-
 
 import org.adempiere.ad.callout.annotations.Callout;
 import org.adempiere.ad.callout.annotations.CalloutMethod;
@@ -50,20 +49,28 @@ public class C_InvoiceLine
 	{
 		final IHUPackingAware packingAware = new InvoiceLineHUPackingAware(invoiceLine);
 		final Integer qtyPacks = packingAware.getQtyPacks().intValue();
-		Services.get(IHUPackingAwareBL.class).setQty(packingAware, qtyPacks);
 
-		// Update lineNetAmt, because QtyEnteredCU changed : see task 06727
-		Services.get(IInvoiceLineBL.class).updateLineNetAmt(invoiceLine);
+		final IHUPackingAwareBL huPackingAwareBL = Services.get(IHUPackingAwareBL.class);
+		huPackingAwareBL.setQty(packingAware, qtyPacks);
+
+		// Update LineNetAmt, because QtyEnteredCU changed : see task 06727
+		// No, don't make the call here:
+		// "QtyEnteredCU" is QtyEntered, i.e. a standard (non-HU) field and if it's changed,
+		// then a callout in de.metas.invoice has the job of updating further standard fields.
+		// final IInvoiceLineBL invoiceLineBL = Services.get(IInvoiceLineBL.class);
+		// invoiceLineBL.setQtyInvoicedInPriceUOM_AND_LineNetAmt(invoiceLine);
 	}
 
 	@CalloutMethod(columnNames = { I_C_InvoiceLine.COLUMNNAME_M_HU_PI_Item_Product_ID })
 	public void onHUPIIPChange(final I_C_InvoiceLine invoiceLine, final ICalloutField field)
 	{
 		final IInvoiceLineBL invoiceLineBL = Services.get(IInvoiceLineBL.class);
-
 		invoiceLineBL.updatePrices(invoiceLine);
 
-		invoiceLineBL.updateLineNetAmt(invoiceLine);
+		// Don't make this call here.
+		// A de.metas.invoice callout is supposed to make further updates,
+		// if the prices were changed due to the changed M_HU_PI_Item_Product_ID
+		// invoiceLineBL.setQtyInvoicedInPriceUOM_AND_LineNetAmt(invoiceLine);
 	}
 
 }

@@ -13,20 +13,20 @@ package de.metas.invoice;
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
+ * License along with this program. If not, see
  * <http://www.gnu.org/licenses/gpl-2.0.html>.
  * #L%
  */
-
 
 import java.math.BigDecimal;
 import java.util.Properties;
 
 import org.adempiere.pricing.api.IEditablePricingContext;
+import org.adempiere.pricing.api.IPricingContext;
 import org.adempiere.util.ISingletonService;
 import org.compiere.model.I_C_Invoice;
 import org.compiere.model.I_C_Tax;
@@ -91,35 +91,30 @@ public interface IInvoiceLineBL extends ISingletonService
 	 *
 	 * @return the "price" qty.
 	 */
-	//BigDecimal calculatedQtyInPriceUOM(BigDecimal qty, I_C_InvoiceLine il, boolean errorIfNotPossible);
+	// BigDecimal calculatedQtyInPriceUOM(BigDecimal qty, I_C_InvoiceLine il, boolean errorIfNotPossible);
 
 	/**
-	 * Calculate and set the given <code>invoiceLine</code>'s <code>PriceActual</code> from <code>PriceEntered</code> and <code>Discount</code>.
-	 * <p>
-	 * Note: does not save invoiceLine after it was changed.
+	 * Updates
+	 * <ul>
+	 * <li><code>PriceList</code>
+	 * <li><code>PriceLimit</code>
+	 * <li><code>Price_UOM_ID</code>
+	 * <li><code>PriceEntered</code>
+	 * <li><code>PriceActual</code>
+	 * <li><code>Discount</code>
+	 * <li><code>PriceActual</code>
+	 * </ul>
 	 *
-	 * @param orderLine
-	 * @param precision optional, if <code>>= 0</code> then the result will be rounded to this precision. Otherwise the precision of the order's price list will be used.
+	 * Based on
+	 * <ul>
+	 * <li>C_InvoiceLine.M_Product_ID: if less or euqal zero, then nothing is done.
+	 * <li>C_InvoiceLine.IsManualPrice: if yes, then the pricing engine is not invoked, but only <code>PriceActual</code> is updated from <code>PriceEntered</code> and <code>Discount</code>.
+	 * <li><code>C_InvoiceLine.C_Invoice.M_PriceList</code>
+	 * <li><code>C_InvoiceLine.QtyInvoiced</code>
+	 * <li>the given <code>invoiceLine</code> itself {@link IPricingContext#getReferencedObject()}: we know that the referenced object is used for ASI based price calculation.
+	 * <li>...all the other things like <code>C_Invoice.C_BPartner</code>, <code>C_Invoice.DateInvoiced</code> etc that go into the price calculation
+	 * </ul>
 	 */
-	void calculatePriceActual(I_C_InvoiceLine invoiceLine, int precision);
-
-	/**
-	 * Uses the given <code>invoiceLine</code>'s <code>QtyInvoiced</code>, <code>C_UOM</code> and <code>Price_UOM</code> to compute and set the given line's <code>QtyInvoicedInPriceUOM</code>.
-	 * <p>
-	 * Note that this method makes use of {@link #calculatedQtyInPriceUOM(BigDecimal, I_C_InvoiceLine)}.
-	 *
-	 * @param invoiceLine
-	 * @see #calculatedQtyInPriceUOM(BigDecimal, I_C_InvoiceLine)
-	 */
-	void setQtyInvoicedInPriceUOM(I_C_InvoiceLine invoiceLine);
-
-	/**
-	 * Update the line net amount. Mainly introduced for manual invoices
-	 *
-	 * @param line
-	 */
-	void updateLineNetAmt(I_C_InvoiceLine line);
-
 	void updatePrices(I_C_InvoiceLine invoiceLine);
 
 	/**
@@ -133,21 +128,34 @@ public interface IInvoiceLineBL extends ISingletonService
 	 */
 	void setProductAndUOM(I_C_InvoiceLine invoiceLine, int productId);
 
+
+
 	/**
 	 * Set the given invoiceline's QtyInvoiced, QtyEntered and QtyInvoicedInPriceUOM.
 	 * This method assumes that the given invoice Line has a product (with an UOM) and a C_UOM and Price_UOM set.
 	 *
 	 * @param invoiceLine
-	 * @param qtyInvoiced qtyInvoice to be set. The other two values are computed from it, using UOM conversions.
+	 * @param qtyInvoiced qtyInvoiced value to be set. The other two values are computed from it, using UOM conversions.
 	 */
 	void setQtys(I_C_InvoiceLine invoiceLine, BigDecimal qtyInvoiced);
 
 	/**
-	 * Set the given <code>invoiceLine</code>'s <code>lineNetAmt</code> based on <code>PriceActual</code>, <code>QtyInvoiced</code>, <code>C_UOM_ID</code> and <code>Price_UOM_ID</code>.
+	 * Set the given <code>invoiceLine</code>'s <code>InvoicedInPriceUOM</code> and <code>LineNetAmt</code>, based on
+	 * <ul>
+	 * <li><code>PriceActual</code>
+	 * <li><code>QtyInvoiced</code>
+	 * <li><code>Price_UOM_ID</code>: used to calculate QtyInvoicedInPriceUOM (from QtyInvoiced)
+	 * <li><code>C_Tax.IsDocumentLevel</code>
+	 * <li><code>C_Tax.IsWholeTax</code>: only relevant if IsDocumentLevel=Y
+	 * <li><code>C_Invoice.IsTaxIncluded</code>: only relevant if IsDocumentLevel=Y
+	 * <li><code>C_Invoice.C_Currency.StdPrecision</code>: the end result is rounded to this precision
+	 * </ul>
+	 *
+	 * Note that this method makes use of {@link #calculatedQtyInPriceUOM(BigDecimal, I_C_InvoiceLine)}.
 	 *
 	 * @param invoiceLine
 	 */
-	void setQtyInvoicedInPriceUOM_AND_LineNetAmt(I_C_InvoiceLine invoiceLine);
+	void updateQtyInvoicedInPriceUomAndLineNetAmt(I_C_InvoiceLine invoiceLine);
 
 	/**
 	 * Call {@link IInvoiceBL#isTaxIncluded(I_C_Invoice, I_C_Tax)} for the given <code>invoiceLine</code>'s <code>C_Invoice</code> and <code>C_Tax</code>.
@@ -157,11 +165,18 @@ public interface IInvoiceLineBL extends ISingletonService
 	 */
 	boolean isTaxIncluded(org.compiere.model.I_C_InvoiceLine invoiceLine);
 
-
 	/**
 	 * Calculate Tax Amt. Assumes Line Net is calculated
 	 */
 	void setTaxAmt(I_C_InvoiceLine invoiceLine);
 
+	/**
+	 * Uses the given <code>qty</code> and the given <code>invoiceLine</code>'s <code>C_UOM</code> and <code>Price_UOM</code> to compute the qantity in proce
+	 *
+	 * @param qty
+	 * @param invoiceLine
+	 * @param errorIfNotPossible
+	 * @return
+	 */
 	BigDecimal calculatedQtyInPriceUOM(BigDecimal qty, I_C_InvoiceLine invoiceLine, boolean errorIfNotPossible);
 }

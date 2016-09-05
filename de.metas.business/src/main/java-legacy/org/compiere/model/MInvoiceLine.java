@@ -1053,7 +1053,7 @@ public class MInvoiceLine extends X_C_InvoiceLine
 
 		// Calculations & Rounding
 		final I_C_InvoiceLine thisExt = InterfaceWrapperHelper.create(this, I_C_InvoiceLine.class);
-		Services.get(IInvoiceLineBL.class).setQtyInvoicedInPriceUOM_AND_LineNetAmt(thisExt);
+		Services.get(IInvoiceLineBL.class).updateQtyInvoicedInPriceUomAndLineNetAmt(thisExt);
 
 		// TaxAmt recalculations should be done if the TaxAmt is zero
 		// or this is an Invoice(Customer) - teo_sarca, globalqss [ 1686773 ]
@@ -1538,7 +1538,7 @@ public class MInvoiceLine extends X_C_InvoiceLine
 		setQty(qty);
 
 		final I_C_InvoiceLine thisExt = InterfaceWrapperHelper.create(this, I_C_InvoiceLine.class);
-		Services.get(IInvoiceLineBL.class).setQtyInvoicedInPriceUOM_AND_LineNetAmt(thisExt);
+		Services.get(IInvoiceLineBL.class).updateQtyInvoicedInPriceUomAndLineNetAmt(thisExt);
 
 		setTaxAmt();
 		setLineTotalAmt(rmaLine.getLineNetAmt());

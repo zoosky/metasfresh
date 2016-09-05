@@ -16,11 +16,11 @@ package de.metas.modelvalidator;
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
+ * License along with this program. If not, see
  * <http://www.gnu.org/licenses/gpl-2.0.html>.
  * #L%
  */
@@ -29,18 +29,20 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
+import org.adempiere.ad.callout.spi.IProgramaticCalloutProvider;
 import org.adempiere.ad.dao.IQueryFilter;
 import org.adempiere.ad.dao.cache.IModelCacheService;
 import org.adempiere.ad.dao.cache.ITableCacheConfig;
 import org.adempiere.ad.dao.cache.ITableCacheConfig.TrxLevel;
 import org.adempiere.ad.housekeeping.IHouseKeepingBL;
 import org.adempiere.ad.migration.logger.IMigrationLogger;
+import org.adempiere.ad.modelvalidator.AbstractModuleInterceptor;
 import org.adempiere.ad.modelvalidator.IModelInterceptor;
+import org.adempiere.ad.modelvalidator.IModelValidationEngine;
 import org.adempiere.ad.ui.api.ITabCalloutFactory;
 import org.adempiere.ad.validationRule.IValidationRuleFactory;
 import org.adempiere.appdict.validation.model.validator.ApplicationDictionary;
 import org.adempiere.bpartner.service.impl.AsyncBPartnerStatisticsUpdater;
-import org.adempiere.model.POWrapper;
 import org.adempiere.model.tree.IPOTreeSupportFactory;
 import org.adempiere.model.tree.spi.impl.BPartnerTreeSupport;
 import org.adempiere.model.tree.spi.impl.CampainTreeSupport;
@@ -60,6 +62,7 @@ import org.adempiere.util.api.IMsgBL;
 import org.adempiere.util.api.IMsgDAO;
 import org.adempiere.warehouse.validationrule.FilterWarehouseByDocTypeValidationRule;
 import org.compiere.db.CConnection;
+import org.compiere.model.I_AD_Client;
 import org.compiere.model.I_AD_Menu;
 import org.compiere.model.I_AD_Org;
 import org.compiere.model.I_C_BPartner;
@@ -72,10 +75,6 @@ import org.compiere.model.I_M_Attribute;
 import org.compiere.model.I_M_Locator;
 import org.compiere.model.I_M_Product;
 import org.compiere.model.I_M_Warehouse;
-import org.compiere.model.MClient;
-import org.compiere.model.ModelValidationEngine;
-import org.compiere.model.ModelValidator;
-import org.compiere.model.PO;
 import org.compiere.report.IJasperServiceRegistry;
 import org.compiere.report.IJasperServiceRegistry.ServiceType;
 import org.compiere.report.impl.JasperService;
@@ -101,11 +100,9 @@ import de.metas.adempiere.service.ITriggerUIBL;
 import de.metas.bpartner.IBPartnerStatisticsUpdater;
 import de.metas.document.ICounterDocBL;
 import de.metas.freighcost.modelvalidator.FreightCostValidator;
-import de.metas.inout.model.I_M_InOutLine;
 import de.metas.inout.model.validator.M_InOut;
 import de.metas.inoutcandidate.modelvalidator.InOutCandidateValidator;
 import de.metas.inoutcandidate.modelvalidator.ReceiptScheduleValidator;
-import de.metas.interfaces.I_C_OrderLine;
 import de.metas.invoice.IInvoiceBL;
 import de.metas.invoice.impl.AbstractInvoiceBL;
 import de.metas.invoice.model.interceptor.C_InvoiceLine_TabCallout;
@@ -123,7 +120,7 @@ import de.metas.shipping.model.validator.M_ShipperTransportation;
  * @author tsa
  *
  */
-public class SwatValidator implements ModelValidator
+public class SwatValidator extends AbstractModuleInterceptor
 {
 	private static final String MSG_ORG_ADEMPIERE_UTIL_CHECK_EXCEPTION_HEADER_MESSAGE = "org.adempiere.util.Check.ExceptionHeaderMessage";
 
@@ -145,37 +142,9 @@ public class SwatValidator implements ModelValidator
 
 	private final Logger log = LogManager.getLogger(getClass());
 
-	private int m_AD_Client_ID = -1;
-
 	@Override
-	public int getAD_Client_ID()
+	protected void registerInterceptors(final IModelValidationEngine engine, final I_AD_Client client)
 	{
-		return m_AD_Client_ID;
-	}
-
-	@Override
-	public void initialize(ModelValidationEngine engine, MClient client)
-	{
-		if (client != null)
-		{
-			m_AD_Client_ID = client.getAD_Client_ID();
-		}
-
-		Check.errorUnless(Services.isAutodetectServices(), "Autodetect services is not true!");
-
-		setupTableCacheConfig();
-
-		configDatabase();
-
-		//
-		// Services
-
-		//task FRESH-152: BPartner Stats Updater
-		Services.registerService(IBPartnerStatisticsUpdater.class, new AsyncBPartnerStatisticsUpdater());
-
-		engine.addModelChange(I_C_InvoiceLine.Table_Name, this);
-		engine.addModelChange(I_M_InOutLine.Table_Name, this);
-
 		// registering child validators
 		engine.addModelValidator(new ApplicationDictionary(), client);
 		engine.addModelValidator(new FreightCostValidator(), client);
@@ -217,14 +186,52 @@ public class SwatValidator implements ModelValidator
 		engine.addModelValidator(new M_ShipperTransportation(), client); // 06899
 
 		// task 09700
-		final IModelInterceptor counterDocHandlerInterceptor =
-				Services.get(ICounterDocBL.class).registerHandler(C_Order_CounterDocHandler.instance, I_C_Order.Table_Name);
+		final IModelInterceptor counterDocHandlerInterceptor = Services.get(ICounterDocBL.class).registerHandler(C_Order_CounterDocHandler.instance, I_C_Order.Table_Name);
 		engine.addModelValidator(counterDocHandlerInterceptor, null);
 
 		// pricing
 		{
 			engine.addModelValidator(new de.metas.pricing.modelvalidator.M_ProductPrice(), client); // 06931
+		}
 
+		new de.metas.order.model.validator.ConfigValidator().initialize(engine, client);
+
+		new de.metas.invoicecandidate.modelvalidator.ConfigValidator().initialize(engine, client);
+
+		//
+		engine.addModelValidator(new de.metas.tourplanning.model.validator.TourPlanningModuleActivator(), client);
+	}
+
+	@Override
+	protected void registerTabCallouts(final ITabCalloutFactory tabCalloutsRegistry)
+	{
+		tabCalloutsRegistry.registerTabCalloutForTable(I_C_InvoiceLine.Table_Name, C_InvoiceLine_TabCallout.class);
+
+		// task 09232
+		tabCalloutsRegistry.registerTabCalloutForTable(I_C_Order.Table_Name, C_OrderFastInputTabCallout.class);
+	}
+
+	@Override
+	protected void registerCallouts(final IProgramaticCalloutProvider calloutsRegistry)
+	{
+		calloutsRegistry.registerAnnotatedCallout(de.metas.pricing.attributebased.callout.C_InvoiceLine.INSTANCE);
+	}
+
+	@Override
+	public void onAfterInit()
+	{
+		Check.errorUnless(Services.isAutodetectServices(), "Autodetect services is not true!");
+
+		configDatabase();
+
+		//
+		// Services
+
+		// task FRESH-152: BPartner Stats Updater
+		Services.registerService(IBPartnerStatisticsUpdater.class, new AsyncBPartnerStatisticsUpdater());
+
+		// pricing
+		{
 			// task 07286: a replacement for the former jboss-aop aspect <code>de.metas.adempiere.aop.PriceListCreate</code>.
 			Services.get(IPriceListBL.class).addPlvCreationListener(new AttributePlvCreationListener());
 		}
@@ -243,10 +250,6 @@ public class SwatValidator implements ModelValidator
 		// Note: de.metas.adempiere.modelvalidator.InvoiceLine is currently deactivated, so we leave it in
 		// AD_ModelValidator until its status is clear.
 
-		new de.metas.order.model.validator.ConfigValidator().initialize(engine, client);
-
-		new de.metas.invoicecandidate.modelvalidator.ConfigValidator().initialize(engine, client);
-
 		JRClient.get(); // make sure Jasper client is loaded and initialized
 
 		Services.get(IValidationRuleFactory.class).registerTableValidationRule(I_M_Warehouse.Table_Name, FilterWarehouseByDocTypeValidationRule.class);
@@ -263,12 +266,6 @@ public class SwatValidator implements ModelValidator
 			migrationLogger.addTableToIgnoreList(I_EXP_ReplicationTrx.Table_Name);
 			migrationLogger.addTableToIgnoreList(I_EXP_ReplicationTrxLine.Table_Name);
 		}
-
-		//
-		engine.addModelValidator(new de.metas.tourplanning.model.validator.TourPlanningModuleActivator(), client);
-
-		Services.get(ITabCalloutFactory.class).registerTabCalloutForTable(I_C_InvoiceLine.Table_Name, C_InvoiceLine_TabCallout.class);
-
 		// register the default copy handler
 		// task 07286: required because we need to introduce copy handlers that replace some former jboss-aop aspects in de.metas.commission. We do that be adding copy handlers there and to allow
 		// this, we had to extend the API and register the default handlers whose invocation used to be hardcoded in the IInvoiceBL impl.
@@ -323,17 +320,11 @@ public class SwatValidator implements ModelValidator
 				jasperServiceRegistry.registerJasperService(ServiceType.MASS_PRINT_FRAMEWORK, new JasperService());
 			}
 		}
-
-		// task 09232
-		{
-			Services.get(ITabCalloutFactory.class).registerTabCalloutForTable(I_C_Order.Table_Name, C_OrderFastInputTabCallout.class);
-		}
 	}
 
-	private void setupTableCacheConfig()
+	@Override
+	protected void setupCaching(final IModelCacheService cachingService)
 	{
-		final IModelCacheService cachingService = Services.get(IModelCacheService.class);
-
 		cachingService.addTableCacheConfigIfAbsent(I_M_Attribute.class);
 		cachingService.addTableCacheConfigIfAbsent(I_M_Product.class);
 		cachingService.addTableCacheConfigIfAbsent(I_C_UOM.class);
@@ -360,7 +351,7 @@ public class SwatValidator implements ModelValidator
 	}
 
 	@Override
-	public String login(int AD_Org_ID, int AD_Role_ID, int AD_User_ID)
+	public void onUserLogin(final int AD_Org_ID, final int AD_Role_ID, final int AD_User_ID)
 	{
 		configDatabase(); // run it again here because ModelValidator.initialize is run only once
 
@@ -374,38 +365,6 @@ public class SwatValidator implements ModelValidator
 			log.info("Set " + Env.CTXNAME_SalesRep_ID + "=" + defaultSalesRepId + " from " + SYSCONFIG_DEFAULT_SalesRep_ID);
 			Env.setContext(ctx, Env.CTXNAME_SalesRep_ID, defaultSalesRepId);
 		}
-
-		return null;
-	}
-
-	@Override
-	public String modelChange(PO po, int type) throws Exception
-	{
-		if (I_C_InvoiceLine.Table_Name.equals(po.get_TableName()) && TYPE_BEFORE_NEW == type)
-		{
-			I_C_InvoiceLine invoiceLine = POWrapper.create(po, I_C_InvoiceLine.class);
-			if (invoiceLine.getC_OrderLine_ID() > 0)
-			{
-				I_C_OrderLine orderLine = POWrapper.create(invoiceLine.getC_OrderLine(), I_C_OrderLine.class);
-				invoiceLine.setProductDescription(orderLine.getProductDescription());
-			}
-		}
-		if (I_M_InOutLine.Table_Name.equals(po.get_TableName()) && TYPE_BEFORE_NEW == type)
-		{
-			I_M_InOutLine ioLine = POWrapper.create(po, I_M_InOutLine.class);
-			if (ioLine.getC_OrderLine_ID() > 0)
-			{
-				I_C_OrderLine orderLine = POWrapper.create(ioLine.getC_OrderLine(), I_C_OrderLine.class);
-				ioLine.setProductDescription(orderLine.getProductDescription());
-			}
-		}
-		return null;
-	}
-
-	@Override
-	public String docValidate(PO po, int timing)
-	{
-		return null;
 	}
 
 	private void configDatabase()

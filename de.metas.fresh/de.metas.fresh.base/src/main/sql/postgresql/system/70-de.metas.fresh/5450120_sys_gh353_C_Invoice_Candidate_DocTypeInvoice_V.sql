@@ -56,8 +56,8 @@ Goals of this view:
 
 Note: 
   INSERT INTO C_Invoice_Candidate_Recompute (C_Invoice_Candidate_ID)
-  SELECT C_Invoice_Candidate_ID FROM "de.metas.fresh".C_Invoice_Candidate_DocTypeInvoice_V 
-  AND COALESCE(v.ic_C_DocTypeInvoice_ID_current,0)!=COALESCE(v.ic_C_DocTypeInvoice_ID_should,0) AND v.Processed=''N'' AND v.Recompute=''N'' AND AND v.Locked=''N'';
+  SELECT C_Invoice_Candidate_ID FROM "de.metas.fresh".C_Invoice_Candidate_DocTypeInvoice_V v
+  WHERE COALESCE(v.ic_C_DocTypeInvoice_ID_current,0)!=COALESCE(v.ic_C_DocTypeInvoice_ID_should,0) AND v.Processed=''N'' AND v.Recompute=''N'' AND v.Locked=''N'';
 alone might not work, because currently, the conde to update the doctype is triggered from a model interceptor.
 If the IC updated does not find any "other" change to make, then that MI won''t be fired.
 
