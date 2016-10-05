@@ -29,8 +29,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import org.slf4j.Logger;
-import de.metas.logging.LogManager;
 
 import org.adempiere.ad.trx.api.ITrx;
 import org.adempiere.exceptions.AdempiereException;
@@ -45,12 +43,14 @@ import org.adempiere.util.proxy.Cached;
 import org.compiere.model.I_C_UOM;
 import org.compiere.model.I_C_UOM_Conversion;
 import org.compiere.model.I_M_Product;
-import org.slf4j.Logger;
-import de.metas.logging.LogManager;
 import org.compiere.util.Env;
 import org.compiere.util.Util.ArrayKey;
+import org.slf4j.Logger;
+import org.slf4j.Logger;
 
 import de.metas.adempiere.util.CacheCtx;
+import de.metas.logging.LogManager;
+import de.metas.logging.LogManager;
 import de.metas.product.IProductBL;
 
 public class UOMConversionBL implements IUOMConversionBL
@@ -326,7 +326,7 @@ public class UOMConversionBL implements IUOMConversionBL
 		BigDecimal rate = getRateForConversionFromProductUOM(ctx, product, uomDest);
 		if (rate != null)
 		{
-			if (Env.ONE.compareTo(rate) == 0)
+			if (BigDecimal.ONE.compareTo(rate) == 0)
 			{
 				return qtyToConvert;
 			}

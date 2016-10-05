@@ -121,6 +121,7 @@ public class MUOM extends X_C_UOM
 	 * @return MUOM if found, null if not found
 	 * @deprecated Deprecated because it's error phrone (no AD_Client_ID is enforced) and because it's used only in one AIT.
 	 */
+	@Deprecated
 	public static MUOM get(Properties ctx, String name, String trxName)
 	{
 		MUOM uom = (MUOM)TableModelLoader.instance.getPO(ctx, Table_Name, "Name = ?", new Object[] { name }, trxName);
