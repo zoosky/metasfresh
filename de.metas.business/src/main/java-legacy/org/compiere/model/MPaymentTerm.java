@@ -1,18 +1,18 @@
 /******************************************************************************
- * Product: Adempiere ERP & CRM Smart Business Solution                       *
- * Copyright (C) 1999-2006 ComPiere, Inc. All Rights Reserved.                *
- * This program is free software; you can redistribute it and/or modify it    *
- * under the terms version 2 of the GNU General Public License as published   *
- * by the Free Software Foundation. This program is distributed in the hope   *
+ * Product: Adempiere ERP & CRM Smart Business Solution *
+ * Copyright (C) 1999-2006 ComPiere, Inc. All Rights Reserved. *
+ * This program is free software; you can redistribute it and/or modify it *
+ * under the terms version 2 of the GNU General Public License as published *
+ * by the Free Software Foundation. This program is distributed in the hope *
  * that it will be useful, but WITHOUT ANY WARRANTY; without even the implied *
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.           *
- * See the GNU General Public License for more details.                       *
- * You should have received a copy of the GNU General Public License along    *
- * with this program; if not, write to the Free Software Foundation, Inc.,    *
- * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.                     *
- * For the text or an alternative of this public license, you may reach us    *
- * ComPiere, Inc., 2620 Augustine Dr. #245, Santa Clara, CA 95054, USA        *
- * or via info@compiere.org or http://www.compiere.org/license.html           *
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. *
+ * See the GNU General Public License for more details. *
+ * You should have received a copy of the GNU General Public License along *
+ * with this program; if not, write to the Free Software Foundation, Inc., *
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA. *
+ * For the text or an alternative of this public license, you may reach us *
+ * ComPiere, Inc., 2620 Augustine Dr. #245, Santa Clara, CA 95054, USA *
+ * or via info@compiere.org or http://www.compiere.org/license.html *
  *****************************************************************************/
 package org.compiere.model;
 
@@ -21,20 +21,17 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Properties;
-import org.slf4j.Logger;
-import de.metas.logging.LogManager;
 
 import org.adempiere.exceptions.AdempiereException;
 import org.compiere.util.DB;
 import org.compiere.util.Env;
 import org.compiere.util.Msg;
 
-
 /**
- *	Payment Term Model
- *	
- *  @author Jorg Janke
- *  @version $Id: MPaymentTerm.java,v 1.3 2006/07/30 00:51:03 jjanke Exp $
+ * Payment Term Model
+ * 
+ * @author Jorg Janke
+ * @version $Id: MPaymentTerm.java,v 1.3 2006/07/30 00:51:03 jjanke Exp $
  */
 public class MPaymentTerm extends X_C_PaymentTerm
 {
@@ -45,50 +42,56 @@ public class MPaymentTerm extends X_C_PaymentTerm
 	private static final long serialVersionUID = 2494915482340569386L;
 
 	/**
-	 * 	Standard Constructor
-	 *	@param ctx context
-	 *	@param C_PaymentTerm_ID id
-	 *	@param trxName transaction
+	 * Standard Constructor
+	 * 
+	 * @param ctx context
+	 * @param C_PaymentTerm_ID id
+	 * @param trxName transaction
 	 */
 	public MPaymentTerm(Properties ctx, int C_PaymentTerm_ID, String trxName)
 	{
 		super(ctx, C_PaymentTerm_ID, trxName);
 		if (C_PaymentTerm_ID == 0)
 		{
-			setAfterDelivery (false);
-			setNetDays (0);
-			setDiscount (Env.ZERO);
-			setDiscount2 (Env.ZERO);
-			setDiscountDays (0);
-			setDiscountDays2 (0);
-			setGraceDays (0);
-			setIsDueFixed (false);
-			setIsValid (false);
-		}	}	//	MPaymentTerm
+			setAfterDelivery(false);
+			setNetDays(0);
+			setDiscount(Env.ZERO);
+			setDiscount2(Env.ZERO);
+			setDiscountDays(0);
+			setDiscountDays2(0);
+			setGraceDays(0);
+			setIsDueFixed(false);
+			setIsValid(false);
+		}
+	}	// MPaymentTerm
 
 	/**
-	 * 	Load Constructor
-	 *	@param ctx context
-	 *	@param rs result set
-	 *	@param trxName transaction
+	 * Load Constructor
+	 * 
+	 * @param ctx context
+	 * @param rs result set
+	 * @param trxName transaction
 	 */
 	public MPaymentTerm(Properties ctx, ResultSet rs, String trxName)
 	{
 		super(ctx, rs, trxName);
-	}	//	MPaymentTerm
+	}	// MPaymentTerm
 
-	/** 100									*/
-	private final static BigDecimal		HUNDRED = new BigDecimal(100);
+	/** 100 */
+	private final static BigDecimal HUNDRED = new BigDecimal(100);
 
-	/**	Payment Schedule children			*/
-	private MPaySchedule[]				m_schedule;
+	/** Payment Schedule children */
+	private MPaySchedule[] m_schedule;
 
 	/**
-	 * 	Get Payment Schedule
-	 * 	@param requery if true re-query
-	 *	@return array of schedule
+	 * Get Payment Schedule
+	 * 
+	 * @param requery if true re-query
+	 * @return array of schedule
+	 * @deprecated Please, use {@code de.metas.payment.api.IPayScheduleDAO.retrievePayScheduleForPaymentTerm(I_C_PaymentTerm)}
 	 */
-	public MPaySchedule[] getSchedule (boolean requery)
+	@Deprecated
+	public MPaySchedule[] getSchedule(boolean requery)
 	{
 		if (m_schedule != null && !requery)
 			return m_schedule;
@@ -104,7 +107,7 @@ public class MPaymentTerm extends X_C_PaymentTerm
 			{
 				MPaySchedule ps = new MPaySchedule(getCtx(), rs, get_TrxName());
 				ps.setParent(this);
-				list.add (ps);
+				list.add(ps);
 			}
 			rs.close();
 			pstmt.close();
@@ -112,7 +115,7 @@ public class MPaymentTerm extends X_C_PaymentTerm
 		}
 		catch (Exception e)
 		{
-			log.error("getSchedule", e); 
+			log.error("getSchedule", e);
 		}
 		try
 		{
@@ -124,15 +127,16 @@ public class MPaymentTerm extends X_C_PaymentTerm
 		{
 			pstmt = null;
 		}
-		
+
 		m_schedule = new MPaySchedule[list.size()];
 		list.toArray(m_schedule);
 		return m_schedule;
-	}	//	getSchedule
+	}	// getSchedule
 
 	/**
-	 * 	Validate Payment Term & Schedule
-	 *	@return Validation Message @OK@ or error
+	 * Validate Payment Term & Schedule
+	 * 
+	 * @return Validation Message @OK@ or error
 	 */
 	public String validate()
 	{
@@ -152,8 +156,8 @@ public class MPaymentTerm extends X_C_PaymentTerm
 			}
 			return "@Invalid@ @Count@ # = 1 (@C_PaySchedule_ID@)";
 		}
-		
-		//	Add up
+
+		// Add up
 		BigDecimal total = Env.ZERO;
 		for (int i = 0; i < m_schedule.length; i++)
 		{
@@ -162,7 +166,7 @@ public class MPaymentTerm extends X_C_PaymentTerm
 				total = total.add(percent);
 		}
 		boolean valid = total.compareTo(HUNDRED) == 0;
-		setIsValid (valid);
+		setIsValid(valid);
 		for (int i = 0; i < m_schedule.length; i++)
 		{
 			if (m_schedule[i].isValid() != valid)
@@ -173,33 +177,34 @@ public class MPaymentTerm extends X_C_PaymentTerm
 		}
 		String msg = "@OK@";
 		if (!valid)
-			msg = "@Total@ = " + total + " - @Difference@ = " + HUNDRED.subtract(total); 
+			msg = "@Total@ = " + total + " - @Difference@ = " + HUNDRED.subtract(total);
 		return Msg.parseTranslation(getCtx(), msg);
-	}	//	validate
-
+	}	// validate
 
 	/*************************************************************************
-	 * 	Apply Payment Term to Invoice -
-	 *	@param C_Invoice_ID invoice
-	 *	@return true if payment schedule is valid
+	 * Apply Payment Term to Invoice -
+	 * 
+	 * @param C_Invoice_ID invoice
+	 * @return true if payment schedule is valid
 	 */
-	public boolean apply (int C_Invoice_ID)
+	public boolean apply(int C_Invoice_ID)
 	{
-		MInvoice invoice = new MInvoice (getCtx(), C_Invoice_ID, get_TrxName());
+		MInvoice invoice = new MInvoice(getCtx(), C_Invoice_ID, get_TrxName());
 		if (invoice == null || invoice.get_ID() == 0)
 		{
 			log.error("apply - Not valid C_Invoice_ID=" + C_Invoice_ID);
 			return false;
 		}
-		return apply (invoice);
-	}	//	apply
-	
+		return apply(invoice);
+	}	// apply
+
 	/**
-	 * 	Apply Payment Term to Invoice
-	 *	@param invoice invoice
-	 *	@return true if payment schedule is valid
+	 * Apply Payment Term to Invoice
+	 * 
+	 * @param invoice invoice
+	 * @return true if payment schedule is valid
 	 */
-	public boolean apply (MInvoice invoice)
+	public boolean apply(MInvoice invoice)
 	{
 		if (invoice == null || invoice.get_ID() == 0)
 		{
@@ -208,97 +213,101 @@ public class MPaymentTerm extends X_C_PaymentTerm
 		}
 
 		if (!isValid())
-			return applyNoSchedule (invoice);
+			return applyNoSchedule(invoice);
 		//
 		getSchedule(true);
 		if (m_schedule.length <= 1)
-			return applyNoSchedule (invoice);
-		else	//	only if valid
-			return applySchedule(invoice);		
-	}	//	apply
+			return applyNoSchedule(invoice);
+		else	// only if valid
+			return applySchedule(invoice);
+	}	// apply
 
 	/**
-	 * 	Apply Payment Term without schedule to Invoice
-	 *	@param invoice invoice
-	 *	@return false as no payment schedule
+	 * Apply Payment Term without schedule to Invoice
+	 * 
+	 * @param invoice invoice
+	 * @return false as no payment schedule
 	 */
-	private boolean applyNoSchedule (MInvoice invoice)
+	private boolean applyNoSchedule(MInvoice invoice)
 	{
-		deleteInvoicePaySchedule (invoice.getC_Invoice_ID(), invoice.get_TrxName());
-		//	updateInvoice
+		deleteInvoicePaySchedule(invoice.getC_Invoice_ID(), invoice.get_TrxName());
+		// updateInvoice
 		if (invoice.getC_PaymentTerm_ID() != getC_PaymentTerm_ID())
 			invoice.setC_PaymentTerm_ID(getC_PaymentTerm_ID());
 		if (invoice.isPayScheduleValid())
 			invoice.setIsPayScheduleValid(false);
 		return false;
-	}	//	applyNoSchedule
+	}	// applyNoSchedule
 
 	/**
-	 * 	Apply Payment Term with schedule to Invoice
-	 *	@param invoice invoice
-	 *	@return true if payment schedule is valid
+	 * Apply Payment Term with schedule to Invoice
+	 * 
+	 * @param invoice invoice
+	 * @return true if payment schedule is valid
 	 */
-	private boolean applySchedule (MInvoice invoice)
+	private boolean applySchedule(MInvoice invoice)
 	{
-		deleteInvoicePaySchedule (invoice.getC_Invoice_ID(), invoice.get_TrxName());
-		//	Create Schedule
+		deleteInvoicePaySchedule(invoice.getC_Invoice_ID(), invoice.get_TrxName());
+		// Create Schedule
 		MInvoicePaySchedule ips = null;
 		BigDecimal remainder = invoice.getGrandTotal();
 		for (int i = 0; i < m_schedule.length; i++)
 		{
-			ips = new MInvoicePaySchedule (invoice, m_schedule[i]);
+			ips = new MInvoicePaySchedule(invoice, m_schedule[i]);
 			ips.save(invoice.get_TrxName());
 			log.debug(ips.toString());
 			remainder = remainder.subtract(ips.getDueAmt());
-		}	//	for all schedules
-		//	Remainder - update last
+		} 	// for all schedules
+		// Remainder - update last
 		if (remainder.compareTo(Env.ZERO) != 0 && ips != null)
 		{
 			ips.setDueAmt(ips.getDueAmt().add(remainder));
 			ips.save(invoice.get_TrxName());
 			log.debug("Remainder=" + remainder + " - " + ips);
 		}
-		
-		//	updateInvoice
+
+		// updateInvoice
 		if (invoice.getC_PaymentTerm_ID() != getC_PaymentTerm_ID())
 			invoice.setC_PaymentTerm_ID(getC_PaymentTerm_ID());
 		return invoice.validatePaySchedule();
-	}	//	applySchedule
+	}	// applySchedule
 
 	/**
-	 * 	Delete existing Invoice Payment Schedule
-	 *	@param C_Invoice_ID id
-	 *	@param trxName transaction
+	 * Delete existing Invoice Payment Schedule
+	 * 
+	 * @param C_Invoice_ID id
+	 * @param trxName transaction
 	 */
-	private void deleteInvoicePaySchedule (int C_Invoice_ID, String trxName)
+	private void deleteInvoicePaySchedule(int C_Invoice_ID, String trxName)
 	{
 		String sql = "DELETE FROM C_InvoicePaySchedule WHERE C_Invoice_ID=" + C_Invoice_ID;
 		int no = DB.executeUpdate(sql, trxName);
 		log.debug("C_Invoice_ID=" + C_Invoice_ID + " - #" + no);
-	}	//	deleteInvoicePaySchedule
+	}	// deleteInvoicePaySchedule
 
-	
 	/**************************************************************************
-	 * 	String Representation
-	 *	@return info
+	 * String Representation
+	 * 
+	 * @return info
 	 */
 	@Override
-	public String toString ()
+	public String toString()
 	{
-		StringBuffer sb = new StringBuffer ("MPaymentTerm[");
+		StringBuffer sb = new StringBuffer("MPaymentTerm[");
 		sb.append(get_ID()).append("-").append(getName())
-			.append(",Valid=").append(isValid())
-			.append ("]");
-		return sb.toString ();
-	}	//	toString
-	
+				.append(",Valid=").append(isValid())
+				.append("]");
+		return sb.toString();
+	}	// toString
+
 	/**
-	 * 	Before Save
-	 *	@param newRecord new
-	 *	@return true
+	 * Before Save
+	 * 
+	 * @param newRecord new
+	 * @return true
 	 */
 	@Override
-	protected boolean beforeSave (boolean newRecord)
+	protected boolean beforeSave(boolean newRecord)
 	{
 		if (isDueFixed())
 		{
@@ -313,10 +322,10 @@ public class MPaymentTerm extends X_C_PaymentTerm
 				throw new AdempiereException("@Invalid@ @FixMonthCutoff@");
 			}
 		}
-		
+
 		if (!newRecord || !isValid())
 			validate();
 		return true;
-	}	//	beforeSave
-	
-}	//	MPaymentTerm
+	}	// beforeSave
+
+}	// MPaymentTerm

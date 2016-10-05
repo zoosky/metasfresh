@@ -349,6 +349,8 @@ public class CalloutInvoice extends CalloutEngine
 		// TODO: Fix in next step (refactoring: Move the apply method from MPaymentTerm to a BL)
 		MPaymentTerm pt = InterfaceWrapperHelper.getPO(paymentTerm);
 
+		Services.get(IInvoiceBL.class).applyPaymentTerm(invoice, paymentTerm);
+		
 		final boolean valid = pt.apply(invoice.getC_Invoice_ID());
 		invoice.setIsPayScheduleValid(valid);
 
