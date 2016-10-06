@@ -42,6 +42,7 @@ import de.metas.adempiere.service.IInvoiceLineBL;
 import de.metas.document.documentNo.IDocumentNoBuilderFactory;
 import de.metas.document.documentNo.impl.IDocumentNoInfo;
 import de.metas.logging.MetasfreshLastError;
+import de.metas.payment.api.IPaymentTermBL;
 import de.metas.product.IProductBL;
 import de.metas.tax.api.ITaxBL;
 
@@ -346,12 +347,9 @@ public class CalloutInvoice extends CalloutEngine
 			return NO_ERROR;
 		}
 
-		// TODO: Fix in next step (refactoring: Move the apply method from MPaymentTerm to a BL)
-		MPaymentTerm pt = InterfaceWrapperHelper.getPO(paymentTerm);
+		// Check if the payment term applies to the invoice
+		final boolean valid = Services.get(IPaymentTermBL.class).applyPaymentTermToInvoice(invoice, paymentTerm);
 
-		Services.get(IInvoiceBL.class).applyPaymentTerm(invoice, paymentTerm);
-		
-		final boolean valid = pt.apply(invoice.getC_Invoice_ID());
 		invoice.setIsPayScheduleValid(valid);
 
 		return NO_ERROR;
