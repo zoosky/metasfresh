@@ -186,7 +186,10 @@ public class MPaymentTerm extends X_C_PaymentTerm
 	 * 
 	 * @param C_Invoice_ID invoice
 	 * @return true if payment schedule is valid
+	 * 
+	 * @deprecated
 	 */
+	@Deprecated
 	public boolean apply(int C_Invoice_ID)
 	{
 		MInvoice invoice = new MInvoice(getCtx(), C_Invoice_ID, get_TrxName());
@@ -203,7 +206,10 @@ public class MPaymentTerm extends X_C_PaymentTerm
 	 * 
 	 * @param invoice invoice
 	 * @return true if payment schedule is valid
+	 * 
+	 * @deprecated Please use {@link de.metas.payment.api.IPaymentTermBL.applyPaymentTermToInvoice(I_C_Invoice, I_C_PaymentTerm)}
 	 */
+	@Deprecated
 	public boolean apply(MInvoice invoice)
 	{
 		if (invoice == null || invoice.get_ID() == 0)
@@ -227,7 +233,10 @@ public class MPaymentTerm extends X_C_PaymentTerm
 	 * 
 	 * @param invoice invoice
 	 * @return false as no payment schedule
+	 * 
+	 * @deprecated de.metas.payment.api.impl.PaymentTermBL.applyNoSchedule(I_C_Invoice, I_C_PaymentTerm)
 	 */
+	@Deprecated
 	private boolean applyNoSchedule(MInvoice invoice)
 	{
 		deleteInvoicePaySchedule(invoice.getC_Invoice_ID(), invoice.get_TrxName());
@@ -244,7 +253,10 @@ public class MPaymentTerm extends X_C_PaymentTerm
 	 * 
 	 * @param invoice invoice
 	 * @return true if payment schedule is valid
+	 * 
+	 * @deprecated de.metas.payment.api.impl.PaymentTermBL.applySchedule(I_C_Invoice, I_C_PaymentTerm)
 	 */
+	@Deprecated
 	private boolean applySchedule(MInvoice invoice)
 	{
 		deleteInvoicePaySchedule(invoice.getC_Invoice_ID(), invoice.get_TrxName());
@@ -257,9 +269,10 @@ public class MPaymentTerm extends X_C_PaymentTerm
 			ips.save(invoice.get_TrxName());
 			log.debug(ips.toString());
 			remainder = remainder.subtract(ips.getDueAmt());
-		} 	// for all schedules
+		}
+		// for all schedules
 		// Remainder - update last
-		if (remainder.compareTo(Env.ZERO) != 0 && ips != null)
+		if (remainder.compareTo(BigDecimal.ZERO) != 0 && ips != null)
 		{
 			ips.setDueAmt(ips.getDueAmt().add(remainder));
 			ips.save(invoice.get_TrxName());
@@ -268,7 +281,9 @@ public class MPaymentTerm extends X_C_PaymentTerm
 
 		// updateInvoice
 		if (invoice.getC_PaymentTerm_ID() != getC_PaymentTerm_ID())
+		{
 			invoice.setC_PaymentTerm_ID(getC_PaymentTerm_ID());
+		}
 		return invoice.validatePaySchedule();
 	}	// applySchedule
 
@@ -277,7 +292,10 @@ public class MPaymentTerm extends X_C_PaymentTerm
 	 * 
 	 * @param C_Invoice_ID id
 	 * @param trxName transaction
+	 * 
+	 * @deprecated Please use de.metas.payment.api.IInvoicePayScheduleDAO.deleteInvoicePaySchedule(I_C_Invoice)
 	 */
+	@Deprecated
 	private void deleteInvoicePaySchedule(int C_Invoice_ID, String trxName)
 	{
 		String sql = "DELETE FROM C_InvoicePaySchedule WHERE C_Invoice_ID=" + C_Invoice_ID;
