@@ -149,7 +149,7 @@ public class CalloutInvoice extends CalloutEngine
 				+ "p." + I_C_BPartner.COLUMNNAME_AD_Language
 				+ ", p." + I_C_BPartner.COLUMNNAME_C_PaymentTerm_ID
 				+ ", COALESCE(p." + I_C_BPartner.COLUMNNAME_M_PriceList_ID
-				+ ". g." + I_C_BP_Group.COLUMNNAME_M_PriceList_ID
+				+ ", g." + I_C_BP_Group.COLUMNNAME_M_PriceList_ID
 				+ ") AS M_PriceList_ID"
 				+ ", p." + I_C_BPartner.COLUMNNAME_PaymentRule
 				+ ", p." + I_C_BPartner.COLUMNNAME_POReference
@@ -161,8 +161,8 @@ public class CalloutInvoice extends CalloutEngine
 				+ ", l." + I_C_BPartner_Location.COLUMNNAME_C_BPartner_Location_ID
 				+ ", c." + I_AD_User.COLUMNNAME_AD_User_ID
 				+ ", COALESCE(p." + I_C_BPartner.COLUMNNAME_PO_PriceList_ID
-				+ ". g." + I_C_BP_Group.COLUMNNAME_PO_PriceList_ID
-				+ " AS PO_PriceList_ID"
+				+ ", g." + I_C_BP_Group.COLUMNNAME_PO_PriceList_ID
+				+ ") AS PO_PriceList_ID"
 				+ ", p." + I_C_BPartner.COLUMNNAME_PaymentRulePO
 				+ ", p." + I_C_BPartner.COLUMNNAME_PO_PaymentTerm_ID
 
@@ -221,7 +221,10 @@ public class CalloutInvoice extends CalloutEngine
 				// PaymentRule
 				String paymentRule = rs.getString(isSOTrx ? I_C_BPartner.COLUMNNAME_PaymentRule : I_C_BPartner.COLUMNNAME_PaymentRulePO);
 
-				if (!Check.isEmpty(paymentRule))
+				final I_C_DocType docType = invoice.getC_DocType();
+
+				// if there is no doctype set yet, the payment rule will also not be set.
+				if (docType != null && (!Check.isEmpty(paymentRule)))
 				{
 					final String docBaseType = invoice.getC_DocType().getDocBaseType();
 
@@ -374,13 +377,13 @@ public class CalloutInvoice extends CalloutEngine
 		final de.metas.adempiere.model.I_C_InvoiceLine invoiceLine = calloutField.getModel(de.metas.adempiere.model.I_C_InvoiceLine.class);
 
 		final I_M_Product product = invoiceLine.getM_Product();
-		final int productID = product.getM_Product_ID();
 
-		if (productID <= 0)
+		if (product == null)
 		{
-			// nothing to do
+			// The product was not yet set. Nothing to do
 			return NO_ERROR;
 		}
+		final int productID = product.getM_Product_ID();
 
 		// a line with product does not have charge
 		invoiceLine.setC_Charge_ID(-1);
@@ -642,6 +645,12 @@ public class CalloutInvoice extends CalloutEngine
 
 		// log.warn("amt - init");
 		final I_C_UOM uomTo = invoiceLine.getPrice_UOM();
+
+		if (uomTo == null)
+		{
+			// if the price UOM was not yet set, nothing to do
+			return NO_ERROR;
+		}
 		final int uomToID = uomTo.getC_UOM_ID(); // 07216 : We convert to the price UOM.
 
 		final I_M_Product product = invoiceLine.getM_Product();
@@ -661,7 +670,7 @@ public class CalloutInvoice extends CalloutEngine
 
 		BigDecimal priceEntered = invoiceLine.getPriceEntered();
 		BigDecimal priceActual = invoiceLine.getPriceActual();
-		// final BigDecimal Discount = invoiceLine.getDiscount();
+		//BigDecimal Discount = invoiceLine.getDiscount();
 		BigDecimal priceLimit = invoiceLine.getPriceLimit();
 		BigDecimal priceList = invoiceLine.getPriceList();
 
