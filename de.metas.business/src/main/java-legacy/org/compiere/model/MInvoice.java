@@ -136,7 +136,7 @@ public class MInvoice extends X_C_Invoice implements DocAction
 		// ts: 04054: moving copyFrom business logic to the implementors of IInvoiceBL
 		// NOTE: the old crap is deleted from here.... search it in SCM history
 		final I_C_Invoice to = Services.get(IInvoiceBL.class).copyFrom(from, dateDoc, C_DocTypeTarget_ID, isSOTrx, counter, setOrder,
-				false,  // setInvoiceRef == false
+				false,   // setInvoiceRef == false
 				true); // copyLines == true
 
 		// Make sure DateAcct is set (08356)
@@ -454,7 +454,7 @@ public class MInvoice extends X_C_Invoice implements DocAction
 
 		// Set Contact
 		MUser[] contacts = bp.getContacts(false);
-		if (contacts != null && contacts.length > 0) 	// get first User
+		if (contacts != null && contacts.length > 0)  	// get first User
 		{
 			setAD_User_ID(contacts[0].getAD_User_ID());
 		}
@@ -801,7 +801,9 @@ public class MInvoice extends X_C_Invoice implements DocAction
 	 * Validate Invoice Pay Schedule
 	 *
 	 * @return pay schedule is valid
+	 * @deprecated Please, use {@link de.metas.payment.api.IInvoicePayScheduleBL}
 	 */
+	@Deprecated
 	public boolean validatePaySchedule()
 	{
 		MInvoicePaySchedule[] schedule = MInvoicePaySchedule.getInvoicePaySchedule(getCtx(), getC_Invoice_ID(), 0, get_TrxName());
@@ -1344,7 +1346,7 @@ public class MInvoice extends X_C_Invoice implements DocAction
 
 		// explodeBOM(); // task 09030: we don't really want to explode the BOM, least of all this uncontrolled way after invoice-candidates-way.
 
-		if (!calculateTaxTotal()) 	// setTotals
+		if (!calculateTaxTotal())  	// setTotals
 		{
 			m_processMsg = "Error calculating Tax";
 			return DocAction.STATUS_Invalid;
@@ -1704,7 +1706,7 @@ public class MInvoice extends X_C_Invoice implements DocAction
 			}
 			info.append("@C_Cash_ID@: " + cash.getName() + " #" + cl.getLine());
 			setC_CashLine_ID(cl.getC_CashLine_ID());
-		} 	// CashBook
+		}  	// CashBook
 
 		// Update Order & Match
 		int matchInv = 0;
@@ -1788,7 +1790,7 @@ public class MInvoice extends X_C_Invoice implements DocAction
 					matchInv++;
 				}
 			}
-		} 	// for all lines
+		}  	// for all lines
 		if (matchInv > 0)
 		{
 			info.append(" @M_MatchInv_ID@#").append(matchInv).append(" ");
@@ -1802,7 +1804,7 @@ public class MInvoice extends X_C_Invoice implements DocAction
 		// Update total revenue and balance / credit limit (reversed on AllocationLine.processIt)
 		final BigDecimal invAmt = Services.get(ICurrencyBL.class).convertBase(
 				getCtx(),
-				getGrandTotal(true), 	// CM adjusted
+				getGrandTotal(true),  	// CM adjusted
 				getC_Currency_ID(),
 				getDateAcct(),
 				getC_ConversionType_ID(),
@@ -1858,7 +1860,7 @@ public class MInvoice extends X_C_Invoice implements DocAction
 				m_processMsg = "Could not update Project";
 				return DocAction.STATUS_Invalid;
 			}
-		} 	// project
+		}  	// project
 
 		// User Validation
 		String valid = ModelValidationEngine.get().fireDocValidate(this, ModelValidator.TIMING_AFTER_COMPLETE);
