@@ -1,5 +1,7 @@
 package de.metas.payment.api.impl;
 
+import java.util.List;
+
 import org.adempiere.ad.dao.IQueryBL;
 import org.adempiere.util.Services;
 import org.compiere.model.I_C_Invoice;
@@ -39,6 +41,29 @@ public class InvoicePayScheduleDAO implements IInvoicePayScheduleDAO
 				.create()
 				.delete();
 
-	}	// deleteInvoicePaySchedule
+	}
 
+	@Override
+	public List<I_C_InvoicePaySchedule> retrievePaySchedulesForInvoice(final I_C_Invoice invoice)
+	{
+		return Services.get(IQueryBL.class).createQueryBuilder(I_C_InvoicePaySchedule.class, invoice)
+				.addEqualsFilter(I_C_InvoicePaySchedule.COLUMNNAME_C_Invoice_ID, invoice.getC_Invoice_ID())
+				.orderBy()
+				.addColumn(I_C_InvoicePaySchedule.COLUMNNAME_DueDate)
+				.endOrderBy()
+				.create()
+				.list();
+	}
+
+	@Override
+	public List<I_C_InvoicePaySchedule> retrievePaySchedulesForID(final I_C_InvoicePaySchedule paySchedule)
+	{
+		return Services.get(IQueryBL.class).createQueryBuilder(I_C_InvoicePaySchedule.class, paySchedule)
+				.addEqualsFilter(I_C_InvoicePaySchedule.COLUMNNAME_C_InvoicePaySchedule_ID, paySchedule.getC_InvoicePaySchedule_ID())
+				.orderBy()
+				.addColumn(I_C_InvoicePaySchedule.COLUMNNAME_DueDate)
+				.endOrderBy()
+				.create()
+				.list();
+	}
 }

@@ -1,10 +1,9 @@
 package de.metas.payment.api;
 
-import java.util.List;
-
 import org.adempiere.util.ISingletonService;
 import org.compiere.model.I_C_Invoice;
 import org.compiere.model.I_C_InvoicePaySchedule;
+import org.compiere.model.I_C_PaySchedule;
 
 /*
  * #%L
@@ -28,31 +27,24 @@ import org.compiere.model.I_C_InvoicePaySchedule;
  * #L%
  */
 
-public interface IInvoicePayScheduleDAO extends ISingletonService
+public interface IInvoicePayScheduleBL extends ISingletonService
 {
 
 	/**
-	 * Delete existing Invoice Payment Schedule of the given invoice
+	 * Create an invoicePaySchedule based on the given invoice and paySchedule.
+	 * DO not save the entry.
 	 * 
 	 * @param invoice
-	 */
-	void deleteInvoicePaySchedule(final I_C_Invoice invoice);
-
-	/**
-	 * Warning: this method is not natural but I put it here for legacy.
-	 * Retrieve list of invoicePaySchedule entries for the given paySchedule
-	 * 
 	 * @param paySchedule
 	 * @return
 	 */
-	List<I_C_InvoicePaySchedule> retrievePaySchedulesForID(I_C_InvoicePaySchedule paySchedule);
+	I_C_InvoicePaySchedule createInvoicePaySchedule(I_C_Invoice invoice, I_C_PaySchedule paySchedule);
 
 	/**
-	 * Retrieve list of invoicePaySchedule entries for the given invoice
 	 * 
 	 * @param invoice
-	 * @return
+	 * @return true if pay schedule is valid, false otherwise
 	 */
-	List<I_C_InvoicePaySchedule> retrievePaySchedulesForInvoice(I_C_Invoice invoice);
+	boolean validatePaySchedule(I_C_Invoice invoice);
 
 }
