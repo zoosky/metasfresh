@@ -3,6 +3,7 @@ package de.metas.payment.api.impl;
 import java.math.BigDecimal;
 import java.util.List;
 
+import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.util.Check;
 import org.adempiere.util.Services;
 import org.compiere.model.I_C_Invoice;
@@ -10,6 +11,7 @@ import org.compiere.model.I_C_InvoicePaySchedule;
 import org.compiere.model.I_C_PaySchedule;
 import org.compiere.model.I_C_PaymentTerm;
 
+import de.metas.payment.api.IInvoicePayScheduleBL;
 import de.metas.payment.api.IInvoicePayScheduleDAO;
 import de.metas.payment.api.IPayScheduleDAO;
 import de.metas.payment.api.IPaymentTermBL;
@@ -66,10 +68,8 @@ public class PaymentTermBL implements IPaymentTermBL
 
 		else
 		{
-			//TODO
-			//return applySchedule(invoice);
+			return applySchedule(invoice, paymentTerm);
 		}
-		return false;
 
 	}
 
@@ -105,40 +105,43 @@ public class PaymentTermBL implements IPaymentTermBL
 	 */
 	private boolean applySchedule(final I_C_Invoice invoice, final I_C_PaymentTerm paymentTerm)
 	{
+		final IInvoicePayScheduleBL invoicePayScheduleBL = Services.get(IInvoicePayScheduleBL.class);
+
 		Services.get(IInvoicePayScheduleDAO.class).deleteInvoicePaySchedule(invoice);
 
-		I_C_InvoicePaySchedule ips = null;
-		// Create Schedule
+		I_C_InvoicePaySchedule invoicePaySchedule = null;
 
 		BigDecimal remainder = invoice.getGrandTotal();
 
 		final List<I_C_PaySchedule> payScheduleForPaymentTerm = Services.get(IPayScheduleDAO.class).retrievePayScheduleForPaymentTerm(paymentTerm);
 
-		for(final I_C_PaySchedule paySchedule : payScheduleForPaymentTerm)
+		for (final I_C_PaySchedule paySchedule : payScheduleForPaymentTerm)
 		{
-			// TODO
+			invoicePaySchedule = invoicePayScheduleBL.createInvoicePaySchedule(invoice, paySchedule);
+		
+			InterfaceWrapperHelper.save(invoicePaySchedule);
+
+			remainder = remainder.subtract(invoicePaySchedule.getDueAmt());
+
 		}
-		//TODO
-//		for (int i = 0; i < m_schedule.length; i++)
-//		{
-//			ips = new MInvoicePaySchedule(invoice, m_schedule[i]);
-//			ips.save(invoice.get_TrxName());
-//			log.debug(ips.toString());
-//			remainder = remainder.subtract(ips.getDueAmt());
-//		}  	// for all schedules
-//		// Remainder - update last
-//		if (remainder.compareTo(Env.ZERO) != 0 && ips != null)
-//		{
-//			ips.setDueAmt(ips.getDueAmt().add(remainder));
-//			ips.save(invoice.get_TrxName());
-//			log.debug("Remainder=" + remainder + " - " + ips);
-//		}
-//
-//		// updateInvoice
-//		if (invoice.getC_PaymentTerm_ID() != getC_PaymentTerm_ID())
-//			invoice.setC_PaymentTerm_ID(getC_PaymentTerm_ID());
-	//	return invoice.validatePaySchedule();
-		return false;
+
+		if (remainder.signum() != 0 && invoicePaySchedule != null)
+		{
+			invoicePaySchedule.setDueAmt(invoicePaySchedule.getDueAmt().add(remainder));
+			InterfaceWrapperHelper.save(invoicePaySchedule);
+
+		}
+
+		// updateInvoice
+		final int paymentTermID = paymentTerm.getC_PaymentTerm_ID();
+
+		if (invoice.getC_PaymentTerm_ID() != paymentTermID)
+		{
+			invoice.setC_PaymentTerm_ID(paymentTermID);
+		}
+
+		return Services.get(IInvoicePayScheduleBL.class).validatePaySchedule(invoice);
+
 	}	// applySchedule
 
 }
