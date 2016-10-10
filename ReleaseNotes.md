@@ -10,7 +10,22 @@ Additional notes:
 
 Here come the actual release notes:
 
-# metasfresh 4.38.36 (2016-40)
+# metasfresh 4.39.38 (2016-41)
+
+upcoming
+
+## Features
+* #388 make M_ReceiptSchedule.IsPackagingMaterial a physical column
+* #418 Improve sales and purchase tracking reports
+* #443 Add is to be sent as email to doc outbound log
+
+## Fixes
+* #448 Rounding issue with partical credit memos
+* #428 NPE when reversing an invoice including a product with inactive UOM conversion
+* #270 Purchase Order from Sales Order Process wrong Aggregation
+* #433 C_Order copy with details: Packing Instructions are not copied
+
+# metasfresh 4.38.37 (2016-40)
 
 this week's RC
 
@@ -19,6 +34,11 @@ this week's RC
    - Added a new row in to allow the display of optional line text in further invoices
 
 ## Fixes
+ * #451 OCRB not available in JVM but needed for ESR page
+ * #431 QtyTU does not update in wareneingang pos
+ * #436 Single lookup/list value for mandatory field is not automatically set
+ * #454 barcode field is reset after 500ms
+ * #455 autocomplete in non-generic fields not working anymore
 
 # metasfresh 4.37.36 (2016-39)
 
