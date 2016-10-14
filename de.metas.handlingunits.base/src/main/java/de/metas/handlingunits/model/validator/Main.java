@@ -172,7 +172,7 @@ public final class Main extends AbstractModuleInterceptor
 		Services.registerService(IShipmentScheduleInvalidateBL.class, new HUShipmentScheduleInvalidateBL());
 
 		// invoice line callout
-		programaticCalloutProvider.registerAnnotatedCallout(de.metas.handlingunits.callout.C_InvoiceLine.instance);
+		//programaticCalloutProvider.registerAnnotatedCallout(de.metas.handlingunits.callout.C_InvoiceLine.instance);
 
 		//
 		// Manufacturing

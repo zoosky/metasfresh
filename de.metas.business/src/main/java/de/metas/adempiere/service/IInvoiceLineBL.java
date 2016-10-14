@@ -97,5 +97,10 @@ public interface IInvoiceLineBL extends ISingletonService
 	 */
 	void updateLineNetAmt(I_C_InvoiceLine line, BigDecimal qtyEntered);
 
+	/**
+	 * Update prices based on the pricing engine
+	 * 
+	 * @param invoiceLine
+	 */
 	void updatePrices(I_C_InvoiceLine invoiceLine);
 }

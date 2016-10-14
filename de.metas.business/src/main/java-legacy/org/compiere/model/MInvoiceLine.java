@@ -238,7 +238,9 @@ public class MInvoiceLine extends X_C_InvoiceLine
 		setDescription(oLine.getDescription());
 		//
 		if (oLine.getM_Product_ID() == 0)
+		{
 			setC_Charge_ID(oLine.getC_Charge_ID());
+		}
 		//
 		setM_Product_ID(oLine.getM_Product_ID());
 		setM_AttributeSetInstance_ID(oLine.getM_AttributeSetInstance_ID());

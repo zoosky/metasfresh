@@ -176,7 +176,7 @@ public class InvoiceLineBL implements IInvoiceLineBL
 		final IPriceListDAO priceListDAO = Services.get(IPriceListDAO.class);
 		final Boolean processedPLVFiltering = null; // task 09533: the user doesn't know about PLV's processed flag, so we can't filter by it
 
-		if (invoice.getM_PriceList_ID() != 100)  // FIXME use PriceList_None constant
+		if (invoice.getM_PriceList_ID() != 100)   // FIXME use PriceList_None constant
 		{
 			final I_M_PriceList priceList = invoice.getM_PriceList();
 
@@ -374,14 +374,30 @@ public class InvoiceLineBL implements IInvoiceLineBL
 
 		//
 		// Discount
+		//
+		// Discount
+		// NOTE: Subscription prices do not work with Purchase Orders.
+		if (pricingCtx.isSOTrx())
+		{
+			// FIXME: This should be fixed in the task #346
 
-		invoiceLine.setDiscount(pricingResult.getDiscount());
+			if (!invoiceLine.isManualPrice())
+			{
+				// Override discount only if is not manual
+				// Note: only the sales order widnow has the field 'isManualDiscount'
+				invoiceLine.setDiscount(pricingResult.getDiscount());
+			}
+		}
+		else
+		{
+			invoiceLine.setDiscount(pricingResult.getDiscount());
+		}
 
 		//
 		// Calculate PriceActual from PriceEntered and Discount
 		calculatePriceActual(invoiceLine, pricingResult.getPrecision());
 
-		invoiceLine.setPrice_UOM_ID(pricingResult.getPrice_UOM_ID()); //
+		//
 
 	}
 
