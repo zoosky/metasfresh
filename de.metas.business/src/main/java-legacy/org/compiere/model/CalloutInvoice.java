@@ -17,7 +17,6 @@
 package org.compiere.model;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -25,7 +24,6 @@ import java.sql.Timestamp;
 import java.util.Properties;
 
 import org.adempiere.ad.callout.api.ICalloutField;
-import org.adempiere.ad.security.IUserRolePermissions;
 import org.adempiere.ad.trx.api.ITrx;
 import org.adempiere.exceptions.AdempiereException;
 import org.adempiere.invoice.service.IInvoiceBL;
@@ -36,7 +34,6 @@ import org.adempiere.util.Check;
 import org.adempiere.util.Services;
 import org.compiere.util.DB;
 import org.compiere.util.DisplayType;
-import org.compiere.util.Env;
 
 import de.metas.adempiere.service.IInvoiceLineBL;
 import de.metas.document.documentNo.IDocumentNoBuilderFactory;
@@ -44,7 +41,6 @@ import de.metas.document.documentNo.impl.IDocumentNoInfo;
 import de.metas.logging.MetasfreshLastError;
 import de.metas.payment.api.IPaymentTermBL;
 import de.metas.product.IProductBL;
-import de.metas.tax.api.ITaxBL;
 
 /**
  * Invoice Callouts
@@ -627,7 +623,9 @@ public class CalloutInvoice extends CalloutEngine
 	 */
 	public String amt(final ICalloutField calloutField)
 	{
-		final Object value = calloutField.getValue();
+		return NO_ERROR;
+		
+	/*	final Object value = calloutField.getValue();
 		if (isCalloutActive() || value == null)
 		{
 			return NO_ERROR;
@@ -777,34 +775,35 @@ public class CalloutInvoice extends CalloutEngine
 			invoiceLine.setPriceActual(priceActual);
 		}
 
+		
+		 // Discount entered - Calculate Actual/Entered
 		/*
-		 * Discount entered - Calculate Actual/Entered
-		 * if (columnName.equals("Discount"))
-		 * {
-		 * PriceActual = new BigDecimal ((100.0 - Discount.doubleValue()) / 100.0 * PriceList.doubleValue());
-		 * if (PriceActual.scale() > StdPrecision)
-		 * PriceActual = PriceActual.setScale(StdPrecision, BigDecimal.ROUND_HALF_UP);
-		 * PriceEntered = MUOMConversion.convertProductFrom (ctx, M_Product_ID,
-		 * C_UOM_To_ID, PriceActual);
-		 * if (PriceEntered == null)
-		 * PriceEntered = PriceActual;
-		 * mTab.setValue("PriceActual", PriceActual);
-		 * mTab.setValue("PriceEntered", PriceEntered);
-		 * }
-		 * // calculate Discount
-		 * else
-		 * {
-		 * if (PriceList.intValue() == 0)
-		 * Discount = Env.ZERO;
-		 * else
-		 * Discount = new BigDecimal ((PriceList.doubleValue() - PriceActual.doubleValue()) / PriceList.doubleValue() * 100.0);
-		 * if (Discount.scale() > 2)
-		 * Discount = Discount.setScale(2, BigDecimal.ROUND_HALF_UP);
-		 * mTab.setValue("Discount", Discount);
-		 * }
-		 * log.debug("amt = PriceEntered=" + PriceEntered + ", Actual" + PriceActual + ", Discount=" + Discount);
-		 * /*
-		 */
+		  if (columnName.equals("Discount"))
+		  {
+		  PriceActual = new BigDecimal ((100.0 - Discount.doubleValue()) / 100.0 * PriceList.doubleValue());
+		  if (PriceActual.scale() > StdPrecision)
+		  PriceActual = PriceActual.setScale(StdPrecision, BigDecimal.ROUND_HALF_UP);
+		  PriceEntered = MUOMConversion.convertProductFrom (ctx, M_Product_ID,
+		  C_UOM_To_ID, PriceActual);
+		  if (PriceEntered == null)
+		  PriceEntered = PriceActual;
+		  mTab.setValue("PriceActual", PriceActual);
+		  mTab.setValue("PriceEntered", PriceEntered);
+		  }
+		  // calculate Discount
+		  else
+		  {
+		  if (PriceList.intValue() == 0)
+		  Discount = Env.ZERO;
+		  else
+		  Discount = new BigDecimal ((PriceList.doubleValue() - PriceActual.doubleValue()) / PriceList.doubleValue() * 100.0);
+		  if (Discount.scale() > 2)
+		  Discount = Discount.setScale(2, BigDecimal.ROUND_HALF_UP);
+		  mTab.setValue("Discount", Discount);
+		  }
+		  log.debug("amt = PriceEntered=" + PriceEntered + ", Actual" + PriceActual + ", Discount=" + Discount);
+		 
+		
 
 		// Check PriceLimit
 		final boolean enforcePriceLimit = calloutField.getContextAsBoolean(CTX_EnforcePriceLimit);
@@ -883,6 +882,7 @@ public class CalloutInvoice extends CalloutEngine
 		}
 
 		return "";
+		*/
 	}	// amt
 
 	/**

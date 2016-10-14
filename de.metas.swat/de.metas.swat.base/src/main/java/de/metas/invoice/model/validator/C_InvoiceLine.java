@@ -30,10 +30,8 @@ import org.adempiere.ad.modelvalidator.annotations.Init;
 import org.adempiere.ad.modelvalidator.annotations.ModelChange;
 import org.adempiere.ad.modelvalidator.annotations.Validator;
 import org.adempiere.invoice.service.IInvoiceBL;
-import org.adempiere.mm.attributes.api.IAttributeSetInstanceBL;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.util.Services;
-import org.compiere.model.I_C_OrderLine;
 import org.compiere.model.I_M_Product;
 import org.compiere.model.I_M_Product_Acct;
 import org.compiere.model.ModelValidator;
@@ -45,7 +43,7 @@ import de.metas.adempiere.service.IInvoiceLineBL;
 import de.metas.product.acct.api.IProductAcctDAO;
 
 @Validator(I_C_InvoiceLine.class)
-@Callout(I_C_InvoiceLine.class)
+@Callout(value = I_C_InvoiceLine.class, recursionAvoidanceLevel = Callout.RecursionAvoidanceLevel.CalloutMethod)
 public class C_InvoiceLine
 {
 	@Init
@@ -82,37 +80,9 @@ public class C_InvoiceLine
 	@ModelChange(timings = { ModelValidator.TYPE_BEFORE_CHANGE, ModelValidator.TYPE_BEFORE_NEW }, ifColumnsChanged = I_C_InvoiceLine.COLUMNNAME_C_OrderLine_ID)
 	public void onOrderLineSet(final I_C_InvoiceLine invoiceLine)
 	{
-		final I_C_OrderLine orderLine = invoiceLine.getC_OrderLine();
-
-		if (orderLine == null)
-		{
-			// set the product to null if the orderline was set to null
-			invoiceLine.setM_Product(null);
-
-			// in case the c_orderline_id is removed, make sure the ASI is also removed. The user can set it manually
-			invoiceLine.setM_AttributeSetInstance_ID(-1);
-
-			// in case the c_orderline_id is removed, make sure the flag is on false. The user can set it on true, manually
-			invoiceLine.setIsPackagingMaterial(false);
-
-			return;
-		}
-
-		// set the product
-		final I_M_Product product = orderLine.getM_Product();
-
-		invoiceLine.setM_Product(product);
-
-		// set the attribute set instance
-
-		Services.get(IAttributeSetInstanceBL.class).cloneASI(invoiceLine, orderLine);
-
-		// set isPackagingMaterial
-		final de.metas.interfaces.I_C_OrderLine ol = InterfaceWrapperHelper.create(invoiceLine.getC_OrderLine(), de.metas.interfaces.I_C_OrderLine.class);
-
-		invoiceLine.setIsPackagingMaterial(ol.isPackagingMaterial());
+		Services.get(IInvoiceLineBL.class).updateFromOrderLine(invoiceLine);
 	}
-	
+
 	@CalloutMethod(columnNames = { I_C_InvoiceLine.COLUMNNAME_C_Order_ID })
 	@ModelChange(timings = { ModelValidator.TYPE_BEFORE_CHANGE, ModelValidator.TYPE_BEFORE_NEW }, ifColumnsChanged = I_C_InvoiceLine.COLUMNNAME_C_Order_ID)
 	public void onOrderSet(final I_C_InvoiceLine invoiceLine)
@@ -183,6 +153,19 @@ public class C_InvoiceLine
 	@ModelChange(timings = { ModelValidator.TYPE_BEFORE_NEW, ModelValidator.TYPE_BEFORE_CHANGE }, ifColumnsChanged = { I_C_InvoiceLine.COLUMNNAME_M_AttributeSetInstance_ID })
 	public void onASIChange(final I_C_InvoiceLine invoiceLine)
 	{
-		Services.get(IInvoiceLineBL.class).updatePrices(invoiceLine);
+		// only update the prices if the orderline is not set
+		// in case the orderline is set, kepp the prices from there
+
+		if (invoiceLine.getC_OrderLine() == null)
+		{
+			Services.get(IInvoiceLineBL.class).updatePrices(invoiceLine);
+		}
+	}
+
+	@CalloutMethod(columnNames = { I_C_InvoiceLine.COLUMNNAME_PriceEntered, I_C_InvoiceLine.COLUMNNAME_Discount })
+	@ModelChange(timings = { ModelValidator.TYPE_BEFORE_NEW, ModelValidator.TYPE_BEFORE_CHANGE }, ifColumnsChanged = { I_C_InvoiceLine.COLUMNNAME_PriceEntered, I_C_InvoiceLine.COLUMNNAME_Discount })
+	public void onManualPrice(final I_C_InvoiceLine invoiceLine)
+	{
+		Services.get(IInvoiceLineBL.class).updateManualPrices(invoiceLine);
 	}
 }

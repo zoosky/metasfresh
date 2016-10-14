@@ -111,19 +111,6 @@ public class C_InvoiceLine
 		Services.get(IInvoiceLineBL.class).updateLineNetAmt(invoiceLine, invoiceLine.getQtyEntered());
 	}
 
-	@ModelChange(timings = {
-			ModelValidator.TYPE_BEFORE_NEW,
-			ModelValidator.TYPE_BEFORE_CHANGE }, ifColumnsChanged = { I_C_InvoiceLine.COLUMNNAME_M_HU_PI_Item_Product_ID
-
-	})
-	@CalloutMethod(columnNames = { I_C_InvoiceLine.COLUMNNAME_M_HU_PI_Item_Product_ID })
-	public void onHUPIIPChange(final I_C_InvoiceLine invoiceLine)
-	{
-		final IInvoiceLineBL invoiceLineBL = Services.get(IInvoiceLineBL.class);
-
-		invoiceLineBL.updatePrices(invoiceLine);
-
-		invoiceLineBL.updateLineNetAmt(invoiceLine, invoiceLine.getQtyEntered());
-	}
+	
 
 }

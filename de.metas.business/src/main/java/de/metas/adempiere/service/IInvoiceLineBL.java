@@ -103,4 +103,20 @@ public interface IInvoiceLineBL extends ISingletonService
 	 * @param invoiceLine
 	 */
 	void updatePrices(I_C_InvoiceLine invoiceLine);
+
+	/**
+	 * Update the prices according to manual modifications
+	 * 
+	 * @param invoiceLine
+	 */
+	void updateManualPrices(I_C_InvoiceLine invoiceLine);
+
+	/**
+	 * Update the invoiceline with the details from its set order line
+	 * In case the orderline is null, remove the details.
+	 * This method will be used only on orderline setting and removing
+	 * 
+	 * @param invoiceLine
+	 */
+	void updateFromOrderLine(I_C_InvoiceLine invoiceLine);
 }

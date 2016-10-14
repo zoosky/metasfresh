@@ -30,6 +30,7 @@ import java.util.Properties;
 import org.adempiere.exceptions.AdempiereException;
 import org.adempiere.exceptions.TaxNotFoundException;
 import org.adempiere.invoice.service.IInvoiceBL;
+import org.adempiere.mm.attributes.api.IAttributeSetInstanceBL;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.pricing.api.IEditablePricingContext;
 import org.adempiere.pricing.api.IPriceListDAO;
@@ -43,6 +44,7 @@ import org.adempiere.warehouse.api.IWarehouseBL;
 import org.compiere.model.I_C_Invoice;
 import org.compiere.model.I_C_Location;
 import org.compiere.model.I_C_Order;
+import org.compiere.model.I_C_OrderLine;
 import org.compiere.model.I_C_Tax;
 import org.compiere.model.I_C_UOM;
 import org.compiere.model.I_M_InOut;
@@ -176,7 +178,7 @@ public class InvoiceLineBL implements IInvoiceLineBL
 		final IPriceListDAO priceListDAO = Services.get(IPriceListDAO.class);
 		final Boolean processedPLVFiltering = null; // task 09533: the user doesn't know about PLV's processed flag, so we can't filter by it
 
-		if (invoice.getM_PriceList_ID() != 100)   // FIXME use PriceList_None constant
+		if (invoice.getM_PriceList_ID() != 100)      // FIXME use PriceList_None constant
 		{
 			final I_M_PriceList priceList = invoice.getM_PriceList();
 
@@ -355,6 +357,8 @@ public class InvoiceLineBL implements IInvoiceLineBL
 			return;
 		}
 
+		// check
+
 		final IPricingResult pricingResult = Services.get(IPricingBL.class).calculatePrice(pricingCtx);
 		if (!pricingResult.isCalculated())
 		{
@@ -369,35 +373,29 @@ public class InvoiceLineBL implements IInvoiceLineBL
 		invoiceLine.setPriceLimit(pricingResult.getPriceLimit());
 		invoiceLine.setPrice_UOM_ID(pricingResult.getPrice_UOM_ID());
 
+		System.out.println(pricingResult.getPriceStd());
 		invoiceLine.setPriceEntered(pricingResult.getPriceStd());
 		invoiceLine.setPriceActual(pricingResult.getPriceStd());
 
 		//
 		// Discount
-		//
-		// Discount
-		// NOTE: Subscription prices do not work with Purchase Orders.
-		if (pricingCtx.isSOTrx())
-		{
-			// FIXME: This should be fixed in the task #346
 
-			if (!invoiceLine.isManualPrice())
-			{
-				// Override discount only if is not manual
-				// Note: only the sales order widnow has the field 'isManualDiscount'
-				invoiceLine.setDiscount(pricingResult.getDiscount());
-			}
-		}
-		else
-		{
-			invoiceLine.setDiscount(pricingResult.getDiscount());
-		}
+		invoiceLine.setDiscount(pricingResult.getDiscount());
 
 		//
 		// Calculate PriceActual from PriceEntered and Discount
 		calculatePriceActual(invoiceLine, pricingResult.getPrecision());
 
-		//
+		invoiceLine.setPrice_UOM_ID(pricingResult.getPrice_UOM_ID()); //
+
+	}
+
+	@Override
+	public void updateManualPrices(final I_C_InvoiceLine invoiceLine)
+	{
+		final int precision = Services.get(IInvoiceBL.class).getPrecision(invoiceLine);
+
+		calculatePriceActual(invoiceLine, precision);
 
 	}
 
@@ -438,5 +436,63 @@ public class InvoiceLineBL implements IInvoiceLineBL
 
 		final BigDecimal result = baseAmount.multiply(multiplier).setScale(precision, RoundingMode.HALF_UP);
 		return result;
+	}
+
+	@Override
+	public void updateFromOrderLine(final I_C_InvoiceLine invoiceLine)
+	{
+		final I_C_OrderLine orderLine = invoiceLine.getC_OrderLine();
+
+		// instance from interfaces. Needed for PriceUOM, IsPackingMaterial
+		final de.metas.interfaces.I_C_OrderLine ol = InterfaceWrapperHelper.create(invoiceLine.getC_OrderLine(), de.metas.interfaces.I_C_OrderLine.class);
+
+		if (orderLine == null)
+		{
+			// set the product to null if the orderline was set to null
+			invoiceLine.setM_Product(null);
+
+			// in case the c_orderline_id is removed, make sure the ASI is also removed. The user can set it manually
+			invoiceLine.setM_AttributeSetInstance_ID(-1);
+
+			// in case the c_orderline_id is removed, make sure the flag is on false. The user can set it on true, manually
+			invoiceLine.setIsPackagingMaterial(false);
+
+			// remove uoms
+			invoiceLine.setPrice_UOM(null);
+			
+
+			// also remove prices
+			invoiceLine.setPriceEntered(BigDecimal.ZERO);
+			invoiceLine.setPriceLimit(BigDecimal.ZERO);
+			invoiceLine.setPriceList(BigDecimal.ZERO);
+
+			// remove qty
+			invoiceLine.setQtyEntered(BigDecimal.ZERO);
+
+			return;
+		}
+
+		// set the product
+		final I_M_Product product = orderLine.getM_Product();
+
+		invoiceLine.setM_Product(product);
+		
+		//setQtys
+		invoiceLine.setQtyEntered(ol.getQtyEntered());
+		
+		// set uoms
+		invoiceLine.setPrice_UOM(ol.getPrice_UOM());
+
+		// also set prices
+		invoiceLine.setPriceEntered(ol.getPriceEntered());
+		invoiceLine.setPriceLimit(ol.getPriceLimit());
+		invoiceLine.setPriceList(ol.getPriceList());
+
+		// set the attribute set instance
+
+		Services.get(IAttributeSetInstanceBL.class).cloneASI(invoiceLine, orderLine);
+
+		// set isPackagingMaterial
+		invoiceLine.setIsPackagingMaterial(ol.isPackagingMaterial());
 	}
 }
