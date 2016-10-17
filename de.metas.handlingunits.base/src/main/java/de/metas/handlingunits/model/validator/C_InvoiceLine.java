@@ -31,6 +31,7 @@ import org.adempiere.ad.modelvalidator.annotations.ModelChange;
 import org.adempiere.ad.modelvalidator.annotations.Validator;
 import org.adempiere.model.InterfaceWrapperHelper;
 import org.adempiere.util.Services;
+import org.compiere.model.I_C_UOM;
 import org.compiere.model.ModelValidator;
 
 import de.metas.adempiere.gui.search.IHUPackingAware;
@@ -103,14 +104,20 @@ public class C_InvoiceLine
 	@CalloutMethod(columnNames = { I_C_InvoiceLine.COLUMNNAME_QtyEnteredTU, I_C_InvoiceLine.COLUMNNAME_M_HU_PI_Item_Product_ID })
 	public void onQtyEnteredChange(final I_C_InvoiceLine invoiceLine)
 	{
+
 		final IHUPackingAware packingAware = new InvoiceLineHUPackingAware(invoiceLine);
 		final Integer qtyPacks = packingAware.getQtyPacks().intValue();
+
+		// make sure the packingAware object has the correct current UOM
+		// useful for callout
+		final I_C_UOM uom = invoiceLine.getC_UOM();
+
+		packingAware.setC_UOM(uom);
+
 		Services.get(IHUPackingAwareBL.class).setQty(packingAware, qtyPacks);
 
 		// Update lineNetAmt, because QtyEnteredCU changed : see task 06727
 		Services.get(IInvoiceLineBL.class).updateLineNetAmt(invoiceLine, invoiceLine.getQtyEntered());
 	}
-
-	
 
 }

@@ -373,7 +373,6 @@ public class InvoiceLineBL implements IInvoiceLineBL
 		invoiceLine.setPriceLimit(pricingResult.getPriceLimit());
 		invoiceLine.setPrice_UOM_ID(pricingResult.getPrice_UOM_ID());
 
-		System.out.println(pricingResult.getPriceStd());
 		invoiceLine.setPriceEntered(pricingResult.getPriceStd());
 		invoiceLine.setPriceActual(pricingResult.getPriceStd());
 
