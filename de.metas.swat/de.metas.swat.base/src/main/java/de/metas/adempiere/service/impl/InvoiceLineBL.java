@@ -178,7 +178,7 @@ public class InvoiceLineBL implements IInvoiceLineBL
 		final IPriceListDAO priceListDAO = Services.get(IPriceListDAO.class);
 		final Boolean processedPLVFiltering = null; // task 09533: the user doesn't know about PLV's processed flag, so we can't filter by it
 
-		if (invoice.getM_PriceList_ID() != 100)      // FIXME use PriceList_None constant
+		if (invoice.getM_PriceList_ID() != 100)            // FIXME use PriceList_None constant
 		{
 			final I_M_PriceList priceList = invoice.getM_PriceList();
 
@@ -313,6 +313,12 @@ public class InvoiceLineBL implements IInvoiceLineBL
 		{
 			final Properties ctx = InterfaceWrapperHelper.getCtx(line);
 			final I_C_Invoice invoice = line.getC_Invoice();
+
+			if (invoice == null)
+			{
+				// nothing to do
+				return;
+			}
 			final int priceListId = invoice.getM_PriceList_ID();
 
 			//
@@ -458,7 +464,6 @@ public class InvoiceLineBL implements IInvoiceLineBL
 
 			// remove uoms
 			invoiceLine.setPrice_UOM(null);
-			
 
 			// also remove prices
 			invoiceLine.setPriceEntered(BigDecimal.ZERO);
@@ -475,10 +480,10 @@ public class InvoiceLineBL implements IInvoiceLineBL
 		final I_M_Product product = orderLine.getM_Product();
 
 		invoiceLine.setM_Product(product);
-		
-		//setQtys
+
+		// setQtys
 		invoiceLine.setQtyEntered(ol.getQtyEntered());
-		
+
 		// set uoms
 		invoiceLine.setPrice_UOM(ol.getPrice_UOM());
 
@@ -493,5 +498,15 @@ public class InvoiceLineBL implements IInvoiceLineBL
 
 		// set isPackagingMaterial
 		invoiceLine.setIsPackagingMaterial(ol.isPackagingMaterial());
+
+		final Properties ctx = InterfaceWrapperHelper.getCtx(invoiceLine);
+		final String trxName = InterfaceWrapperHelper.getTrxName(invoiceLine);
+
+		// set taxes
+		setTax(ctx, invoiceLine, trxName);
+		setTaxAmtInfo(ctx, invoiceLine, trxName);
+
+		// set LineNetAmt
+		updateLineNetAmt(invoiceLine, ol.getQtyEntered());
 	}
 }

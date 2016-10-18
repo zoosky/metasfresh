@@ -110,7 +110,7 @@ public class C_InvoiceLine
 
 		// make sure the packingAware object has the correct current UOM
 		// useful for callout
-		final I_C_UOM uom = invoiceLine.getC_UOM();
+		final I_C_UOM uom = invoiceLine.getPrice_UOM();
 
 		packingAware.setC_UOM(uom);
 
