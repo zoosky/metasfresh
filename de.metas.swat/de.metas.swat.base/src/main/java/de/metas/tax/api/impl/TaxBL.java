@@ -510,7 +510,7 @@ public class TaxBL implements de.metas.tax.api.ITaxBL
 		// Null Tax
 		if (tax.getRate().signum() == 0)
 		{
-			return Env.ZERO;
+			return BigDecimal.ZERO;
 		}
 
 		BigDecimal multiplier = tax.getRate().divide(Env.ONEHUNDRED, 12, BigDecimal.ROUND_HALF_UP);

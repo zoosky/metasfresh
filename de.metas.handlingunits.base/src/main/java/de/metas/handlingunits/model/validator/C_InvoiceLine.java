@@ -98,11 +98,14 @@ public class C_InvoiceLine
 
 	@ModelChange(timings = {
 			ModelValidator.TYPE_BEFORE_NEW,
-			ModelValidator.TYPE_BEFORE_CHANGE }, ifColumnsChanged = { I_C_InvoiceLine.COLUMNNAME_QtyEnteredTU, I_C_InvoiceLine.COLUMNNAME_M_HU_PI_Item_Product_ID
+			ModelValidator.TYPE_BEFORE_CHANGE }, ifColumnsChanged = { 
+					I_C_InvoiceLine.COLUMNNAME_QtyEnteredTU, 
+					I_C_InvoiceLine.COLUMNNAME_M_HU_PI_Item_Product_ID,
+					I_C_InvoiceLine.COLUMNNAME_C_UOM_ID
 
 	})
-	@CalloutMethod(columnNames = { I_C_InvoiceLine.COLUMNNAME_QtyEnteredTU, I_C_InvoiceLine.COLUMNNAME_M_HU_PI_Item_Product_ID })
-	public void onQtyEnteredChange(final I_C_InvoiceLine invoiceLine)
+	@CalloutMethod(columnNames = { I_C_InvoiceLine.COLUMNNAME_QtyEnteredTU, I_C_InvoiceLine.COLUMNNAME_M_HU_PI_Item_Product_ID, I_C_InvoiceLine.COLUMNNAME_C_UOM_ID })
+	public void updateQuantities(final I_C_InvoiceLine invoiceLine)
 	{
 
 		final IHUPackingAware packingAware = new InvoiceLineHUPackingAware(invoiceLine);
@@ -110,14 +113,23 @@ public class C_InvoiceLine
 
 		// make sure the packingAware object has the correct current UOM
 		// useful for callout
-		final I_C_UOM uom = invoiceLine.getPrice_UOM();
+		I_C_UOM uom = invoiceLine.getPrice_UOM();
+		
+		if(uom == null)
+		{
+			uom = invoiceLine.getC_UOM();
+		}
+		
+		// do not recalculate before the unit of measure is set
+		if (uom != null)
+		{
+			packingAware.setC_UOM(uom);
 
-		packingAware.setC_UOM(uom);
+			Services.get(IHUPackingAwareBL.class).setQty(packingAware, qtyPacks);
 
-		Services.get(IHUPackingAwareBL.class).setQty(packingAware, qtyPacks);
-
-		// Update lineNetAmt, because QtyEnteredCU changed : see task 06727
-		Services.get(IInvoiceLineBL.class).updateLineNetAmt(invoiceLine, invoiceLine.getQtyEntered());
+			// Update lineNetAmt, because QtyEnteredCU changed : see task 06727
+			Services.get(IInvoiceLineBL.class).updateLineNetAmt(invoiceLine, invoiceLine.getQtyEntered());
+		}
 	}
 
 }

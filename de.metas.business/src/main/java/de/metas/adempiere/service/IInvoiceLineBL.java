@@ -105,7 +105,7 @@ public interface IInvoiceLineBL extends ISingletonService
 	void updatePrices(I_C_InvoiceLine invoiceLine);
 
 	/**
-	 * Update the prices according to manual modifications
+	 * Update the prices ( Price Actual only for the time being) according to manual modifications
 	 * 
 	 * @param invoiceLine
 	 */

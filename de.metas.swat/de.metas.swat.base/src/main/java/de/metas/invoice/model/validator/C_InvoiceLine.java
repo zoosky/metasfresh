@@ -85,6 +85,18 @@ public class C_InvoiceLine
 	@ModelChange(timings = { ModelValidator.TYPE_BEFORE_CHANGE, ModelValidator.TYPE_BEFORE_NEW }, ifColumnsChanged = I_C_InvoiceLine.COLUMNNAME_C_OrderLine_ID)
 	public void onOrderLineSet(final I_C_InvoiceLine invoiceLine)
 	{
+
+		if (invoiceLine.getC_OrderLine() == null)
+		{
+			final boolean justCreated = InterfaceWrapperHelper.isJustCreated(invoiceLine);
+
+			if (justCreated)
+			{
+				// do nothing. We don't want the other details removed in case the invoice line was created without an orderline. We need them only on order line removal
+				return;
+			}
+		}
+
 		Services.get(IInvoiceLineBL.class).updateFromOrderLine(invoiceLine);
 	}
 
@@ -141,10 +153,11 @@ public class C_InvoiceLine
 			return;
 		}
 
-		final IInvoiceLineBL invoiceLineBL = Services.get(IInvoiceLineBL.class);
+		//final IInvoiceLineBL invoiceLineBL = Services.get(IInvoiceLineBL.class);
 		final IInvoiceBL invoiceBL = Services.get(IInvoiceBL.class);
 
-		invoiceLineBL.setQtyInvoicedInPriceUOM(invoiceLine);
+		// this is not needed here because it is already done in the setLineNetAmt logic
+		// invoiceLineBL.setQtyInvoicedInPriceUOM(invoiceLine);
 
 		invoiceBL.setLineNetAmt(invoiceLine);
 	}
