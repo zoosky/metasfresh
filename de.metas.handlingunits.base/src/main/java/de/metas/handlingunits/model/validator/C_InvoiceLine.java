@@ -98,8 +98,8 @@ public class C_InvoiceLine
 
 	@ModelChange(timings = {
 			ModelValidator.TYPE_BEFORE_NEW,
-			ModelValidator.TYPE_BEFORE_CHANGE }, ifColumnsChanged = { 
-					I_C_InvoiceLine.COLUMNNAME_QtyEnteredTU, 
+			ModelValidator.TYPE_BEFORE_CHANGE }, ifColumnsChanged = {
+					I_C_InvoiceLine.COLUMNNAME_QtyEnteredTU,
 					I_C_InvoiceLine.COLUMNNAME_M_HU_PI_Item_Product_ID,
 					I_C_InvoiceLine.COLUMNNAME_C_UOM_ID
 
@@ -114,12 +114,12 @@ public class C_InvoiceLine
 		// make sure the packingAware object has the correct current UOM
 		// useful for callout
 		I_C_UOM uom = invoiceLine.getPrice_UOM();
-		
-		if(uom == null)
+
+		if (uom == null)
 		{
 			uom = invoiceLine.getC_UOM();
 		}
-		
+
 		// do not recalculate before the unit of measure is set
 		if (uom != null)
 		{
@@ -132,4 +132,5 @@ public class C_InvoiceLine
 		}
 	}
 
+	
 }

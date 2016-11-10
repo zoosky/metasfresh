@@ -178,7 +178,7 @@ public class InvoiceLineBL implements IInvoiceLineBL
 		final IPriceListDAO priceListDAO = Services.get(IPriceListDAO.class);
 		final Boolean processedPLVFiltering = null; // task 09533: the user doesn't know about PLV's processed flag, so we can't filter by it
 
-		if (invoice.getM_PriceList_ID() != 100)            // FIXME use PriceList_None constant
+		if (invoice.getM_PriceList_ID() != 100)             // FIXME use PriceList_None constant
 		{
 			final I_M_PriceList priceList = invoice.getM_PriceList();
 
@@ -325,17 +325,27 @@ public class InvoiceLineBL implements IInvoiceLineBL
 			// We need to get the quantity in the pricing's UOM (if different)
 			final BigDecimal convertedQty = calculateQtyInvoicedInPriceUOM(line);
 
-			// this code has been borrowed from
-			// org.compiere.model.CalloutOrder.amt
-			final int stdPrecision = MPriceList.getStandardPrecision(ctx, priceListId);
-
-			BigDecimal lineNetAmt = convertedQty.multiply(line.getPriceActual());
-
-			if (lineNetAmt.scale() > stdPrecision)
+			BigDecimal lineNetAmt;
+			if (convertedQty == null)
 			{
-				lineNetAmt = lineNetAmt.setScale(stdPrecision, BigDecimal.ROUND_HALF_UP);
+				lineNetAmt = BigDecimal.ZERO;
 			}
-			logger.info("LineNetAmt=" + lineNetAmt);
+
+			else
+			{
+
+				// this code has been borrowed from
+				// org.compiere.model.CalloutOrder.amt
+				final int stdPrecision = MPriceList.getStandardPrecision(ctx, priceListId);
+
+				lineNetAmt = convertedQty.multiply(line.getPriceActual());
+
+				if (lineNetAmt.scale() > stdPrecision)
+				{
+					lineNetAmt = lineNetAmt.setScale(stdPrecision, BigDecimal.ROUND_HALF_UP);
+				}
+				logger.info("LineNetAmt=" + lineNetAmt);
+			}
 			line.setLineNetAmt(lineNetAmt);
 		}
 	}
@@ -469,6 +479,7 @@ public class InvoiceLineBL implements IInvoiceLineBL
 			invoiceLine.setPriceEntered(BigDecimal.ZERO);
 			invoiceLine.setPriceLimit(BigDecimal.ZERO);
 			invoiceLine.setPriceList(BigDecimal.ZERO);
+			invoiceLine.setPriceActual(BigDecimal.ZERO);
 
 			// remove qty
 			invoiceLine.setQtyEntered(BigDecimal.ZERO);
@@ -491,6 +502,7 @@ public class InvoiceLineBL implements IInvoiceLineBL
 		invoiceLine.setPriceEntered(ol.getPriceEntered());
 		invoiceLine.setPriceLimit(ol.getPriceLimit());
 		invoiceLine.setPriceList(ol.getPriceList());
+		invoiceLine.setPriceActual(ol.getPriceActual());
 
 		// set the attribute set instance
 

@@ -88,7 +88,7 @@ public class C_InvoiceLine
 
 		if (invoiceLine.getC_OrderLine() == null)
 		{
-			final boolean justCreated = InterfaceWrapperHelper.isJustCreated(invoiceLine);
+			final boolean justCreated = InterfaceWrapperHelper.isNew(invoiceLine);
 
 			if (justCreated)
 			{
@@ -153,7 +153,7 @@ public class C_InvoiceLine
 			return;
 		}
 
-		//final IInvoiceLineBL invoiceLineBL = Services.get(IInvoiceLineBL.class);
+		// final IInvoiceLineBL invoiceLineBL = Services.get(IInvoiceLineBL.class);
 		final IInvoiceBL invoiceBL = Services.get(IInvoiceBL.class);
 
 		// this is not needed here because it is already done in the setLineNetAmt logic
@@ -188,25 +188,54 @@ public class C_InvoiceLine
 		Services.get(IInvoiceLineBL.class).updateManualPrices(invoiceLine);
 	}
 
-	@CalloutMethod(columnNames = {
-			I_C_InvoiceLine.COLUMNNAME_PriceEntered,
-			I_C_InvoiceLine.COLUMNNAME_Discount,
-			I_C_InvoiceLine.COLUMNNAME_QtyEntered,
-			I_C_InvoiceLine.COLUMNNAME_C_Tax_ID,
-			I_C_InvoiceLine.COLUMNNAME_Price_UOM_ID
-	})
-	@ModelChange(timings = {
-			ModelValidator.TYPE_BEFORE_NEW, ModelValidator.TYPE_BEFORE_CHANGE }, ifColumnsChanged = {
-					I_C_InvoiceLine.COLUMNNAME_PriceEntered,
-					I_C_InvoiceLine.COLUMNNAME_Discount,
-					I_C_InvoiceLine.COLUMNNAME_QtyEntered,
-					I_C_InvoiceLine.COLUMNNAME_C_Tax_ID,
-					I_C_InvoiceLine.COLUMNNAME_Price_UOM_ID
-			})
-	public void updateLineNetAmt(final I_C_InvoiceLine invoiceLine)
-	{
-		// Update lineNetAmt
-		Services.get(IInvoiceLineBL.class).updateLineNetAmt(invoiceLine, invoiceLine.getQtyEntered());
-	}
+//	@CalloutMethod(columnNames = {
+//			I_C_InvoiceLine.COLUMNNAME_PriceEntered,
+//			I_C_InvoiceLine.COLUMNNAME_Discount,
+//			I_C_InvoiceLine.COLUMNNAME_QtyEntered,
+//			I_C_InvoiceLine.COLUMNNAME_C_Tax_ID,
+//			I_C_InvoiceLine.COLUMNNAME_Price_UOM_ID
+//	})
+//	@ModelChange(timings = {
+//			ModelValidator.TYPE_BEFORE_NEW, ModelValidator.TYPE_BEFORE_CHANGE }, ifColumnsChanged = {
+//					I_C_InvoiceLine.COLUMNNAME_PriceEntered,
+//					I_C_InvoiceLine.COLUMNNAME_Discount,
+//					I_C_InvoiceLine.COLUMNNAME_QtyEntered,
+//					I_C_InvoiceLine.COLUMNNAME_C_Tax_ID,
+//					I_C_InvoiceLine.COLUMNNAME_Price_UOM_ID
+//			})
+//	public void updateLineNetAmt(final I_C_InvoiceLine invoiceLine)
+//	{
+//		// Update lineNetAmt
+//		Services.get(IInvoiceLineBL.class).updateLineNetAmt(invoiceLine, invoiceLine.getQtyEntered());
+//	}
+
+	// @CalloutMethod(columnNames = {
+	// I_C_InvoiceLine.COLUMNNAME_PriceActual
+	// })
+	// @ModelChange(timings = {ModelValidator.TYPE_BEFORE_NEW, ModelValidator.TYPE_BEFORE_CHANGE }, ifColumnsChanged = {
+	// I_C_InvoiceLine.COLUMNNAME_PriceActual})
+	// public void onPriceActualChange(final I_C_InvoiceLine invoiceLine)
+	// {
+	//
+	// final BigDecimal priceActual = invoiceLine.getPriceActual();
+	//
+	// priceEntered = Services.get(IUOMConversionBL.class).convertFromProductUOM(
+	// ctx,
+	// product,
+	// uomTo,
+	// priceActual);
+	//
+	// if (priceEntered == null)
+	// {
+	// priceEntered = priceActual;
+	// }
+	// //
+	// log.debug("amt - PriceActual=" + priceActual
+	// + " -> PriceEntered=" + priceEntered);
+	//
+	// invoiceLine.setPriceEntered(priceEntered);
+	//
+	// }
+	// }
 
 }
