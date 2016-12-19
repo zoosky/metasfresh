@@ -17,6 +17,7 @@ Here come the actual release notes:
 ## Features
 * metasfresh
   * #489 Implement DLM within single logical tables
+  * #682 Translation in window Vendor Returns
 
 * webui
   * #698 Pipeline - add webui deployment
